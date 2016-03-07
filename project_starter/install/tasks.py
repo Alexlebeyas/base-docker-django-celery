@@ -60,6 +60,28 @@ def set_prod_settings():
 
 
 @tasks.add
+def set_puppet_prod_settings():
+    """
+    Insert project variables into puppet's prod.pp.
+    """
+    puppet_prod_settings_file = path.join(project_directory, 'puppet', 'manifests', 'prod.pp')
+    with FileEditor(puppet_prod_settings_file) as editor:
+        editor.replace_token('PROJECT_USER', project_user)
+        editor.replace_token('PROJECT_NAME', project_name)
+        editor.replace_token('DB_PASS', db_pass)
+
+
+@tasks.add
+def set_puppet_deploy_settings():
+    """
+    Insert project variables into puppet's prod.pp.
+    """
+    puppet_prod_settings_file = path.join(project_directory, 'puppet', 'deploy.py')
+    with FileEditor(puppet_prod_settings_file) as editor:
+        editor.replace_token('PROJECT_USER', project_user)
+
+
+@tasks.add
 def run_tests():
     """
     Make sure the project installed correctly
