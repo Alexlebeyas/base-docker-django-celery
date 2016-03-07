@@ -22,6 +22,10 @@
         .author {
             margin-top: 30px;
         }
+
+        li {
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +42,7 @@
 </ul>
 
 <h2 id="how-works">How puppet works</h2>
+<p class="code"><a href="https://puppetlabs.com/">https://puppetlabs.com/</a></p>
 <p>
     Puppet is made of manifests that describe a specific environment to be installed and maintained.
     Those manifests are copied to the remote server via rsync and are applied with the execution of
@@ -53,19 +58,45 @@
 </p>
 
 <h2 id="first-deploy">First deployment</h2>
-<p>
-    Once a droplet is created, 
-</p>
 <ol type="1">
-    <li></li>
+    <li>Create a droplet with your public ssh key as root access and retreive the IP.</li>
+    <li>Input the follow settings:
+        <ul>
+            <li>puppet/manifests/prod.pp =&gt; Set GIT repository URL</li>
+            <li>puppet/deploy.py =&gt; Set the server IP</li>
+            <li>puppet/connect.sh =&gt; Set the server IP</li>
+            <li><i>(project_name)</i>/prod.py =&gt; Set the server IP to allowed hosts</li>
+        </ul>
+    </li>
+    <li>
+        From the puppet directory, execute install_puppet to install puppet and puppet modules on the remote server:
+        <p class="code">&gt;&gt; python deploy.py install_puppet</p>
+        This will also rsync all the puppet modules and manifests. At this point, many dependencies
+        will fail because the remote server does not have access to the GIT.
+    </li>
+    <li>
+        Retreive the newly created public key for the project user:
+        <p class="code">&gt;&gt; python deploy.py git_key</p>
+        And add it to bitbucket in "deployment keys".
+    </li>
+    <li>You may be now proceed with the normal deployment</li>
 </ol>
 
 <h2 id="normal-deploy">Normal deployment</h2>
+<p>The normal deployment flows as follows:</p>
+<p class="code">&gt;&gt; python deploy.py</p>
 <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat.
+    Executing the deploy.py script with no arguments does the normal deployment.
+    Those steps are done automatically:
 </p>
+<ol type="1">
+    <li>Rsync puppet manifests</li>
+    <li>Apply <i>puppet/sh/prod.sh</i></li>
+    <li>Pull GIT</li>
+    <li>Collect static files</li>
+    <li>Run migrations</li>
+    <li>Restart uWSGI and celery with supervisor</li>
+</ol>
 
 <h2 id="connecting">Connecting to the server</h2>
 <p>
