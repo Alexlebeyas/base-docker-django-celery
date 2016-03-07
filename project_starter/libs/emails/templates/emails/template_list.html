@@ -1,0 +1,8 @@
+{% extends 'emails/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    {% for template in templates %}
+        {% include 'emails/template_card.html' %}
+    {% endfor %}
+{% endblock %}

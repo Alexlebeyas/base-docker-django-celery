@@ -1,0 +1,15 @@
+*.pyc
+*.pyo
+*.db
+*.log
+
+celerybeat-*
+
+.DS_Store
+.idea
+.coverage
+.vagrant
+.venv
+
+local_settings.py
+Vagrantfile

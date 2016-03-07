@@ -1,0 +1,19 @@
+[
+    {
+        "pk": 1,
+        "model": "accounts.user",
+        "fields": {
+            "first_name": "dev",
+            "last_name": "at nixa",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2014-10-30T15:39:26.305Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$12000$ffkdLUaJVjNL$54TiMba/CmxJL2P9ASiBHgL0rUF1QImecCwPCDUKsA0=",
+            "email": "dev@nixa.ca",
+            "date_joined": "2014-10-06T18:15:11Z"
+        }
+    }
+]

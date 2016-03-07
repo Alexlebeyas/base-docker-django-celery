@@ -1,0 +1,8 @@
+{% for code, language in languages %}
+    {% if code == current_language %}
+        <strong>{{ language }}</strong>
+    {% else %}
+        <a href="{{ request.path }}?email_change_language={{ code }}">{{ language }}</a>
+    {% endif %}
+    {% if not forloop.last %} | {% endif %}
+{% endfor %}

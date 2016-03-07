@@ -1,0 +1,11 @@
+{% load i18n emails %}
+<header>
+    <div class="email-list">
+        <a href="{% url 'email_template_list' %}">{% trans 'All' %}</a>
+        {% for template in templates %}
+            | <a href="{{ template.get_absolute_url }}">{{ template.template }}</a>
+        {% endfor %}
+    </div>
+    <div class="language-selector">[{% language_selector %}]</div>
+    <hr>
+</header>
