@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Puppet Deployment</title>
+    <style>
+        body {
+            background-color: #eee;
+            font-family: "Arial", Helvetica, sans-serif;
+            font-size: 18px;
+            margin: auto;
+            max-width: 700px;
+        }
+
+        .code {
+            background-color: #e5e5e5;
+            font-style: italic;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .author {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Puppet Deployment</h1>
+<p><i>To use deploy.py, you must have <strong>rsync</strong> installed.</i></p>
+<ul>
+    <li><a href="#how-works">How puppet works</a></li>
+    <li><a href="#access">Access and security</a></li>
+    <li><a href="#first-deploy">First deployment</a></li>
+    <li><a href="#normal-deploy">Normal deployment</a></li>
+    <li><a href="#connecting">Connecting to the server</a></li>
+    <li><a href="#file-struct">Remote file structure</a></li>
+</ul>
+
+<h2 id="how-works">How puppet works</h2>
+<p>
+    Puppet is made of manifests that describe a specific environment to be installed and maintained.
+    Those manifests are copied to the remote server via rsync and are applied with the execution of
+    <i>puppet/sh/prod.sh</i>. This is done with a python script called <strong>deploy.py</strong> in puppet
+    directory.
+</p>
+
+<h2 id="access">Access and security</h2>
+<p>
+    Puppet will automatically restrict ssh access by disabling root & password login. You must put your
+    public key in <i>puppet/modules/deploy/templates/authorized_keys.erb</i> or will be locked out.
+    The only access to the server is with the deploy user and ssh keys.
+</p>
+
+<h2 id="first-deploy">First deployment</h2>
+<p>
+    Once a droplet is created, 
+</p>
+<ol type="1">
+    <li></li>
+</ol>
+
+<h2 id="normal-deploy">Normal deployment</h2>
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat.
+</p>
+
+<h2 id="connecting">Connecting to the server</h2>
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat.
+</p>
+
+<h2 id="file-struct">Remote file structure</h2>
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat.
+</p>
+
+<p class="author">Author: Simon Lessnick</p>
+<script>
+    (function () {
+        var RELOAD_TIME = 1500;
+        setTimeout(function () {
+            location.reload();
+        }, RELOAD_TIME);
+    })();
+</script>
+</body>
+</html>

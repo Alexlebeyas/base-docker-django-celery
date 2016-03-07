@@ -19,9 +19,9 @@ random_password = lambda: str(uuid4()).replace('-', '')
 
 def run(cmd):
     """
-    Call python3 command.
+    Call python command.
     """
-    system('python3 %s' % cmd)
+    system('python %s' % cmd)
 
 
 def manage(cmd):

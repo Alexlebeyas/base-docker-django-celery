@@ -74,7 +74,7 @@ def set_puppet_prod_settings():
 @tasks.add
 def set_puppet_deploy_settings():
     """
-    Insert project variables into puppet's prod.pp.
+    Insert project variables into puppet's deploy.py.
     """
     puppet_prod_settings_file = path.join(project_directory, 'puppet', 'deploy.py')
     with FileEditor(puppet_prod_settings_file) as editor:
