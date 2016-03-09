@@ -8,7 +8,7 @@ executed in order.
 """
 
 from os import path, renames
-from settings import settings_directory, project_directory, project_name, project_user, secret_key, ssh_pass, db_pass
+from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
 __author__ = 'snake'

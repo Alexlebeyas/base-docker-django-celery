@@ -46,9 +46,10 @@
 <p class="code"><a href="https://puppetlabs.com/">https://puppetlabs.com/</a></p>
 <p>
     Puppet is made of manifests that describe a specific environment to be installed and maintained.
+    The current puppet configuration is called <strong>Masterless Puppet</strong>.
     Those manifests are copied to the remote server via rsync and are applied with the execution of
-    <i>puppet/sh/prod.sh</i>. This is done with a python script called <strong>deploy.py</strong> in puppet
-    directory.
+    <i>puppet/sh/prod.sh</i>. This is done with a python script called <strong>deploy.py</strong> in
+    puppet directory.
 </p>
 
 <h2 id="access">Access and security</h2>
@@ -84,7 +85,7 @@
 </ol>
 
 <h2 id="normal-deploy">Normal deployment</h2>
-<p>The normal deployment flows as follows:</p>
+<p>The normal deployment flows like this:</p>
 <p class="code">&gt;&gt; python deploy.py</p>
 <p>
     Executing the deploy.py script with no arguments does the normal deployment.
@@ -144,5 +145,13 @@
 </pre>
 
 <p class="author">Author: Simon Lessnick</p>
+<script>
+    (function () {
+        var RELOAD_TIME = 1500;
+        setTimeout(function () {
+            location.reload();
+        }, RELOAD_TIME);
+    })();
+</script>
 </body>
 </html>

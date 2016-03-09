@@ -9,6 +9,7 @@ should not import any other module in this package.
 import re
 from os import system, path, sep
 from shutil import rmtree
+from sys import executable as python_bin
 from uuid import uuid4
 
 __author__ = 'snake'
@@ -17,18 +18,18 @@ make_project_user = lambda project_name: re_non_alpha.sub('', project_name.lower
 random_password = lambda: str(uuid4()).replace('-', '')
 
 
-def run(cmd):
+def python(cmd):
     """
     Call python command.
     """
-    system('python %s' % cmd)
+    system('%s %s' % (python_bin, cmd))
 
 
 def manage(cmd):
     """
     Call management command.
     """
-    run('manage.py %s' % cmd)
+    python('manage.py %s' % cmd)
 
 
 def cleanup():
