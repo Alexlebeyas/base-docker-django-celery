@@ -9,6 +9,7 @@ directory=<%= @project_path %>
 redirect_stderr=true
 stdout_logfile=<%= @logs %>/celery_beat.log
 stderr_logfile=<%= @logs %>/celery_beat.log
+environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
 
 [program:<%= @project_name %>_celery_worker]
 user=<%= @project_user %>
@@ -17,6 +18,7 @@ directory=<%= @project_path %>
 redirect_stderr=true
 stdout_logfile=<%= @logs %>/celery_worker.log
 stderr_logfile=<%= @logs %>/celery_worker.log
+environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
 
 [program:<%= @project_name %>_wsgi]
 user=<%= @project_user %>
@@ -25,3 +27,4 @@ directory=<%= @project_path %>
 redirect_stderr=true
 stdout_logfile=<%= @logs %>/supervisor_uwsgi.log
 stderr_logfile=<%= @logs %>/supervisor_uwsgi.log
+environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8 
