@@ -79,8 +79,13 @@
 <h2 id="recover-unlinked">Recover unlinked box</h2>
 <p>
     Vagrant sometimes make mistakes. If your "vagrant up" creates a new box instead of using the same one as before,
-    you will need to 
+    it's because vagrant lost track of your box. Type this command to find your box id.
 </p>
+<p class="code">&gt;&gt; "C:\Program Files\Oracle\VirtualBox\VBoxManage" list vms</p>
+<p>
+    This is obviously a windows command. You should adapt it to your system. Grab your VM id put in it:
+</p>
+<p class="code">&nbsp;&nbsp;&nbsp;(project_path)/.vagrant/machines/default/virtualbox/id</p>
 
 <p class="author">Author: Simon Lessnick</p>
 <script>
