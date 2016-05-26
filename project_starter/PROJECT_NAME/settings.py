@@ -13,7 +13,7 @@ INSTALLED_APPS = (
     'crispy_forms',
 
     # LIBS
-	'libs.constant_types',
+    'libs.constant_types',
     'libs.emails',
     'libs.log_tailer',
     'libs.sitemap',
@@ -25,8 +25,6 @@ INSTALLED_APPS = (
 )
 
 ADMINS = (
-    ('William', 'william@nixa.ca'),
-    ('Simon', 'simon@nixa.ca'),
     ('Philippe', 'philippe@nixa.ca'),
 )
 

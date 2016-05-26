@@ -45,6 +45,7 @@ def rsync(local='.', remote='/etc/puppet/sync', user=DEPLOY_USER, host=HOST, **k
 @command
 def install_puppet(user='root', host=HOST, debug=False, **kwargs):
     ssh('mkdir /etc/puppet', user=user, host=host)
+    ssh('mkdir --mode=755 /opt', user=user, host=host)
     rsync(user=user, host=host)
     ssh('cd /etc/puppet/sync/sh && chmod 770 *.sh && sudo ./install.sh', user=user, host=host)
     if not debug:
