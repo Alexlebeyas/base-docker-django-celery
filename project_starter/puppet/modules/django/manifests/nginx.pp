@@ -1,3 +1,5 @@
+# https://easyengine.io/tutorials/nginx/using-pagespeed/
+
 class django::nginx {
   package { "nginx":
     ensure => present,

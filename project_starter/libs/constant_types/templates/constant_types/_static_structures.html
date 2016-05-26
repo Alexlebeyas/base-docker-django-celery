@@ -1,0 +1,7 @@
+{% load constant_types %}
+<!-- Constant type -->
+<script>
+    {% autoescape on %}{% for name, const in constant_types.items %}{% for lang, __ in languages %}
+        {% if forloop.first %}var {{ name }} {{ start }}{% endif %}
+        {% choice_dictionary const.choices lang %}{% if not forloop.last %},{% else %}{{ end }}{% endif %}{% endfor %}{% endfor %}{% endautoescape %}
+</script>

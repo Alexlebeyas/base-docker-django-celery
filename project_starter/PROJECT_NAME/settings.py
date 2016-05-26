@@ -13,6 +13,7 @@ INSTALLED_APPS = (
     'crispy_forms',
 
     # LIBS
+	'libs.constant_type',
     'libs.emails',
     'libs.log_tailer',
     'libs.sitemap',
