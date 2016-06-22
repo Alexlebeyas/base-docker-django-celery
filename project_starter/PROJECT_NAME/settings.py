@@ -26,6 +26,7 @@ INSTALLED_APPS = (
 
 ADMINS = (
     ('Philippe', 'philippe@nixa.ca'),
+	('Nixa', 'errors@nixa.ca'),
 )
 
 from os import path
