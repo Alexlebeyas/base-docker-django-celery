@@ -4,13 +4,12 @@ from django.core.urlresolvers import reverse
 from django.template import TemplateDoesNotExist, Template, Context
 from django.template.loader import get_template
 from django.utils import translation
-from django.utils.functional import cached_property
 from django.utils.translation import get_language
 from .exceptions import EmailException
 from .loggers import logger
 from .models import EmailSent
 from .settings import USER_EMAIL_FIELD, USER_LANG_FIELD, USER_ACTIVE_FIELD
-from .utils import clean_template_name, prod_cached_property
+from .utils import clean_template_name, prod_cached_property, attach_file_to_email
 
 __author__ = 'snake'
 
@@ -42,7 +41,7 @@ class Email(object):
     def __str__(self):
         return self.template
 
-    def send(self, recipients, context, lang=None, reply_to=None, commit=True):
+    def send(self, recipients, context, lang=None, reply_to=None, commit=True, files=None):
         """
         Send emails to a list of recipients. They can either be email strings or
         objects with email mixin. Context is validated and emails are sent separately.
@@ -51,9 +50,9 @@ class Email(object):
         self._validate_context(context)
         context = Context(context)
         for recipient in recipients:
-            self._send_single(recipient, context, lang, reply_to, commit)
+            self._send_single(recipient, context, lang, reply_to, commit,files)
 
-    def _send_single(self, recipient, context, lang=None, reply_to=None, commit=True):
+    def _send_single(self, recipient, context, lang=None, reply_to=None, commit=True, files=None):
         """
         Send email to a single recipient, which can be a string or an object with
         email mixin. Recipients with attribute USER_ACTIVE_FIELD set to False will
@@ -79,6 +78,7 @@ class Email(object):
                     body=body,
                     from_email=settings.EMAIL_HOST_USER,
                     to=(user.get_email(), ),
+
                 )
                 if self.template_html:
                     email.attach_alternative(self.template_html.render(context).strip(), "text/html")
@@ -86,6 +86,9 @@ class Email(object):
                 email.extra_headers['Reply-To'] = reply_to
             elif self.reply_to:
                 email.extra_headers['Reply-To'] = self.reply_to
+            if files:
+                for file in files:
+                    attach_file_to_email(email, file)
             if commit:
                 email.send()
             EmailSent.objects.create(
