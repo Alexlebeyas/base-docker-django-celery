@@ -25,8 +25,7 @@ INSTALLED_APPS = (
 )
 
 ADMINS = (
-    ('Philippe', 'philippe@nixa.ca'),
-	('Nixa', 'errors@nixa.ca'),
+    ('Nixa', 'errors@nixa.ca'),
 )
 
 from os import path
@@ -56,7 +55,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = path.normpath(path.join(BASE_DIR, 'static'))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = path.join(BASE_DIR, 'media')
-FIXTURE_DIRS = 'fixtures/', 
+FIXTURE_DIRS = 'fixtures/',
 LOCALE_PATHS = 'locale/',
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -86,19 +85,15 @@ DATABASES = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ('templates/', ),
-        'APP_DIRS': False,
+        'DIRS': ('templates/',),
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
-            'loaders': (
-                'django.template.loaders.app_directories.Loader',
-                'django.template.loaders.filesystem.Loader',
-            )
+            ]
         },
     },
 ]
@@ -169,7 +164,7 @@ LOGGING = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'console@localhost'
-BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = 'redis://localhost:6379/1'
 CELERYD_HIJACK_ROOT_LOGGER = False
 
 show_toolbar = lambda r: not r.is_ajax() and (DEBUG or r.user.is_superuser)
@@ -177,7 +172,6 @@ show_toolbar = lambda r: not r.is_ajax() and (DEBUG or r.user.is_superuser)
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": '%s.settings.show_toolbar' % PROJECT_NAME,
 }
-
 
 ###############################################################################################
 # Project specific  #

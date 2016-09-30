@@ -2,7 +2,7 @@ import hotfix
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from libs.sitemap import Sitemap
+from libs.sitemap.views import Sitemap
 
 urlpatterns = [
     url(r'^sitemap.xml$', Sitemap.as_view(), name='sitemap'),

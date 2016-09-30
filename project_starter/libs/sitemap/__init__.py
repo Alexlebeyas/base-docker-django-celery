@@ -1,5 +1,4 @@
-from .models import SitemapDisplayable
-from .views import Sitemap
+default_app_config = 'libs.sitemap.apps.SiteMapConfig'
 
 __author__ = 'snake'
 __version__ = '1.0.0'

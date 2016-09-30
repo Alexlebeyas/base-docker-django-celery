@@ -1,4 +1,1 @@
-from .classes import Email
-from .exceptions import EmailException
-from .mixins import EmailMixin
-from .models import EmailSent
+default_app_config = 'libs.emails.apps.EmailsConfig'

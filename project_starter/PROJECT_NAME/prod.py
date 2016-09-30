@@ -1,7 +1,5 @@
 from os import path
 
-__author__ = 'snake'
-
 DB_USER = '((DB_USER))'
 DB_NAME = '((DB_NAME))'
 DB_PASS = '((DB_PASS))'
@@ -41,8 +39,6 @@ TEMPLATES = (
             'context_processors': (
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.static',
-                'django.core.context_processors.media',
                 'django.contrib.messages.context_processors.messages',
             ),
             'loaders': (
