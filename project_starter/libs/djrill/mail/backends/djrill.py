@@ -103,7 +103,7 @@ class DjrillBackend(BaseEmailBackend):
             if not self.fail_silently:
                 raise
             return False
-        print(api_params)
+        # print(api_params)
         response = requests.post(api_url, data=json.dumps(api_params, cls=JSONDateUTCEncoder))
 
         if response.status_code != 200:
