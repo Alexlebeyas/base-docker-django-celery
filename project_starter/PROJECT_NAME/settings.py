@@ -100,9 +100,7 @@ TEMPLATES = [
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': BASE_DIR,
-        'PREFIX': PROJECT_NAME,
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
 
