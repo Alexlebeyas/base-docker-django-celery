@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils.translation import activate, deactivate
+from libs.sitemap.settings import SITEMAP_EXTRA_MODELS
 
 __author__ = 'snake'
 
@@ -20,6 +21,33 @@ def get_sitemap_models():
     for model in apps.get_models():
         if hasattr(model, 'get_sitemap_queryset'):
             yield model
+
+
+def get_extra_models():
+    """
+    Iterator for all models in SITEMAP_EXTRA_MODELS.
+    """
+    for model_str in SITEMAP_EXTRA_MODELS:
+        app_label, models_name = model_str.split('.')
+        model = apps.get_model(app_label=app_label, model_name=models_name)
+        yield model
+
+
+def get_extra_urls(models):
+    urls = set()
+
+    def add_urls():
+        for o in model.objects.all():
+            url = o.get_absolute_url()
+            if url:
+                urls.add(url)
+
+    for model in models:
+        for lang, _ in settings.LANGUAGES:
+            activate(lang)
+            add_urls()
+            deactivate()
+    return urls
 
 
 def get_absolute_urls(models):

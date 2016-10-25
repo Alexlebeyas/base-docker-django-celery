@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import Context
 from django.template.loader import get_template
 from django.views.generic import TemplateView
-from .utils import get_sitemap_models, get_absolute_urls, UrlList
+from .utils import get_sitemap_models, get_absolute_urls, UrlList, get_extra_models, get_extra_urls
 from .settings import SITEMAP_CACHE_KEY, SITEMAP_CACHE_EXPIRATION, SITEMAP_EXTRA_URLS
 
 __author__ = 'snake'
@@ -25,7 +25,11 @@ class Sitemap(TemplateView):
     def get_urls(self):
         sitemap_models = get_sitemap_models()
         model_urls = get_absolute_urls(sitemap_models)
-        return UrlList(model_urls, self.extra_urls, SITEMAP_EXTRA_URLS)
+
+        extra_models = get_extra_models()
+        extra_models_url = get_extra_urls(extra_models)
+
+        return UrlList(model_urls, extra_models_url, self.extra_urls, SITEMAP_EXTRA_URLS)
 
     def render(self, urls):
         context = Context({'host': self.get_host(), 'urls': urls})
