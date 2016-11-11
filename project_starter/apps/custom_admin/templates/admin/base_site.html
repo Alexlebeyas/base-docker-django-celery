@@ -1,0 +1,24 @@
+{% extends 'admin/base.html' %}
+{% load staticfiles admin_static i18n %}
+
+{#Additional CSS includes#}
+{% block extrastyle %}
+  <link rel="stylesheet" type="text/css" href="{% static 'custom_admin/css/base_admin.css' %}" media="all">
+{% endblock %}
+
+{#Header branding #}
+{% block branding %}
+    <h1 id="site-name">
+        <a id="link" href="/admin/">
+            {% if request.site.lang == "fr" %}
+            <img src="{% static 'custom_admin/img/logo-nixa-mini.png' %}" alt="Nom du site" />
+            {% else %}
+            <img src="{% static 'custom_admin/img/logo-nixa-mini.png' %}" alt="Site name" />
+            {% endif %}
+        </a>
+        <span>{% trans 'Administration' %}</span>
+    </h1>
+{% endblock %}
+
+{#Footer #}
+{% block footer %}<div id="footer"></div>{% endblock %}

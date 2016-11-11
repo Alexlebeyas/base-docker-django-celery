@@ -1,0 +1,163 @@
+/* Author: Gabriel St-Amant/Nixa */
+
+.container {
+	width: 160px;
+}
+
+#wrap{
+	background:none;
+}
+
+#container {
+	border-bottom: 1px solid #e9ebed;
+}
+
+a {
+	color: #d9232e;
+	font-style: normal;
+	text-decoration: none!important;
+	padding: 5px 10px;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+.left-nav>ul>li {
+	/*border-bottom: 1px solid #e9ebed;*/
+	background:none!important;
+}
+
+.left-nav>ul>li a {
+	font-size: 16px;
+	padding: 5px 20px;
+	margin: 10px 0;
+	border:none;
+	line-height: 26px;
+}
+
+a:hover, .left-nav>ul>li.active>a {
+	color:#fff!important;
+	background-color:#d9232e!important;
+	background-image:none;
+	text-shadow:none!important;
+	font-weight: normal!important;
+}
+
+.left-nav>ul>li ul li a {
+	color: #475057;
+}
+
+.left-nav>ul>li ul li.active a {
+	font-weight: normal!important;
+	color: #d9232e;
+}
+
+.left-nav>ul>li.active>a:after {
+	content:"";
+}
+
+.left-nav>ul>li:not(.active):hover>ul {
+	left: 200px;
+	margin-top: -50px;
+}
+
+.left-nav>ul>li:not(.active):hover>ul>li a, .left-nav>ul>li:not(.active):hover>ul>li a:first-child, .left-nav>ul>li:not(.active):hover>ul>li a:last-child {
+	padding: 10px 25px 10px 15px;
+	margin: 0;
+}
+
+.suit-columns {
+	width: 898px;
+	margin: 0 auto;
+}
+
+#content th, #content a, #content li, :not(a.add-related, a.change-related) {
+	font-size: 14px!important;
+	padding: 10px 10px!important;
+}
+
+#content caption a:hover {
+	color: #fff!important;
+}
+
+#content caption, #content h4 {
+	margin-bottom: 20px;
+	white-space: nowrap;
+	margin-top:20px;
+}
+
+.table thead th a, .breadcrumb li.active, .breadcrumb li.active a{
+	font-weight: normal;
+}
+
+.btn-info {
+	padding: 10px 20px;
+}
+
+.btn-info, .btn-success {
+	background:#d9232e;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+.btn-info:hover, .btn-success:hover {
+	background:#FF5B57!important;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+.search-container input { 
+	padding: 10px 20px;
+}
+
+#branding a {
+	display: none;
+}
+
+#branding a#link {
+	display: block;
+}
+
+#branding a#logo, #branding a:hover {
+	background-color:transparent!important;
+}
+
+.alert-info {
+	background-color: #F7D9D9;
+	border-color: #F1BCBC;
+	color: #A10000;
+}
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+	border-color: rgba(236, 82, 82, 0.8);
+	outline: 0;
+	outline: thin dotted \9;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	background-color: rgb(255, 238, 238);
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+.login #content-main h1 {
+	background:#d9232e;
+}
+
+.tab-content input:not([type=checkbox]), .tab-content select, .tab-content textarea {
+	width:97%;
+}
+
+.sortedm2m-container {
+   margin-right: 10px;
+   width: 482px !important;
+   overflow: hidden;
+}
+
