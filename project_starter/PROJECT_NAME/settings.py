@@ -1,6 +1,10 @@
 # coding: UTF-8
 
 INSTALLED_APPS = (
+    # Admin settings
+    'apps.custom_admin',
+    'suit',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -178,7 +182,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 SECRET_KEY = ''
 AUTH_USER_MODEL = 'accounts.User'
-STARTUP_INITIAL_FIXTURES = 'initial', 'admins',
+STARTUP_INITIAL_FIXTURES = tuple()
 
 try:
     from .local_settings import *
