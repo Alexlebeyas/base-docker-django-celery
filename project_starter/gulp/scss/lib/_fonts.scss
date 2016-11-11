@@ -1,0 +1,46 @@
+/* FONTS
+=========================== 
+Important:
+- Define default font families and font styles here.
+- Design titles only using .d1, .d2... Not h1, h2...
+- Use EM font sizes and adjust responsive by setting body font size.
+- Default body font size is 16px.
+*/
+
+$font-title: '', sans-serif;
+$font-content: '', sans-serif;
+$font-fancy: '', sans-serif;
+
+$text-xs: 0.625em; //10px
+$text-sm: 0.750em; //12px
+$text-md: 1em; //16px
+$text-lg: 1.250em; //20px
+$text-xl: 2.250em; //36px
+
+body {
+    font-family: $font-content;
+    color: $black;
+    font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6, .d1, .d2, .d3, .d4, .d5, .d6 {
+    font-family: $font-title;
+}
+
+* { outline: none }
+
+.text-uppercase { text-transform: uppercase }
+.text-capitalize { text-transform: capitalize }
+
+.text-thin { font-weight: 100 }
+.text-normal { font-weight: 400 }
+.text-bold { font-weight: 700 }
+.text-extrabold { font-weight: 900 }
+
+.text-fancy { font-family: $font-fancy }
+
+.text-xs { font-size: $text-xs }
+.text-sm { font-size: $text-sm }
+.text-md { font-size: $text-md }
+.text-lg { font-size: $text-lg }
+.text-xl { font-size: $text-xl }

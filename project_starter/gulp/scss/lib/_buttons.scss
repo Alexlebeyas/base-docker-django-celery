@@ -1,0 +1,25 @@
+/* BUTTONS
+===========================
+Important: See _mixins for time variables.
+ */
+
+a, .btn, button {
+    text-decoration: none;
+    @include transition-md();
+	&:focus{
+		outline: none !important;
+	}
+}
+
+.btn-primary {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    &:hover, &:focus {
+    	background-color: transparent;
+    	border-color: $color-primary;
+    }
+}
+
+.btn-full {
+    width: 100%;
+}

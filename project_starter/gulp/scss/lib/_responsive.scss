@@ -1,0 +1,32 @@
+/* RESPONSIVE
+=========================== 
+*/
+$screen-xxl: 1680px; // Desktop
+$screen-xl: 1360px; // HD Laptop
+$screen-lg: 1200px; // iPad Landscape, Old Laptop
+$screen-md: 992px; // iPad Portrait
+$screen-sm: 767px; // Phone landscape
+$screen-xs: 480px; // iPhone 6
+$screen-xxs: 360px; // iPhone 4, iPhone 5
+
+@mixin breakpoint($class) {
+  @if $class == xs {
+    @media (max-width: $screen-sm) { @content; } 
+  }
+ 
+  @else if $class == sm {
+    @media (min-width: $screen-sm + 1) { @content; }
+  }
+ 
+  @else if $class == md {
+    @media (min-width: $screen-md) { @content; }
+  }
+ 
+  @else if $class == lg {
+    @media (min-width: $screen-lg) { @content; }
+  }
+ 
+  @else {
+    @warn "Breakpoint mixin supports: xs, sm, md, lg";
+  }
+}
