@@ -1,6 +1,10 @@
 # coding: UTF-8
 
 INSTALLED_APPS = (
+    # Admin settings
+    'apps.custom_admin',
+    'suit',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
