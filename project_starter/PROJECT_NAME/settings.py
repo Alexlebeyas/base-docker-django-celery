@@ -178,7 +178,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 SECRET_KEY = ''
 AUTH_USER_MODEL = 'accounts.User'
-STARTUP_INITIAL_FIXTURES = 'initial', 'admins',
+STARTUP_INITIAL_FIXTURES = tuple()
 
 try:
     from .local_settings import *
