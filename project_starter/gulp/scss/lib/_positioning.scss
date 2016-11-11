@@ -94,22 +94,6 @@ $spacing-lg: 100px;
 .margin-right-md { margin-right: $spacing-md }
 .margin-right-lg { margin-right: $spacing-lg }
 
-.container-sm {
-    max-width: 500px;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin: auto;
-}
-
-.row-narrow {
-    margin-left: -7px;
-    margin-right: -7px;
-    [class*="col"] {
-        padding-left: 7px;
-        padding-right: 7px;
-    }
-}
-
 /* SEPARATORS
 =========================== */
 
@@ -161,19 +145,19 @@ hr {
     width: 20%;
     float: left;
 }
-@media (min-width: 768px) {
+@include breakpoint(sm) {
     .col-sm-15 {
         width: 20%;
         float: left;
     }
 }
-@media (min-width: 992px) {
+@include breakpoint(md) {
     .col-md-15 {
         width: 20%;
         float: left;
     }
 }
-@media (min-width: 1200px) {
+@include breakpoint(lg) {
     .col-lg-15 {
         width: 20%;
         float: left;
@@ -194,4 +178,12 @@ hr {
         padding-left: 7px;
         padding-right: 7px;
     }
+}
+
+.row-no-padding {
+  margin: 0;
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
