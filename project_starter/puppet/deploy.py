@@ -21,9 +21,18 @@ command = lambda f: commands.__setitem__(f.__name__, f) or f
 
 @command
 def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, **kwargs):
+    # PROD
     if not debug:
         rsync(user=user, host=host)
     ssh('cd /etc/puppet/sync/sh && sudo ./prod.sh', user=user, host=host)
+
+
+@command
+def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, **kwargs):
+    # STAGING
+    if not debug:
+        rsync(user=user, host=host)
+    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh', user=user, host=host)
 
 
 @command
@@ -44,26 +53,21 @@ def rsync(local='.', remote='/etc/puppet/sync', user=DEPLOY_USER, host=PROD_HOST
 
 
 @command
-def install_puppet(user='root', prod_host=PROD_HOST, debug=False, **kwargs):
+def install_puppet(user='root', host=PROD_HOST, debug=False, **kwargs):
     # PROD
-    ssh('mkdir /etc/puppet', user=user, host=prod_host)
-    ssh('mkdir --mode=755 /opt', user=user, host=prod_host)
-    rsync(user=user, host=prod_host)
-    ssh('cd /etc/puppet/sync/sh && chmod 770 *.sh && sudo ./install.sh', user=user, host=prod_host)
+    ssh('mkdir /etc/puppet', user=user, host=host)
+    ssh('mkdir --mode=755 /opt', user=user, host=host)
+    rsync(user=user, host=host)
+    ssh('cd /etc/puppet/sync/sh && chmod 770 *.sh && sudo ./install.sh', user=user, host=host)
 
     if not debug:
-        deploy(user=user, host=prod_host)
+        deploy(user=user, host=host)
 
 
 @command
-def install_puppet_staging(user='root', staging_host=STAGING_HOST, debug=False, **kwargs):
-    ssh('mkdir /etc/puppet', user=user, host=staging_host)
-    ssh('mkdir --mode=755 /opt', user=user, host=staging_host)
-    rsync(user=user, host=staging_host)
-    ssh('cd /etc/puppet/sync/sh && chmod 770 *.sh && sudo ./install.sh', user=user, host=staging_host)
-
-    if not debug:
-        deploy(user=user, host=staging_host)
+def install_puppet_staging(user='root', host=STAGING_HOST, debug=False, **kwargs):
+    # STAGING
+    install_puppet(user=user, host=host, debug=debug)
 
 
 def ssh(cmd, user, host):
