@@ -1,0 +1,7 @@
+{% load i18n %}
+
+{% trans 'Nom' %}: {{ contact.name }}
+{% trans 'Couriel' %}: {{ contact.email }}
+{% if contact.phone %}{% trans 'Téléphone' %}: {{ contact.phone }}{% endif %}
+{% if contact.subject %}{% trans 'Sujet' %}: {{ contact.subject }}{% endif %}
+{% trans 'Message' %}: {{ contact.message }}
