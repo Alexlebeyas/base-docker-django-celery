@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from . import models
+from libs.nixa_fields import forms as nixa_forms
 
 __author__ = 'snake'
 
@@ -9,14 +10,12 @@ class PasswordEditForm(forms.ModelForm):
     error_messages = {
         'password_mismatch': _("The two password fields didn't match."),
     }
-    password1 = forms.CharField(
+    password1 = nixa_forms.PasswordField(
         label=_("Password"),
-        widget=forms.PasswordInput,
         required=False,
     )
-    password2 = forms.CharField(
+    password2 = nixa_forms.PasswordField(
         label=_("Password confirmation"),
-        widget=forms.PasswordInput,
         required=False,
         help_text=_("Enter the same password as above, for verification."),
     )

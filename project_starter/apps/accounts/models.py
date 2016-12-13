@@ -5,6 +5,7 @@ from django.utils.crypto import salted_hmac
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from libs.emails.mixins import EmailMixin
+from libs.nixa_fields import fields as nixa_fields
 
 
 __author__ = 'snake'
@@ -43,8 +44,8 @@ class AuthUser(PermissionsMixin, models.Model):
     Based class of all users in proprio direct. Names, email and language code added.
     Used for the admin
     """
-    email = models.EmailField(_('Email'), unique=True)
-    password = models.CharField(_('Password'), max_length=128)
+    email = nixa_fields.EmailField(unique=True)
+    password = nixa_fields.PasswordField()
     date_joined = models.DateTimeField(_('date joined'), default=now)
     last_login = models.DateTimeField(_('last login'), default=now)
     is_staff = models.BooleanField(
@@ -117,8 +118,8 @@ class User(EmailMixin, AuthUser):
         verbose_name = _('User')
         verbose_name_plural = _('Users')
 
-    first_name = models.CharField(_('First name'), max_length=75)
-    last_name = models.CharField(_('Last name'), max_length=75)
+    first_name = nixa_fields.FirstNameField()
+    last_name = nixa_fields.LastNameField()
 
     @property
     def full_name(self):
