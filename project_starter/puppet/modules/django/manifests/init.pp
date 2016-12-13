@@ -26,14 +26,15 @@ define django::project (
   $git_repo = false,
   $git_host = false,
   $prod = false,
+  $staging = false,
   $py_version = '3.4',
 ) {
   $home = "/home/$project_user"
   $logs = "$home/logs"
   $venv_dir = "/home/${project_user}/venv"
 
-  # tODO passworded redis instance
-  # tODO add puppet to startproject
+# tODO passworded redis instance
+# tODO add puppet to startproject
 
   django::user { $project_user:
     project_user => $project_user,
@@ -81,6 +82,7 @@ define django::project (
       project_name => $project_name,
       git_repo     => $git_repo,
       git_host     => $git_host,
+      staging      => $staging,
       notify       => $app_restart,
       require      => [
         Django::Filesystem["filesystem-$project_user"],
@@ -115,6 +117,7 @@ define django::project (
     django::nginx::site { "nginx-$project_user":
       project_path   => $project_path,
       project_user   => $project_user,
+      staging        => $staging,
     }
   }
 }

@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Add prod IP here.
-ssh deploy@127.0.0.1
+ssh deploy@192.168.1.252

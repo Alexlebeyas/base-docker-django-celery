@@ -1,7 +1,7 @@
 $project_user = "((PROJECT_USER))"
 $project_name = "((PROJECT_NAME))"
 $db_pass = "((DB_PASS))"
-$git_repo = "git@bitbucket.org:nixateam/new-project.git"  # tODO git address here
+$git_repo = "git@bitbucket.org:nixateam/project-starter.git"  # tODO git address here
 
 class { "deploy": } ->
 
@@ -19,4 +19,5 @@ django::project{ $project_name:
   git_host     => "bitbucket.org",
   git_repo     => $git_repo,
   prod         => true,
+  staging      => true,
 }

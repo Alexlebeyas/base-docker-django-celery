@@ -16,7 +16,14 @@ class django::nginx {
 define django::nginx::site (
   $project_path,
   $project_user,
+  $staging = false
 ) {
+
+  if (!$staging) {
+    $content = "nginx.erb"
+  } else {
+    $content = "nginx_staging.erb"
+  }
 # tODO have nginx actually listen to allowed hosts instead of catchall
   exec { "nginx-remove-default-$project_user":
     onlyif      => "test -f /etc/nginx/sites-enabled/default",
@@ -30,7 +37,7 @@ define django::nginx::site (
     group       => $project_user,
     owner       => $project_user,
     mode        => 644,
-    content     => template("django/nginx.erb"),
+    content     => template("django/$content"),
     notify      => Service['nginx'],
   }
 

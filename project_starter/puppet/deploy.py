@@ -12,7 +12,7 @@ __author__ = 'snake'
 
 PROJECT_USER = '((PROJECT_USER))'
 DEPLOY_USER = 'deploy'
-PROD_HOST = '127.0.0.1'  # tODO Prod IP here
+PROD_HOST = '192.168.1.252'  # tODO Prod IP here
 STAGING_HOST = '127.0.0.1'  # tODO Staging IP here
 
 commands = {}
@@ -27,7 +27,22 @@ def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, **kwargs):
 
 
 @command
+def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, **kwargs):
+    # STAGING
+    if not debug:
+        rsync(user=user, host=host)
+    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh', user=user, host=host)
+
+
+@command
 def git_key(user=DEPLOY_USER, host=PROD_HOST, project_user=PROJECT_USER, **kwargs):
+    ssh('sudo cat /home/%(project_user)s/.ssh/id_rsa.pub' % {
+        'project_user': project_user,
+    }, user=user, host=host)
+
+
+@command
+def git_key_staging(user=DEPLOY_USER, host=STAGING_HOST, project_user=PROJECT_USER, **kwargs):
     ssh('sudo cat /home/%(project_user)s/.ssh/id_rsa.pub' % {
         'project_user': project_user,
     }, user=user, host=host)

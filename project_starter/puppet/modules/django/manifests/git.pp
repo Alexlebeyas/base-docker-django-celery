@@ -4,9 +4,15 @@ define django::git (
   $project_name,
   $git_repo,
   $git_host,
+  $staging = false,
 ) {
   $known_hosts = "/home/$project_user/.ssh/known_hosts"
 
+  if !$staging {
+    $setting_file = "local_settings.erb"
+  } else {
+    $setting_file = "local_settings_staging.erb"
+  }
   exec { "$git_host-$project_user-ssh-keyscan":
     user    => $project_user,
     path    => ["/bin", "/usr/bin"],
