@@ -34,6 +34,7 @@ ADMINS = (
 
 from os import path
 
+PROJECT_DOMAIN = "//127.0.0.1:8000"
 PROJECT_SETTINGS = path.dirname(__file__)
 BASE_DIR = path.dirname(PROJECT_SETTINGS)
 PROJECT_NAME = path.basename(PROJECT_SETTINGS)
