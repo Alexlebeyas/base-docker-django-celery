@@ -3,7 +3,7 @@
  */
 "use strict";
 
-$(function () {
+window.addEventListener('load', function() {
     var $nixaFieldPhone = $('.nixa-fields-mask');
     var vendor_url = $nixaFieldPhone.first().data('vendor-url');
 
