@@ -12,7 +12,7 @@ __author__ = 'snake'
 
 PROJECT_USER = '((PROJECT_USER))'
 DEPLOY_USER = 'deploy'
-PROD_HOST = '192.168.1.252'  # tODO Prod IP here
+PROD_HOST = '192.168.2.254'  # tODO Prod IP here
 STAGING_HOST = '127.0.0.1'  # tODO Staging IP here
 
 commands = {}

@@ -3,8 +3,8 @@ from os import path
 DB_USER = '((DB_USER))'
 DB_NAME = '((DB_NAME))'
 DB_PASS = '((DB_PASS))'
-ALLOWED_HOSTS = None,  # tODO add prod IP here.
-PROJECT_DOMAIN = ''  # TODO add temporary prod IP here or prod domain.
+ALLOWED_HOSTS = "192.168.2.254",  # tODO add prod IP here.
+PROJECT_DOMAIN = '//192.168.2.254'  # TODO add temporary prod IP here or prod domain.
 
 DEBUG = False
 PROJECT_NAME = path.basename(path.dirname(__file__))
