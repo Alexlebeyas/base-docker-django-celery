@@ -12,15 +12,15 @@ $screen-xs: 480px; // iPhone 6
   @if $class == xs {
     @media (min-width: $screen-xs) { @content; }
   }
-
+ 
   @else if $class == sm {
     @media (min-width: $screen-sm) { @content; }
   }
-
+ 
   @else if $class == md {
     @media (min-width: $screen-md) { @content; }
   }
-
+ 
   @else if $class == lg {
     @media (min-width: $screen-lg) { @content; }
   }
@@ -32,7 +32,7 @@ $screen-xs: 480px; // iPhone 6
   @else if $class == xxl {
     @media (min-width: $screen-xxl) { @content; }
   }
-
+ 
   @else {
     @warn "Breakpoint mixin supports: xxs, xs, sm, md, lg, xl, xxl";
   }
