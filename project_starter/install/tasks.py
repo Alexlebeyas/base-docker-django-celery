@@ -49,14 +49,18 @@ def set_secret_key():
 @tasks.add
 def set_prod_settings():
     """
-    Insert prod settings path string, ssh
+    Insert prod and staging settings path string, ssh
     password and database password.
     """
-    deploy_settings_file = path.join(settings_directory, 'prod.py')
-    with FileEditor(deploy_settings_file) as editor:
-        editor.replace_token('DB_USER', project_user)
-        editor.replace_token('DB_NAME', project_name)
-        editor.replace_token('DB_PASS', db_pass)
+    files = (
+        path.join(settings_directory, 'prod.py'),
+        path.join(settings_directory, 'staging.py')
+    )
+    for file_path in files:
+        with FileEditor(file_path) as editor:
+            editor.replace_token('DB_USER', project_user)
+            editor.replace_token('DB_NAME', project_name)
+            editor.replace_token('DB_PASS', db_pass)
 
 
 @tasks.add
@@ -64,11 +68,15 @@ def set_puppet_prod_settings():
     """
     Insert project variables into puppet's prod.pp.
     """
-    puppet_prod_settings_file = path.join(project_directory, 'puppet', 'manifests', 'prod.pp')
-    with FileEditor(puppet_prod_settings_file) as editor:
-        editor.replace_token('PROJECT_USER', project_user)
-        editor.replace_token('PROJECT_NAME', project_name)
-        editor.replace_token('DB_PASS', db_pass)
+    files = (
+        path.join(project_directory, 'puppet', 'manifests', 'prod.pp'),
+        path.join(project_directory, 'puppet', 'manifests', 'staging.pp'),
+    )
+    for file_path in files:
+        with FileEditor(file_path) as editor:
+            editor.replace_token('PROJECT_USER', project_user)
+            editor.replace_token('PROJECT_NAME', project_name)
+            editor.replace_token('DB_PASS', db_pass)
 
 
 @tasks.add

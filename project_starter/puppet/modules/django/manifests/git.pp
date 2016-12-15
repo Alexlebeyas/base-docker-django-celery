@@ -10,8 +10,10 @@ define django::git (
 
   if !$staging {
     $setting_file = "local_settings.erb"
+    $branch = "production"
   } else {
     $setting_file = "local_settings_staging.erb"
+    $branch = "staging"
   }
   exec { "$git_host-$project_user-ssh-keyscan":
     user    => $project_user,
@@ -33,6 +35,6 @@ define django::git (
     group   => $project_user,
     owner   => $project_user,
     mode    => 744,
-    content => template("django/local_settings.erb"),
+    content => template("django/$setting_file"),
   }
 }

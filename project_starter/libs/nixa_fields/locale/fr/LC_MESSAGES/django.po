@@ -1,0 +1,154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-13 14:46-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: libs/nixa_fields/constants.py:10
+msgid "Enter a valid password. Only one character needed."
+msgstr "Entrez un mote de passe valide. Seulement un caractère accepté."
+
+#: libs/nixa_fields/constants.py:11
+msgid ""
+"Enter a valid password. Minimum 8 characters. At least one digit and one "
+"letter."
+msgstr ""
+"Entrez un mot de passe valide. Mininum 8 caractères. Au moins un chiffre et "
+"une lettre."
+
+#: libs/nixa_fields/constants.py:12
+msgid ""
+"Enter a valid password. Minimum 12 characters. At least one digit, one "
+"uppercase, one lowercase and one special character, like #!?&*()_=~"
+msgstr ""
+"Entrez un mot de passe valide. Minimum 12 caractères. Au moins un chiffre, "
+"une minuscule, une majuscule et un caractère spécial suivant: #!?&*()_=~"
+
+#: libs/nixa_fields/fields.py:11
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr "La valeur « %(value)r » n'est pas un choix valide."
+
+#: libs/nixa_fields/fields.py:12
+msgid "This field cannot be null."
+msgstr "Ce champs ne peut être null."
+
+#: libs/nixa_fields/fields.py:13
+msgid "This field cannot be blank."
+msgstr "Ce champs ne peut être blank."
+
+#: libs/nixa_fields/fields.py:14
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr "Un(e) %(model_name)s avec ce %(field_label)s existe déjà."
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+#. Eg: "Title must be unique for pub_date year"
+#: libs/nixa_fields/fields.py:18
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+"%(field_label)s doit être unique pour la partie %(lookup_type)s de "
+"%(date_field_label)s."
+
+#: libs/nixa_fields/fields.py:74
+msgid "Email address"
+msgstr "Addresse courriel"
+
+#: libs/nixa_fields/fields.py:77
+msgid "Email"
+msgstr "Courriel"
+
+#: libs/nixa_fields/fields.py:84
+msgid "Password field"
+msgstr "Champs de mot de passe"
+
+#: libs/nixa_fields/fields.py:88
+msgid "Password"
+msgstr "Mot de passe"
+
+#: libs/nixa_fields/fields.py:95 libs/nixa_fields/fields.py:98
+msgid "First name"
+msgstr "Prénom"
+
+#: libs/nixa_fields/fields.py:105 libs/nixa_fields/fields.py:108
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: libs/nixa_fields/fields.py:115 libs/nixa_fields/fields.py:121
+msgid "Age"
+msgstr "Âge"
+
+#: libs/nixa_fields/fields.py:117 libs/nixa_fields/fields.py:118
+msgid "Enter a valid age value."
+msgstr "Entrez un âge valide."
+
+#: libs/nixa_fields/fields.py:127
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+#: libs/nixa_fields/fields.py:131
+msgid "Enter a valid phone number. Up to 15 digits allowed."
+msgstr "Entrez un numéro de téléphone valide. Jusqu'à 15 chiffres accepté."
+
+#: libs/nixa_fields/fields.py:136
+msgid "Phone"
+msgstr "Téléphone"
+
+#: libs/nixa_fields/fields.py:144 libs/nixa_fields/fields.py:153
+msgid "Postal code"
+msgstr "Code postal"
+
+#: libs/nixa_fields/fields.py:148
+msgid "Enter a valid postal code."
+msgstr "Entrez un code postal valide."
+
+#: libs/nixa_fields/forms.py:13
+msgid "The email is required."
+msgstr "Le courriel est requis."
+
+#: libs/nixa_fields/forms.py:20
+msgid "The password is required."
+msgstr "Le mot de passe est requis."
+
+#: libs/nixa_fields/forms.py:32
+msgid "The first name is required."
+msgstr "Le prénom est requis."
+
+#: libs/nixa_fields/forms.py:38
+msgid "The last name is required."
+msgstr "Le nom de famille est requis"
+
+#: libs/nixa_fields/forms.py:44
+msgid "The age is required."
+msgstr "L'âge est requis."
+
+#: libs/nixa_fields/forms.py:45
+msgid "Enter an integer."
+msgstr "Entrez un nombre entier."
+
+#: libs/nixa_fields/forms.py:87
+msgid "The phone is required."
+msgstr "Le téléphone est requis."
+
+#: libs/nixa_fields/forms.py:93
+msgid "The postal code is required."
+msgstr "Le code postal est requis."
+
+#: libs/nixa_fields/validators.py:15
+msgid "Enter a valid email address."
+msgstr "Entrez une adresses courriel valide."
