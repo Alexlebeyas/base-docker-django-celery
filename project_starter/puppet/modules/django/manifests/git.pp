@@ -27,7 +27,7 @@ define django::git (
     provider => git,
     source   => $git_repo,
     user     => $project_user,
-    revision => "master",
+    revision => $branch,
   } ->
 
   file { "$project_path/$project_name/local_settings.py":
