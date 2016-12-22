@@ -5,6 +5,7 @@ var gulp = require('gulp'),
   minifycss = require('gulp-clean-css'),
   sass = require('gulp-sass'),
   browserSync = require('browser-sync'),
+  concat = require('gulp-concat'),
   reload = browserSync.reload,
   paths = {
     src: 'scss/**/*.scss',
@@ -14,9 +15,9 @@ var gulp = require('gulp'),
               'node_modules/font-awesome/fonts/fontawesome-webfont.woff2', 'node_modules/font-awesome/fonts/fontawesome-webfont.eot', 'node_modules/font-awesome/fonts/fontawesome-webfont.svg']
   },
   dest = {
-    css: '../apps/front/static/css/',
-    scripts: '../apps/front/static/js/',
-    fonts: '../apps/front/static/fonts/'
+    css: '../dest/css/',
+    scripts: '../dest/js/',
+    fonts: '../dest/fonts/'
   };
 
 gulp.task('styles', function(){
@@ -41,6 +42,7 @@ gulp.task('cssvendors', function(){
         this.emit('end');
     }}))
     .pipe(sass())
+    .pipe(concat('vendors.css'))
     .pipe(rename('vendors.css'))
     .pipe(autoprefixer('last 2 versions'))
     .pipe(minifycss())
@@ -49,6 +51,7 @@ gulp.task('cssvendors', function(){
 
 gulp.task('jsvendors', function(){
   gulp.src(paths.jsvendors)
+    .pipe(concat('vendors.js'))
     .pipe(rename('vendors.js'))
     .pipe(gulp.dest(dest.scripts));
 });

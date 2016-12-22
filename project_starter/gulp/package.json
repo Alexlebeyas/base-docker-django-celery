@@ -13,6 +13,7 @@
     "gulp-autoprefixer": "*",
     "gulp-clean-css": "*",
     "gulp-plumber": "*",
+    "gulp-concat": "*",
     "gulp-rename": "*",
     "gulp-sass": "*",
     "gulp": "*",
