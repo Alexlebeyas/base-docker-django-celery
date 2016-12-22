@@ -88,9 +88,9 @@ def slice_text(text, max_length):
         return text[:max_length]
 
 
-class DateMixing(models.Model):
-    date_created = models.DateField(_('Date created'), auto_now_add=True)
-    date_updated = models.DateField(_('Date updated'), auto_now=True)
+class DateMixin(models.Model):
+    date_created = models.DateTimeField(_('Date created'), auto_now_add=True)
+    date_updated = models.DateTimeField(_('Date updated'), auto_now=True)
 
     class Meta:
         abstract = True
