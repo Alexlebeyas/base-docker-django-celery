@@ -9,19 +9,22 @@ var gulp = require('gulp'),
   reload = browserSync.reload,
   paths = {
     src: 'scss/**/*.scss',
+    main: 'scss/main.scss',
+    admin: 'scss/admin.scss',
     jsvendors: ['node_modules/jquery/dist/jquery.js', 'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js'],
     cssvendors: ['vendors/bootstrap.scss','node_modules/font-awesome/scss/font-awesome.scss'],
     fontsvendors: ['node_modules/font-awesome/fonts/fontawesome-webfont.ttf', 'node_modules/font-awesome/fonts/fontawesome-webfont.woff',
               'node_modules/font-awesome/fonts/fontawesome-webfont.woff2', 'node_modules/font-awesome/fonts/fontawesome-webfont.eot', 'node_modules/font-awesome/fonts/fontawesome-webfont.svg']
   },
   dest = {
-    css: '../dest/css/',
-    scripts: '../dest/js/',
-    fonts: '../dest/fonts/'
+    css: '../apps/front/static/css/',
+    admin: '../apps/custom_admin/static/custom_admin/css/',
+    scripts: '../apps/front/static/js/',
+    fonts: '../apps/front/static/fonts/'
   };
 
 gulp.task('styles', function(){
-  gulp.src([paths.src], { sourcemap: true })
+  gulp.src([paths.main], { sourcemap: true })
     .pipe(plumber({
       errorHandler: function (error) {
         console.log(error.message);
@@ -32,6 +35,21 @@ gulp.task('styles', function(){
     //.pipe(minifycss())
     .pipe(gulp.dest(dest.css))
     .pipe(reload({ stream:true }));
+});
+
+gulp.task('cssadmin', function(){
+  gulp.src(paths.admin, { sourcemap: true })
+    .pipe(plumber({
+      errorHandler: function (error) {
+        console.log(error.message);
+        this.emit('end');
+    }}))
+    .pipe(sass())
+    .pipe(concat('admin.css'))
+    .pipe(rename('admin.css'))
+    .pipe(autoprefixer('last 2 versions'))
+    .pipe(minifycss())
+    .pipe(gulp.dest(dest.admin));
 });
 
 gulp.task('cssvendors', function(){
@@ -71,8 +89,11 @@ gulp.task('browsersync', function(){
 
 gulp.task('vendors', ['cssvendors', 'jsvendors', 'fontsvendors']);
 
+gulp.task('watch', ['default']);
+
 gulp.task('default', function(){
   gulp.styles;
-  gulp.watch(paths.src, ['styles']);
+  gulp.cssadmin;
+  gulp.watch(paths.src, ['styles', 'cssadmin']);
 });
 
