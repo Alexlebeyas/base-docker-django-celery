@@ -1,280 +1,20 @@
-{% load staticfiles i18n %}
+{% load staticfiles i18n front %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>{% block email_title %}{% endblock %}</title>
+        <title>{% block email_title %}{% endblock %} - {{ PROJECT_TITLE }}</title>
         <style type="text/css">
-            /* /\/\/\/\/\/\/\/\/ CLIENT-SPECIFIC STYLES /\/\/\/\/\/\/\/\/ */
-            #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" message */
-            .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
-            .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;} /* Force Hotmail to display normal line spacing */
-            body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;} /* Prevent WebKit and Windows mobile changing default text sizes */
-            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;} /* Remove spacing between tables in Outlook 2007 and up */
-            img{-ms-interpolation-mode:bicubic;} /* Allow smoother rendering of resized image in Internet Explorer */
-
-            /* /\/\/\/\/\/\/\/\/ RESET STYLES /\/\/\/\/\/\/\/\/ */
-            body{margin:0; padding:0;}
-            img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
-            table{border-collapse:collapse !important;}
-            body, #bodyTable, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;}
-
-            /* /\/\/\/\/\/\/\/\/ TEMPLATE STYLES /\/\/\/\/\/\/\/\/ */
-            /* ========== Page Styles ========== */
-            #bodyCell{padding:20px;}
-            #templateContainer{width:600px;}
-            body, #bodyTable{
-                /*@editable*/ background-color:#E8EAEC;
-            }
-            #bodyCell{
-                /*@editable*/ border-top: 10px solid #AFB6CC;
-                /*@editable*/ border-bottom: 10px solid #AFB6CC;
-            }
-            #templateContainer{
-                /*@editable*/
-            }
-            h1{
-                display:block;
-                font-size: 22px;
-                font-weight: bold;
-                color: #fff !important;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-style:normal;
-                /*@editable*/ line-height:130%;
-                /*@editable*/ letter-spacing:1px;
-                margin-top:0;
-                margin-right:0;
-                margin-bottom:0;
-                margin-left:0;
-                /*@editable*/ text-align:left;
-            }
-            h2{
-                /*@editable*/ color:#404040 !important;
-                display:block;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:20px;
-                /*@editable*/ font-style:normal;
-                /*@editable*/ font-weight:bold;
-                /*@editable*/ line-height:100%;
-                /*@editable*/ letter-spacing:normal;
-                margin-top:0;
-                margin-right:0;
-                margin-bottom:10px;
-                margin-left:0;
-                /*@editable*/ text-align:left;
-            }
-            h3{
-                /*@editable*/ color:#606060 !important;
-                display:block;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:16px;
-                /*@editable*/ font-style:italic;
-                /*@editable*/ font-weight:normal;
-                /*@editable*/ line-height:100%;
-                /*@editable*/ letter-spacing:normal;
-                margin-top:0;
-                margin-right:0;
-                margin-bottom:10px;
-                margin-left:0;
-                /*@editable*/ text-align:left;
-            }
-            h4{
-                /*@editable*/ color:#808080 !important;
-                display:block;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:14px;
-                /*@editable*/ font-style:italic;
-                /*@editable*/ font-weight:normal;
-                /*@editable*/ line-height:100%;
-                /*@editable*/ letter-spacing:normal;
-                margin-top:0;
-                margin-right:0;
-                margin-bottom:10px;
-                margin-left:0;
-                /*@editable*/ text-align:left;
-            }
-            /* ========== Header Styles ========== */
-            #templatePreheader{
-                /*@editable*/ background-color:#FFF;
-            }
-            .preheaderContent{
-                /*@editable*/ color:#808080;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:10px;
-                /*@editable*/ line-height:125%;
-                /*@editable*/ text-align:left;
-            }
-            .preheaderContent a:link, .preheaderContent a:visited, /* Yahoo! Mail Override */ .preheaderContent a .yshortcuts /* Yahoo! Mail Override */{
-                /*@editable*/ color:#6cb33f;
-                /*@editable*/ font-weight:normal;
-                /*@editable*/ text-decoration:underline;
-            }
-            #templateHeader{
-                /*@editable*/ background-color:#fff;
-            }
-            #templateTitle {
-                background-color: #6cb33f;
-            }
-            .headerContent{
-                /*@editable*/ color:#505050;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:20px;
-                /*@editable*/ font-weight:bold;
-                /*@editable*/ line-height:100%;
-                /*@editable*/ padding-top:20px;
-                /*@editable*/ padding-right:30px;
-                /*@editable*/ padding-bottom:20px;
-                /*@editable*/ padding-left:30px;
-                /*@editable*/ text-align:left;
-                /*@editable*/ vertical-align:middle;
-                border-top: 10px solid #6cb33f;
-            }
-            .headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */ .headerContent a .yshortcuts /* Yahoo! Mail Override */{
-                /*@editable*/ color:#6cb33f;
-                /*@editable*/ font-weight:normal;
-                /*@editable*/ text-decoration:underline;
-            }
-            .sectionBreak {
-                padding-bottom: 20px !important;
-            }
-            #headerImage{
-                height:auto;
-                max-width:600px;
-            }
-            .headerTitle {
-                padding-top: 30px;
-                padding-right: 20px;
-                padding-left: 30px;
-                padding-bottom: 30px;
-                background-size: cover;
-            }
-            /* ========== Body Styles ========== */
-            #templateBody{
-                background-color: #fff;
-            }
-            #templateMessage {
-                /*@editable*/ background-color:#F4F4F4;
-            }
-            .receiptContent{
-                /*@editable*/ color:#666;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:14px;
-                /*@editable*/ line-height:190%;
-                padding-top: 1px;
-                padding-right: 50px;
-                padding-bottom: 1px;
-                padding-left: 0px;
-                /*@editable*/ text-align:left;
-            }
-            th.receiptContent {
-                color: #1E3368;
-            }
-            .bodyContent{
-                /*@editable*/ color:#171923;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:14px;
-                /*@editable*/ line-height:190%;
-                padding-top:30px;
-                padding-right:30px;
-                padding-bottom:30px;
-                padding-left:30px;
-                /*@editable*/ text-align:left;
-            }
-            .bodyContent a:link, .bodyContent a:visited, /* Yahoo! Mail Override */ .bodyContent a .yshortcuts /* Yahoo! Mail Override */{
-                /*@editable*/ color:#1e3368;
-                /*@editable*/ font-weight:normal;
-                /*@editable*/ text-decoration:underline;
-            }
-            .bodyContent img{
-                display:inline;
-                height:auto;
-                max-width:560px;
-            }
-            /* ========== Footer Styles ========== */
-            #templateFooter{
-                /*@editable*/ background-color:#171923;
-            }
-            .footerContent{
-                /*@editable*/ color:#FFF;
-                /*@editable*/ font-family:Helvetica;
-                /*@editable*/ font-size:10px;
-                /*@editable*/ line-height:150%;
-                padding-top:20px;
-                background-color: #171923;
-                padding-right:30px;
-                padding-bottom:20px;
-                padding-left:30px;
-                /*@editable*/ text-align:left;
-            }
-            .footerLinks {
-                padding-left: 0;
-            }
-            .footerContent a:link, .footerContent a:visited, /* Yahoo! Mail Override */ .footerContent a .yshortcuts, .footerContent a span /* Yahoo! Mail Override */{
-                /*@editable*/ color: #6cb33f;
-                /*@editable*/ font-weight:normal;
-                /*@editable*/ text-decoration:underline;
-            }
-            /* /\/\/\/\/\/\/\/\/ MOBILE STYLES /\/\/\/\/\/\/\/\/ */
-            @media only screen and (max-width: 480px){
-                /* /\/\/\/\/\/\/ CLIENT-SPECIFIC MOBILE STYLES /\/\/\/\/\/\/ */
-                body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:none !important;} /* Prevent Webkit platforms from changing default text sizes */
-                body{width:100% !important; min-width:100% !important;} /* Prevent iOS Mail from adding padding to the body */
-
-                /* /\/\/\/\/\/\/ MOBILE RESET STYLES /\/\/\/\/\/\/ */
-                #bodyCell{padding:10px !important;}
-
-                /* /\/\/\/\/\/\/ MOBILE TEMPLATE STYLES /\/\/\/\/\/\/ */
-                /* ======== Page Styles ======== */
-                #templateContainer{
-                    max-width:600px !important;
-                    /*@editable*/ width:100% !important;
-                }
-                h1{
-                    /*@editable*/ font-size:24px !important;
-                    /*@editable*/ line-height:130% !important;
-                }
-                h2{
-                    /*@editable*/ font-size:20px !important;
-                    /*@editable*/ line-height:100% !important;
-                }
-                h3{
-                    /*@editable*/ font-size:18px !important;
-                    /*@editable*/ line-height:100% !important;
-                }
-                h4{
-                    /*@editable*/ font-size:16px !important;
-                    /*@editable*/ line-height:100% !important;
-                }
-                /* ======== Header Styles ======== */
-                #templatePreheader{display:none !important;} /* Hide the template preheader to save space */
-                #headerImage{
-                    height:auto !important;
-                    /*@editable*/ max-width:600px !important;
-                    /*@editable*/ width:100% !important;
-                }
-                .headerContent{
-                    /*@editable*/ font-size:20px !important;
-                    /*@editable*/ line-height:125% !important;
-                }
-                /* ======== Body Styles ======== */
-                .bodyContent{
-                    /*@editable*/ font-size:18px !important;
-                    /*@editable*/ line-height:125% !important;
-                }
-                /* ======== Footer Styles ======== */
-                .footerContent{
-                    /*@editable*/ font-size:14px !important;
-                    /*@editable*/ line-height:115% !important;
-                }
-                .footerContent a{display:block !important;} /* Place footer social and utility links on their own lines, for easier access */
-            }
+            {% include_static 'css/email.css' %}
         </style>
+
     </head>
+{% with color_bg_header="#6cb33f" color_bg_footer="#171923" color_text_header="#fff" color_text_footer="#fff" color_text_links="#6cb33f" color_border_header="#6cb33f" color_border_body="#AFB6CC" %}
     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;margin: 0;padding: 0;background-color: #E8EAEC;height: 100% !important;width: 100% !important;">
         <center>
             <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;background-color: #E8EAEC;border-collapse: collapse !important;height: 100% !important;width: 100% !important;">
                 <tr>
-                    <td align="center" valign="top" id="bodyCell" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 10px solid #AFB6CC;border-bottom: 10px solid #AFB6CC;height: 100% !important;width: 100% !important;">
+                    <td align="center" valign="top" id="bodyCell" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 10px solid {{ color_border_body }};border-bottom: 10px solid {{ color_border_body }};height: 100% !important;width: 100% !important;">
                         <!-- BEGIN TEMPLATE // -->
                         <table border="0" cellpadding="0" cellspacing="0" id="templateContainer" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 600px;border-collapse: collapse !important;">
                             <tr>
@@ -282,9 +22,9 @@
                                     <!-- BEGIN HEADER // -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #fff;border-collapse: collapse !important;">
                                         <tr>
-                                            <td valign="top" class="headerContent" width="100px" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #505050;font-family: Helvetica;font-size: 20px;font-weight: bold;line-height: 100%;padding-top: 20px;padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;vertical-align: middle;border-top: 10px solid #6cb33f;">
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: #6cb33f;font-weight: normal;text-decoration: underline;">
-                                                    <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" alt="TGTA" id="headerImage" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext>
+                                            <td valign="top" class="headerContent" width="100px" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #505050;font-family: Helvetica;font-size: 20px;font-weight: bold;line-height: 100%;padding-top: 20px;padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;vertical-align: middle;border-top: 10px solid {{ color_border_header }};">
+                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_links }};font-weight: normal;text-decoration: underline;">
+                                                    <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" alt="{{ PROJECT_TITLE }}" id="headerImage">
                                                 </a>
                                             </td>
                                         </tr>
@@ -295,10 +35,10 @@
                             <tr>
                                 <td align="center" valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
                                     <!-- BEGIN HEADER // -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateTitle" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #6cb33f;border-collapse: collapse !important;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateTitle" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: {{ color_bg_header }};border-collapse: collapse !important;">
                                         <tr>
                                             <td valign="top" class="headerTitle" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;padding-top: 30px;padding-right: 20px;padding-left: 30px;padding-bottom: 30px;">
-                                                <h1 style="display: block;font-size: 22px;font-weight: bold;font-family: Helvetica;font-style: normal;line-height: 130%;letter-spacing: 1px;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;text-align: left;color: #fff !important;">{% block subject %}{% endblock %}</h1>
+                                                <h1 style="display: block;font-size: 22px;font-weight: bold;font-family: Helvetica;font-style: normal;line-height: 130%;letter-spacing: 1px;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;text-align: left;color: {{ color_text_header }} !important;">{% block subject %}{% endblock %}</h1>
                                             </td>
                                         </tr>
                                     </table>
@@ -317,15 +57,15 @@
                                     <!-- BEGIN FOOTER // -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #171923;border-collapse: collapse !important;">
                                         <tr>
-                                            <td valign="top" class="footerContent" width="58" mc:edit="footer_content00" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #FFF;font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: #171923;padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;">
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: #6cb33f;font-weight: normal;text-decoration: underline;">
-                                                    <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo_email.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" id="headerImage" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext>
+                                            <td valign="top" class="footerContent" width="58" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ color_text_footer }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ color_bg_footer }};padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;">
+                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_links }};font-weight: normal;text-decoration: underline;">
+                                                    <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo_email.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" id="headerImage">
                                                 </a>
                                             </td>
-                                            <td valign="middle" class="footerContent footerLinks" mc:edit="footer_content00" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #FFF;font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: #171923;padding-right: 30px;padding-bottom: 20px;padding-left: 0;text-align: left;">
-                                                <strong>TGTA</strong><br>
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: #6cb33f;font-weight: normal;text-decoration: underline;">{{ PROJECT_DOMAIN }}</a><br>
-                                                contact@tgta.com
+                                            <td valign="middle" class="footerContent footerLinks" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ color_text_footer }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ color_bg_footer }};padding-right: 30px;padding-bottom: 20px;padding-left: 0;text-align: left;">
+                                                <strong>{{ PROJECT_TITLE }}</strong><br>
+                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_links }};font-weight: normal;text-decoration: underline;">{{ PROJECT_DOMAIN }}</a><br>
+                                                <a href="mailto:{{ PROJECT_CONTACT }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_footer }};font-weight: normal;text-decoration: none;">{{ PROJECT_CONTACT }}</a><br>
                                             </td>
                                         </tr>
                                     </table>
@@ -339,4 +79,5 @@
             </table>
         </center>
     </body>
+{% endwith %}
 </html>
