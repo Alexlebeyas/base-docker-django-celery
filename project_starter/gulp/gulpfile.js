@@ -46,7 +46,6 @@ gulp.task('cssadmin', function(){
     }}))
     .pipe(sass())
     .pipe(concat('admin.css'))
-    .pipe(rename('admin.css'))
     .pipe(autoprefixer('last 2 versions'))
     .pipe(minifycss())
     .pipe(gulp.dest(dest.admin));
@@ -61,7 +60,6 @@ gulp.task('cssvendors', function(){
     }}))
     .pipe(sass())
     .pipe(concat('vendors.css'))
-    .pipe(rename('vendors.css'))
     .pipe(autoprefixer('last 2 versions'))
     .pipe(minifycss())
     .pipe(gulp.dest(dest.css));
@@ -70,7 +68,6 @@ gulp.task('cssvendors', function(){
 gulp.task('jsvendors', function(){
   gulp.src(paths.jsvendors)
     .pipe(concat('vendors.js'))
-    .pipe(rename('vendors.js'))
     .pipe(gulp.dest(dest.scripts));
 });
 
@@ -79,8 +76,7 @@ gulp.task('fontsvendors', function(){
     .pipe(gulp.dest(dest.fonts));
 });
 
-gulp.task('browsersync', function(){
-  gulp.styles;
+gulp.task('browsersync', ['styles'], function(){
   browserSync({
     proxy: "127.0.0.1:8000"
   });
@@ -91,9 +87,6 @@ gulp.task('vendors', ['cssvendors', 'jsvendors', 'fontsvendors']);
 
 gulp.task('watch', ['default']);
 
-gulp.task('default', function(){
-  gulp.styles;
-  gulp.cssadmin;
+gulp.task('default', ['styles', 'cssadmin'] ,function(){
   gulp.watch(paths.src, ['styles', 'cssadmin']);
-});
-
+}); 
