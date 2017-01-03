@@ -9,12 +9,11 @@
         </style>
 
     </head>
-{% with color_bg_header="#6cb33f" color_bg_footer="#171923" color_text_header="#fff" color_text_footer="#fff" color_text_links="#6cb33f" color_border_header="#6cb33f" color_border_body="#AFB6CC" %}
     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;margin: 0;padding: 0;background-color: #E8EAEC;height: 100% !important;width: 100% !important;">
         <center>
             <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;background-color: #E8EAEC;border-collapse: collapse !important;height: 100% !important;width: 100% !important;">
                 <tr>
-                    <td align="center" valign="top" id="bodyCell" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 10px solid {{ color_border_body }};border-bottom: 10px solid {{ color_border_body }};height: 100% !important;width: 100% !important;">
+                    <td align="center" valign="top" id="bodyCell" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 10px solid {{ COLOR_BORDER_BODY }};border-bottom: 10px solid {{ COLOR_BORDER_BODY }};height: 100% !important;width: 100% !important;">
                         <!-- BEGIN TEMPLATE // -->
                         <table border="0" cellpadding="0" cellspacing="0" id="templateContainer" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 600px;border-collapse: collapse !important;">
                             <tr>
@@ -22,8 +21,8 @@
                                     <!-- BEGIN HEADER // -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #fff;border-collapse: collapse !important;">
                                         <tr>
-                                            <td valign="top" class="headerContent" width="100px" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #505050;font-family: Helvetica;font-size: 20px;font-weight: bold;line-height: 100%;padding-top: 20px;padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;vertical-align: middle;border-top: 10px solid {{ color_border_header }};">
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_links }};font-weight: normal;text-decoration: underline;">
+                                            <td valign="top" class="headerContent" width="100px" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #505050;font-family: Helvetica;font-size: 20px;font-weight: bold;line-height: 100%;padding-top: 20px;padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;vertical-align: middle;border-top: 10px solid {{ COLOR_BORDER_HEADER }};">
+                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">
                                                     <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" alt="{{ PROJECT_TITLE }}" id="headerImage">
                                                 </a>
                                             </td>
@@ -35,10 +34,10 @@
                             <tr>
                                 <td align="center" valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
                                     <!-- BEGIN HEADER // -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateTitle" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: {{ color_bg_header }};border-collapse: collapse !important;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateTitle" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: {{ COLOR_BG_HEADER }};border-collapse: collapse !important;">
                                         <tr>
                                             <td valign="top" class="headerTitle" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;padding-top: 30px;padding-right: 20px;padding-left: 30px;padding-bottom: 30px;">
-                                                <h1 style="display: block;font-size: 22px;font-weight: bold;font-family: Helvetica;font-style: normal;line-height: 130%;letter-spacing: 1px;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;text-align: left;color: {{ color_text_header }} !important;">{% block subject %}{% endblock %}</h1>
+                                                <h1 style="display: block;font-size: 22px;font-weight: bold;font-family: Helvetica;font-style: normal;line-height: 130%;letter-spacing: 1px;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;text-align: left;color: {{ COLOR_TEXT_HEADER }} !important;">{% block subject %}{% endblock %}</h1>
                                             </td>
                                         </tr>
                                     </table>
@@ -57,15 +56,15 @@
                                     <!-- BEGIN FOOTER // -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #171923;border-collapse: collapse !important;">
                                         <tr>
-                                            <td valign="top" class="footerContent" width="58" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ color_text_footer }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ color_bg_footer }};padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;">
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_links }};font-weight: normal;text-decoration: underline;">
+                                            <td valign="top" class="footerContent" width="58" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ COLOR_TEXT_FOOTER }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ COLOR_BG_FOOTER }};padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;">
+                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">
                                                     <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo_email.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" id="headerImage">
                                                 </a>
                                             </td>
-                                            <td valign="middle" class="footerContent footerLinks" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ color_text_footer }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ color_bg_footer }};padding-right: 30px;padding-bottom: 20px;padding-left: 0;text-align: left;">
+                                            <td valign="middle" class="footerContent footerLinks" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ COLOR_TEXT_FOOTER }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ COLOR_BG_FOOTER }};padding-right: 30px;padding-bottom: 20px;padding-left: 0;text-align: left;">
                                                 <strong>{{ PROJECT_TITLE }}</strong><br>
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_links }};font-weight: normal;text-decoration: underline;">{{ PROJECT_DOMAIN }}</a><br>
-                                                <a href="mailto:{{ PROJECT_CONTACT }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ color_text_footer }};font-weight: normal;text-decoration: none;">{{ PROJECT_CONTACT }}</a><br>
+                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">{{ PROJECT_DOMAIN }}</a><br>
+                                                <a href="mailto:{{ PROJECT_CONTACT }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_FOOTER }};font-weight: normal;text-decoration: none;">{{ PROJECT_CONTACT }}</a><br>
                                             </td>
                                         </tr>
                                     </table>
@@ -79,5 +78,4 @@
             </table>
         </center>
     </body>
-{% endwith %}
 </html>

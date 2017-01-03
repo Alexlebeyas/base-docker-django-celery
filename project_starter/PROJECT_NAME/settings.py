@@ -168,8 +168,19 @@ LOGGING = {
     },
 }
 
+# EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'console@localhost'
+COLOR_BG_HEADER = '#6cb33f'
+COLOR_BG_FOOTER = '#171923'
+COLOR_TEXT_HEADER = '#fff'
+COLOR_TEXT_FOOTER = '#fff'
+COLOR_TEXT_LINKS = '#6cb33f'
+COLOR_BORDER_HEADER = '#6cb33f'
+COLOR_BORDER_BODY = '#AFB6CC'
+################
+
+
 BROKER_URL = 'redis://localhost:6379/1'
 CELERYD_HIJACK_ROOT_LOGGER = False
 
