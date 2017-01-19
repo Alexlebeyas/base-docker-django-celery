@@ -97,11 +97,18 @@ class CCVerificationField(django_forms.IntegerField):
         return ((type == cc_constant.MASTERCARD or type == cc_constant.VISA) and len(str(code)) == 3) or \
                (type == cc_constant.AMERICAN_EXPRESS and len(str(code)) == 4)
 
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     credit_card = cleaned_data.get("credit_card")
-    #     cvc = cleaned_data.get("cvc")
-    #
-    #     if credit_card and cvc:
-    #         if not CCVerificationField.is_code_match_cc(credit_card, cvc):
-    #             self.add_error("cvc", CCVerificationField.cc_errors_messages['match'])
+
+# Example
+class CreditCardBaseForm(django_forms.Form):
+
+    credit_card = CreditCardField()
+    ccv = CCVerificationField()
+
+    def clean(self):
+        cleaned_data = super(CreditCardBaseForm, self).clean()
+        credit_card = cleaned_data.get("credit_card")
+        cvc = cleaned_data.get("ccv")
+
+        if credit_card and cvc:
+            if not CCVerificationField.is_code_match_cc(credit_card, cvc):
+                self.add_error("ccv", CCVerificationField.cc_errors_messages['match'])
