@@ -5,7 +5,7 @@ from django.core.validators import EmailValidator
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
-from libs.nixa_fields.constants import PasswordLevel
+from libs.nixa_fields.constants import PasswordLevel, CreditCardsConstant
 
 __author__ = 'philippe'
 
@@ -29,6 +29,7 @@ class EmailValidator(EmailValidator):
     #     r'\[([A-f0-9:\.]+)\]\Z',
     #     re.IGNORECASE)
     # domain_whitelist = ['localhost']
+
 
 validate_email = EmailValidator()
 
@@ -72,4 +73,62 @@ class PasswordValidator(object):
             (self.code == other.code)
         )
 
+
 validate_password = PasswordValidator()
+
+
+@deconstructible
+class CreditCardValidator(object):
+    code = "invalid"
+    messages = {
+        'invalid_card': '%s%s' % (_('Veuillez entrer une carte '),
+                                  ', '.join([str(x[1]) for x in CreditCardsConstant.CC_CHOICE])),
+        'invalid_number': _('Veuillez entrer un numero de carte valide'),
+    }
+
+    def __init__(self, code=None):
+        if code is not None:
+            self.code = code
+
+    def __call__(self, value):
+        number = force_text(str(value))
+        if not self.is_valid_number(value=number):
+            print('__call__ %s' % number)
+            raise ValidationError(self.messages['invalid_number'], code=self.code)
+
+        if not self.is_valid_card(value=number):
+            raise ValidationError(self.messages['invalid_card'], code=self.code)
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__) and
+            (self.messages == other.message)
+            and (self.code == other.code)
+        )
+
+    def strip_to_number(self, value):
+        return value.replace(' ', '').replace('-', '')
+
+    def is_valid_card(self, value):
+        number = self.strip_to_number(value=value)
+        is_valid = False
+
+        for k, regex in CreditCardsConstant.CC_PATTERNS.items():
+            if re.match(regex, number):
+                is_valid = True
+                print(k)
+                break
+
+        return is_valid
+
+    def is_valid_number(self, value):
+        number = self.strip_to_number(value=value)
+        return bool(re.search('^[0-9]{13,16}$', number))
+
+
+validate_credit_card = CreditCardValidator()
+
+
+def validate_ccv(value):
+    if not bool(re.search('^[0-9]{3,4}$', str(value))):
+        raise ValidationError(_('Le code de sécurité que vous avez fourni est invalide'), code='invalid')

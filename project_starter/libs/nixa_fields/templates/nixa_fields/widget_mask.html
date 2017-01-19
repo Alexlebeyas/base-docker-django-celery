@@ -1,2 +1,10 @@
-<input class="{{ class }} form-control" data-mask-value="{{ mask_value }}" data-vendor-url="{{ vendor_url }}" maxlength="{{ max_length }}" data-related-input="{{ id }}" type="text" {% if value %}value={{ value }}{% endif %} />
-<input type="hidden" id="{{ id }}" name="{{ name }}" {% if value %}value="{{ value }}"{% endif %} />
+<input class="{{ class }} form-control"
+       data-mask-value="{{ mask_value }}"
+       data-vendor-url="{{ vendor_url }}"
+       {% if size %} size="{{ size }}" {% endif %}
+       {% if max_length %} maxlength="{{ max_length }}" {% endif %}
+       data-related-input="{{ id }}"
+       type="{{ input_type }}"
+       value="{% if value %}{{ value }}{% endif %}"
+/>
+<input type="hidden" id="{{ id }}" name="{{ name }}" value="{% if value %}{{ value }}{% endif %}"/>
