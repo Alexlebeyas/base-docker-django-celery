@@ -2,6 +2,7 @@ from copy import copy
 from django import forms as django_forms
 from django.template.loader import get_template
 from django.templatetags.static import static
+from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 from libs.nixa_fields.widgets import MaskWidget
 
@@ -74,22 +75,29 @@ class PostalCodeField(MaskField):
     }
 
 
-class CreditCardField(MaskField):
-    default_validators=[validators.validate_credit_card]
+class CreditCardField(django_forms.CharField):
+    default_validators = [validators.validate_credit_card]
+    widget = MaskWidget(attrs={
+        'max_length': 19
+    })
+
+    def to_python(self, value):
+        if value in self.empty_values:
+            return ''
+        return smart_text(value.replace(' ', '').replace('-', ''))
 
 
-class CCVerificationField(django_forms.IntegerField):
+class CCVerificationField(django_forms.CharField):
     default_validators = [validators.validate_ccv]
     cc_errors_messages = {
         'match': _('Le numéro de sécurité ne correspond pas avec votre type carte de crédit')
     }
 
     widget = MaskWidget(attrs={
-        'size': 4,
         'max_length': 4
     })
 
-    # Must be call after the super clean, otherwise you'll get errors and you will be angry >:(
+    # Must be called after the super() clean, otherwise you'll get errors and you will be angry >:(
     @staticmethod
     def is_code_match_cc(cc_number, code):
         cc_constant = CreditCardsConstant()
