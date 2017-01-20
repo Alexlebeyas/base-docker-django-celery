@@ -45,3 +45,8 @@ class MaskWidget(django_forms.TextInput):
 
     class Media:
         js = ('js/mask_widget.js',)
+
+
+class CCExpirationWidget(django_forms.MultiWidget):
+    def decompress(self, value):
+        return [value.month, value.year] if value else [None, None]

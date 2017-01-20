@@ -1,12 +1,11 @@
-from copy import copy
+from calendar import monthrange
+from datetime import date
 from django import forms as django_forms
-from django.template.loader import get_template
-from django.templatetags.static import static
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 from libs.nixa_fields.widgets import MaskWidget
-
-from project_starter.libs.nixa_fields.constants import CreditCardsConstant
+from libs.nixa_fields.constants import CreditCardsConstant
+from libs.nixa_fields.widgets import CCExpirationWidget
 from . import validators
 
 __author__ = 'philippe'
@@ -106,9 +105,54 @@ class CCVerificationField(django_forms.CharField):
                (type == cc_constant.AMERICAN_EXPRESS and len(str(code)) == 4)
 
 
+class CCExpirationMultiField(django_forms.MultiValueField):
+    EXP_MONTH = [(x, x) for x in range(1, 13)]
+    EXP_YEAR = [(x, x) for x in range(date.today().year,
+                                      date.today().year + 15)]
+
+    default_error_messages = {
+        'invalid_month': _('Enter a valid month.'),
+        'invalid_year': _('Enter a valid year.'),
+        'invalid_date': _('The expiration date you entered is in the past.'),
+    }
+
+    def __init__(self, *args, **kwargs):
+        errors = self.default_error_messages.copy()
+        if 'error_messages' in kwargs:
+            errors.update(kwargs['error_messages'])
+        fields = (
+            django_forms.ChoiceField(choices=self.EXP_MONTH,
+                                     error_messages={'invalid': errors['invalid_month']}),
+            django_forms.ChoiceField(choices=self.EXP_YEAR,
+                                     error_messages={'invalid': errors['invalid_year']}),
+        )
+        super(CCExpirationMultiField, self).__init__(fields, *args, **kwargs)
+        self.widget = CCExpirationWidget(
+            widgets=[fields[0].widget, fields[1].widget],
+            attrs={'class': 'nixa-fields-mask form-control'}
+        )
+
+    def clean(self, value):
+        exp = super(CCExpirationMultiField, self).clean(value)
+        if date.today() > exp:
+            raise django_forms.ValidationError(self.default_error_messages['invalid_date'])
+
+    def compress(self, data_list):
+        if data_list:
+            if data_list[1] in django_forms.fields.EMPTY_VALUES:
+                raise django_forms.ValidationError(self.default_error_messages['invalid_year'])
+            if data_list[0] in django_forms.fields.EMPTY_VALUES:
+                raise django_forms.ValidationError(self.default_error_messages['invalid_month'])
+
+            year = int(data_list[1])
+            month = int(data_list[0])
+            day = monthrange(year, month)[1]
+            return date(year, month, day)
+        return None
+
+
 # Example
 class CreditCardBaseForm(django_forms.Form):
-
     credit_card = CreditCardField()
     ccv = CCVerificationField()
 
