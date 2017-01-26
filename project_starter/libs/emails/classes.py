@@ -107,14 +107,14 @@ class Email(object):
             if files:
                 for file in files:
                     attach_file_to_email(email, file)
+
+            email.send()
             if commit:
                 EmailSent.objects.create(
                     sent_to=user.get_email(),
                     template=self.template,
                     content=body,
                 )
-            email.send()
-
             return email
 
     def _validate_context(self, context):
