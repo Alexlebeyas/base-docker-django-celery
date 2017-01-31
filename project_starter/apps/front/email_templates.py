@@ -20,6 +20,8 @@ contact_email = Email(
                        'fsd ;ls dsad; dmmem eè; l;lj ds; kfl;sd f;sdlf \n'
                        'fl;sdk fs;d; fjsjfnfkddkkdkdkjf ffkkfdkf fdlfl'
         },
+        'PROJECT_CONTACT': settings.PROJECT_CONTACT,
+        'PROJECT_TITLE': settings.PROJECT_TITLE,
         'PROJECT_DOMAIN': settings.PROJECT_DOMAIN
     },
 )

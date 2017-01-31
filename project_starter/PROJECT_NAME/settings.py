@@ -36,6 +36,8 @@ ADMINS = (
 from os import path
 
 PROJECT_DOMAIN = "//127.0.0.1:8000"
+PROJECT_TITLE = "Project Starter"
+PROJECT_CONTACT = "contact@nixa.com"
 PROJECT_SETTINGS = path.dirname(__file__)
 BASE_DIR = path.dirname(PROJECT_SETTINGS)
 PROJECT_NAME = path.basename(PROJECT_SETTINGS)
@@ -166,8 +168,19 @@ LOGGING = {
     },
 }
 
+# EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'console@localhost'
+COLOR_BG_HEADER = '#6cb33f'
+COLOR_BG_FOOTER = '#171923'
+COLOR_TEXT_HEADER = '#fff'
+COLOR_TEXT_FOOTER = '#fff'
+COLOR_TEXT_LINKS = '#6cb33f'
+COLOR_BORDER_HEADER = '#6cb33f'
+COLOR_BORDER_BODY = '#AFB6CC'
+################
+
+
 BROKER_URL = 'redis://localhost:6379/1'
 CELERYD_HIJACK_ROOT_LOGGER = False
 

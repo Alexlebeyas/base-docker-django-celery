@@ -6,16 +6,6 @@
 @import "lib/colors";
 @import "lib/positioning";
 @import "lib/mixins";
-@import "lib/fonts";
 @import "lib/buttons";
 @import "lib/forms";
-@import "lib/widgets";
-//Modules
-@import "modules/cards";
-@import "modules/hero";
-// Base
-@import "header";
-@import "footer";
-// Pages
-@import "pages/pages";
-@import "pages/home";
+@import "lib/widgets"; 

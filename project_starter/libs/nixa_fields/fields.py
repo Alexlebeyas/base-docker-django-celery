@@ -155,3 +155,35 @@ class PostalCodeField(NixaFieldMixin, models.CharField):
         'form_class': forms.PostalCodeField,
         'mask': 'Z0Z 0Z0'
     }
+
+
+class CreditCardField(NixaFieldMixin, models.CharField):
+    description = _('Credit Card')
+    default_validators = [
+        RegexValidator(
+            regex=r'^[0-9]{13,16}$',
+            message=_("Enter a valid credit card.")
+        )
+    ]
+    default_error_messages = default_error_messages
+    custom_data = {
+        'verbose_name': _('Credit Card'),
+        'max_length': 16,
+        'form_class': forms.CreditCardField,
+    }
+
+
+class CCVerificationField(NixaFieldMixin, models.CharField):
+    description = _('Credit card verification')
+    default_validators = [
+        RegexValidator(
+            regex=r'^[0-9]{3,4}$',
+            message=_("Enter a valid credit card verification code.")
+        )
+    ]
+    default_error_messages = default_error_messages
+    custom_data = {
+        'verbose_name': _('Credit card verification'),
+        'form_class': forms.CCVerificationField,
+        'max_length': 4,
+    }

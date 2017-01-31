@@ -35,11 +35,29 @@ class Email(object):
         self.subject = subject
         self.description = description
         self.reply_to = reply_to
-        self.keys = tuple(context.keys())
-        self.test_values = tuple(context.values())
+        default_context = self._get_default_context
+        full_context = default_context.copy()
+        full_context.update(context)
+        self.keys = tuple(full_context.keys())
+        self.test_values = tuple(full_context.values())
 
     def __str__(self):
         return self.template
+
+    @prod_cached_property
+    def _get_default_context(self):
+        return {
+            'PROJECT_CONTACT': settings.PROJECT_CONTACT,
+            'PROJECT_TITLE': settings.PROJECT_TITLE,
+            'PROJECT_DOMAIN': settings.PROJECT_DOMAIN,
+            'COLOR_BG_HEADER': getattr(settings, 'COLOR_BG_HEADER', '#6cb33f'),
+            'COLOR_BG_FOOTER': getattr(settings, 'COLOR_BG_FOOTER', '#171923'),
+            'COLOR_TEXT_HEADER': getattr(settings, 'COLOR_TEXT_HEADER', '#fff'),
+            'COLOR_TEXT_FOOTER': getattr(settings, 'COLOR_TEXT_FOOTER', '#fff'),
+            'COLOR_TEXT_LINKS': getattr(settings, 'COLOR_TEXT_LINKS', '#6cb33f'),
+            'COLOR_BORDER_HEADER': getattr(settings, 'COLOR_TEXT_LINKS', '#6cb33f'),
+            'COLOR_BORDER_BODY': getattr(settings, 'COLOR_BORDER_BODY', '#AFB6CC')
+        }
 
     def send(self, recipients, context, lang=None, reply_to=None, commit=True, files=None):
         """
@@ -50,7 +68,7 @@ class Email(object):
         self._validate_context(context)
         context = Context(context)
         for recipient in recipients:
-            self._send_single(recipient, context, lang, reply_to, commit,files)
+            self._send_single(recipient, context, lang, reply_to, commit, files)
 
     def _send_single(self, recipient, context, lang=None, reply_to=None, commit=True, files=None):
         """
@@ -77,7 +95,7 @@ class Email(object):
                     subject=subject,
                     body=body,
                     from_email=settings.EMAIL_HOST_USER,
-                    to=(user.get_email(), ),
+                    to=(user.get_email(),),
 
                 )
                 if self.template_html:
@@ -89,13 +107,14 @@ class Email(object):
             if files:
                 for file in files:
                     attach_file_to_email(email, file)
+
+            email.send()
             if commit:
-                email.send()
-            EmailSent.objects.create(
-                sent_to=user.get_email(),
-                template=self.template,
-                content=body,
-            )
+                EmailSent.objects.create(
+                    sent_to=user.get_email(),
+                    template=self.template,
+                    content=body,
+                )
             return email
 
     def _validate_context(self, context):

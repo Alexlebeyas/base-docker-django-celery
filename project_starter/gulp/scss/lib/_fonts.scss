@@ -11,11 +11,11 @@ $font-title: '', sans-serif;
 $font-content: '', sans-serif;
 $font-fancy: '', sans-serif;
 
-$text-xs: 0.625em; //10px
-$text-sm: 0.750em; //12px
-$text-md: 1em; //16px
-$text-lg: 1.250em; //20px
-$text-xl: 2.250em; //36px
+$text-xs: 0.625rem; //10px
+$text-sm: 0.750rem; //12px
+$text-md: 1rem; //16px
+$text-lg: 1.250rem; //20px
+$text-xl: 2.250rem; //36px
 
 body {
     font-family: $font-content;
