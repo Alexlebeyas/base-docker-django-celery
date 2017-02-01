@@ -27,6 +27,7 @@ define django::project (
   $git_host = false,
   $prod = false,
   $staging = false,
+  $branch = 'staging',
   $py_version = '3.4',
 ) {
   $home = "/home/$project_user"
@@ -83,6 +84,7 @@ define django::project (
       git_repo     => $git_repo,
       git_host     => $git_host,
       staging      => $staging,
+      branch       => $branch,
       notify       => $app_restart,
       require      => [
         Django::Filesystem["filesystem-$project_user"],

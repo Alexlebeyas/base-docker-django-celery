@@ -28,11 +28,11 @@ def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, **kwargs):
 
 
 @command
-def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, **kwargs):
+def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, branch="staging", **kwargs):
     # STAGING
     if not debug:
         rsync(user=user, host=host)
-    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh', user=user, host=host)
+    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh %s' % branch, user=user, host=host)
 
 
 @command
@@ -94,11 +94,16 @@ def parse_args():
     parser.add_argument('-r', '--root', action='store_true', help='ssh as root')
     parser.add_argument('-d', '--debug', action='store_true', help='run with minimal execution')
     parser.add_argument('command', nargs='?', help=', '.join(commands.keys()))
+    parser.add_argument('branch', nargs='?', )
+
     args = parser.parse_args()
     kwargs = {'debug': args.debug}
+    if args.branch:
+        kwargs['branch'] = args.branch
     if args.root:
         kwargs['user'] = 'root'
     commands.get(args.command, deploy)(**kwargs)
+
 
 
 parse_args()

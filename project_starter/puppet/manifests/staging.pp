@@ -20,4 +20,5 @@ django::project{ $project_name:
   git_repo     => $git_repo,
   prod         => true,
   staging      => true,
+  branch       => $::branch,
 }
