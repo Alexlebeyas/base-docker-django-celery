@@ -1,14 +1,7 @@
-import json
 from copy import copy
 from django import forms as django_forms
-from django.forms.utils import flatatt
-from django.forms.widgets import DateTimeBaseInput
 from django.template.loader import get_template
 from django.templatetags.static import static
-from django.utils.encoding import force_text
-from django.utils.html import conditional_escape
-
-from libs.nixa_fields.constants import TimeFormatMap
 
 
 class MaskWidget(django_forms.TextInput):

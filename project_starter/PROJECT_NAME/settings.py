@@ -18,11 +18,13 @@ INSTALLED_APPS = (
 
     # LIBS
     'libs.constant_types',
-    'libs.emails',
     'libs.log_tailer',
     'libs.nixa_fields',
     'libs.sitemap',
     'libs.startup',
+
+    # Nixa libs
+    'nixaemails',
 
     # APPS
     'apps.accounts',

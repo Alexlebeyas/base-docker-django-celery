@@ -4,7 +4,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager as DjangoUs
 from django.utils.crypto import salted_hmac
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from libs.emails.mixins import EmailMixin
+from nixaemails.mixins import EmailMixin
 from libs.nixa_fields import fields as nixa_fields
 
 

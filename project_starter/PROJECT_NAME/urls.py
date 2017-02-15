@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^sitemap.xml$', Sitemap.as_view(), name='sitemap'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^hotfix/', include(hotfix)),
-    url(r'^emails/', include('libs.emails.urls')),
+    url(r'^emails/', include('nixaemails.urls')),
     url(r'^', include('apps.front.urls')),
 ]
 
