@@ -95,5 +95,6 @@ def run_tests():
     Make sure the project installed correctly
     by executing management startup and test.
     """
+    manage('makemigrations nixaemails')
     manage('startup')
     manage('test')

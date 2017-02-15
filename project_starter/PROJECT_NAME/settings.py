@@ -4,6 +4,7 @@ INSTALLED_APPS = (
     # Admin settings
     'apps.custom_admin',
     'suit',
+    'modeltranslation',
 
     'django.contrib.admin',
     'django.contrib.auth',
