@@ -26,10 +26,11 @@ INSTALLED_APPS = (
 
     # Nixa libs
     'nixaemails',
+    'nixausers',
 
     # APPS
-    'apps.accounts',
     'apps.front',
+    'apps.user_profile',
 )
 
 ADMINS = (
@@ -199,8 +200,8 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 SECRET_KEY = ''
-AUTH_USER_MODEL = 'accounts.User'
-STARTUP_INITIAL_FIXTURES = tuple()
+AUTH_USER_MODEL = 'nixausers.NixaUser'
+STARTUP_INITIAL_FIXTURES = ['apps/user_profile/fixtures/admin_user.json']
 
 try:
     from .local_settings import *

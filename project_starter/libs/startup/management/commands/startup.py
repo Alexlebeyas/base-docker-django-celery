@@ -13,7 +13,7 @@ ENGINE = settings.DATABASES['default']['ENGINE']
 
 class Command(BaseCommand):
     """
-    Startup restores the main database to its original state. Loads fixtures.
+    Startup restores the main database to its original state. Loads fixtures. Create base user.
     """
 
     def add_arguments(self, parser):
@@ -66,4 +66,5 @@ class Command(BaseCommand):
     @staticmethod
     def load_fixtures():
         for initial_fixture in settings.STARTUP_INITIAL_FIXTURES:
+            print(initial_fixture)
             call_command('loaddata', initial_fixture, )
