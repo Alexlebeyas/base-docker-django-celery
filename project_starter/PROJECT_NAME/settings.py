@@ -18,7 +18,6 @@ INSTALLED_APPS = (
 
     # LIBS
     'libs.constant_types',
-    'libs.log_tailer',
     'libs.sitemap',
     'libs.startup',
 
