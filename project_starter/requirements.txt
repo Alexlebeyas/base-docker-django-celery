@@ -11,4 +11,4 @@ sqlparse==0.2.1
 django-suit==0.2.22
 nixaemails==1.2.1
 nixausers==1.0.1
-nixa_fields==1.0.0
+nixa_fields==1.0.1
