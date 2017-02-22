@@ -10,6 +10,8 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     # SITE-PACKAGE
@@ -18,7 +20,6 @@ INSTALLED_APPS = (
 
     # LIBS
     'libs.constant_types',
-    'libs.sitemap',
     'libs.startup',
 
     # Nixa libs
