@@ -19,13 +19,13 @@ INSTALLED_APPS = (
     'crispy_forms',
 
     # LIBS
-    'libs.constant_types',
     'libs.startup',
 
     # Nixa libs
     'nixaemails',
     'nixausers',
     'nixa_fields',
+    'nixa_constant_types',
 
     # APPS
     'apps.front',
