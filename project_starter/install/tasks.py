@@ -37,6 +37,23 @@ def set_manage_project_name():
 
 
 @tasks.add
+def set_docker_project_name():
+    """
+    Set the project name in docker files
+    """
+    docker_file = path.join(project_directory, 'Dockerfile')
+    with FileEditor(docker_file) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+    docker_compose_file = path.join(project_directory, 'docker-compose.yml')
+    with FileEditor(docker_compose_file) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
+    docker_compose_file = path.join(project_directory, 'config', 'gulp', 'gulp.sh')
+    with FileEditor(docker_compose_file) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
+
+@tasks.add
 def set_secret_key():
     """
     Put the secret key into settings.py.
@@ -89,12 +106,13 @@ def set_puppet_deploy_settings():
         editor.replace_token('PROJECT_USER', project_user)
 
 
-@tasks.add
-def run_tests():
-    """
-    Make sure the project installed correctly
-    by executing management startup and test.
-    """
-    manage('makemigrations nixaemails')
-    manage('startup')
-    manage('test')
+# Must make run_test for docker
+# @tasks.add
+# def run_tests():
+#     """
+#     Make sure the project installed correctly
+#     by executing management startup and test.
+#     """
+#     manage('makemigrations nixaemails')
+#     manage('startup')
+#     manage('test')
