@@ -5,7 +5,7 @@ define django::git (
   $git_repo,
   $git_host,
   $staging = false,
-  $branch = "staging",
+  $branch = "develop",
 ) {
   $known_hosts = "/home/$project_user/.ssh/known_hosts"
 

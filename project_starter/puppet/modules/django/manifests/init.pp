@@ -27,7 +27,7 @@ define django::project (
   $git_host = false,
   $prod = false,
   $staging = false,
-  $branch = 'staging',
+  $branch = 'develop',
   $py_version = '3.4',
 ) {
   $home = "/home/$project_user"

@@ -28,7 +28,7 @@ def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, **kwargs):
 
 
 @command
-def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, branch="staging", **kwargs):
+def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, branch="develop", **kwargs):
     # STAGING
     if not debug:
         rsync(user=user, host=host)
