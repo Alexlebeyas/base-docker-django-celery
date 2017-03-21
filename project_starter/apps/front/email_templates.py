@@ -22,6 +22,6 @@ contact_email = Email(
         },
         'PROJECT_CONTACT': settings.PROJECT_CONTACT,
         'PROJECT_TITLE': settings.PROJECT_TITLE,
-        'PROJECT_DOMAIN': settings.PROJECT_DOMAIN
+        'PROJECT_URI': settings.PROJECT_URI
     },
 )

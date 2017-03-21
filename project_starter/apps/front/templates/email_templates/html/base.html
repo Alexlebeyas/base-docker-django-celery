@@ -22,8 +22,8 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #fff;border-collapse: collapse !important;">
                                         <tr>
                                             <td valign="top" class="headerContent" width="100px" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #505050;font-family: Helvetica;font-size: 20px;font-weight: bold;line-height: 100%;padding-top: 20px;padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;vertical-align: middle;border-top: 10px solid {{ COLOR_BORDER_HEADER }};">
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">
-                                                    <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" alt="{{ PROJECT_TITLE }}" id="headerImage">
+                                                <a href="{{ PROJECT_URI }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">
+                                                    <img src="{{ PROJECT_URI }}{% static 'img/logo.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" alt="{{ PROJECT_TITLE }}" id="headerImage">
                                                 </a>
                                             </td>
                                         </tr>
@@ -57,13 +57,13 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #171923;border-collapse: collapse !important;">
                                         <tr>
                                             <td valign="top" class="footerContent" width="58" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ COLOR_TEXT_FOOTER }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ COLOR_BG_FOOTER }};padding-right: 30px;padding-bottom: 20px;padding-left: 30px;text-align: left;">
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">
-                                                    <img src="{{ PROJECT_DOMAIN }}{% static 'img/logo_email.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" id="headerImage">
+                                                <a href="{{ PROJECT_URI }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">
+                                                    <img src="{{ PROJECT_URI }}{% static 'img/logo_email.png' %}" style="max-width: 600px;-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;" id="headerImage">
                                                 </a>
                                             </td>
                                             <td valign="middle" class="footerContent footerLinks" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: {{ COLOR_TEXT_FOOTER }};font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;background-color: {{ COLOR_BG_FOOTER }};padding-right: 30px;padding-bottom: 20px;padding-left: 0;text-align: left;">
                                                 <strong>{{ PROJECT_TITLE }}</strong><br>
-                                                <a href="{{ PROJECT_DOMAIN }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">{{ PROJECT_DOMAIN }}</a><br>
+                                                <a href="{{ PROJECT_URI }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_LINKS }};font-weight: normal;text-decoration: underline;">{{ PROJECT_URI }}</a><br>
                                                 <a href="mailto:{{ PROJECT_CONTACT }}" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;color: {{ COLOR_TEXT_FOOTER }};font-weight: normal;text-decoration: none;">{{ PROJECT_CONTACT }}</a><br>
                                             </td>
                                         </tr>

@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), {
-        'PROJECT_DOMAIN': settings.PROJECT_DOMAIN
+        'PROJECT_URI': settings.PROJECT_URI
     }),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),

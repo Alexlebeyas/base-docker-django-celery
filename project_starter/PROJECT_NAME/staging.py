@@ -4,7 +4,9 @@ DB_USER = '((DB_USER))'
 DB_NAME = '((DB_NAME))'
 DB_PASS = '((DB_PASS))'
 ALLOWED_HOSTS = None,  # tODO add staging IP here.
-PROJECT_DOMAIN = ''  # TODO add staging ip here.
+PROJECT_PROTOCOL = '//'
+PROJECT_DOMAIN = '127.0.0.1:8000' # TODO add staging ip here.
+PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
 
 DEBUG = False
 PROJECT_NAME = path.basename(path.dirname(__file__))

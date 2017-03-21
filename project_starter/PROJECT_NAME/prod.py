@@ -4,7 +4,9 @@ DB_USER = '((DB_USER))'
 DB_NAME = '((DB_NAME))'
 DB_PASS = '((DB_PASS))'
 ALLOWED_HOSTS = None,  # tODO add prod IP here.
-PROJECT_DOMAIN = ''  # TODO add temporary prod IP here or prod domain.
+PROJECT_PROTOCOL = 'http://'
+PROJECT_DOMAIN = 'todo' # TODO add prod ip here.
+PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
 
 DEBUG = False
 PROJECT_NAME = path.basename(path.dirname(__file__))

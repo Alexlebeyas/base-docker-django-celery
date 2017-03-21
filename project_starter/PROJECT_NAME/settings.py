@@ -38,7 +38,9 @@ ADMINS = (
 
 from os import path
 
-PROJECT_DOMAIN = "//127.0.0.1:8000"
+PROJECT_PROTOCOL = '//'
+PROJECT_DOMAIN = '127.0.0.1:8000'
+PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
 PROJECT_TITLE = "Project Starter"
 PROJECT_CONTACT = "contact@nixa.com"
 PROJECT_SETTINGS = path.dirname(__file__)
