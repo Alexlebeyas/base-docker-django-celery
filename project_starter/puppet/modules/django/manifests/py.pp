@@ -23,6 +23,23 @@ define django::py::venv (
   $py_version = "3.4",
   $pip_requirements = "requirements.txt",
 ) {
+  file { "/home/$project_user/.pip":
+    ensure  => directory,
+    group   => $project_user,
+    owner   => $project_user,
+    mode    => 755,
+    require => File["/home/$project_user"],
+  }
+
+  file { "/home/$project_user/.pip/pip.conf":
+    ensure  => file,
+    group   => $project_user,
+    owner   => $project_user,
+    mode    => 600,
+    content => template("django/pip.erb"),
+    require => File["/home/$project_user/.pip"],
+  }
+
   python::virtualenv { "python-env-$project_user" :
     ensure       => present,
     version      => $py_version,
