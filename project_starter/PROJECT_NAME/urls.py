@@ -5,8 +5,12 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from apps.front.views import error
 from .sitemaps import sitemaps
+from django.views.generic import TemplateView
 
 urlpatterns = [
+    url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), {
+        'PROJECT_DOMAIN': settings.PROJECT_DOMAIN
+    }),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
     url(r'^admin/', include(admin.site.urls)),
