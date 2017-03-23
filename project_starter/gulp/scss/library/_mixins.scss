@@ -5,6 +5,18 @@ $time-sm: 300ms;
 $time-md: 600ms;
 $time-lg: 900ms;
 
+@function rem($pixels, $context: $baseFontSize) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+
+  @return $pixels / $context * 1rem;
+}
+
 @mixin transition-sm($type:all, $ease:ease) {
     @include transition-fix();
     -webkit-transition: $type $time-sm $ease;
