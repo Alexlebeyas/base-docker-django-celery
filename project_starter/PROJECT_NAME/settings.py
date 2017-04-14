@@ -17,6 +17,7 @@ INSTALLED_APPS = (
     # SITE-PACKAGE
     'debug_toolbar',
     'crispy_forms',
+    'pipeline',
 
     # LIBS
     'libs.startup',
@@ -86,7 +87,32 @@ MIDDLEWARE_CLASSES = (
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    'pipeline.finders.PipelineFinder',
 )
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+PIPELINE = {
+    'PIPELINE_ENABLED': True,
+    'COMPILERS': (
+        'pipeline.compilers.es6.ES6Compiler',
+        'pipeline.compilers.sass.SASSCompiler',
+    ),
+    'JAVASCRIPT': {
+        'app': {
+            'source_filenames': (
+            ),
+            'output_filename': 'js/app.js'
+        }
+    },
+    'STYLESHEETS': {
+        'style': {
+            'source_filenames': (
+            ),
+            'output_filename': 'css/main.css'
+        }
+    }
+}
 
 DATABASES = {
     'default': {

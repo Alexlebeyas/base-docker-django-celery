@@ -14,4 +14,5 @@ nixaemails==1.3.0
 nixausers==1.0.1
 nixa_admin_register==1.0.0
 nixa_constant_types==1.0.0
+django-pipeline==1.6.12
 django-anymail # Used for mandrill integration. See installation instruction at https://github.com/anymail/
