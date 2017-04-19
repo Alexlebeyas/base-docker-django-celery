@@ -93,26 +93,27 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE = {
-    'PIPELINE_ENABLED': True,
-    'COMPILERS': (
-        'pipeline.compilers.es6.ES6Compiler',
-        'pipeline.compilers.sass.SASSCompiler',
-    ),
+    'JS_COMPRESSOR': 'pipeline.compressors.uglifyjs.UglifyJSCompressor',
+    'UGLIFYJS_BINARY': '/usr/bin/uglifyjs',
+    'DISABLE_WRAPPER': True,
     'JAVASCRIPT': {
-        'app': {
+        'vendors': {
             'source_filenames': (
+                'js/vendors.js'
             ),
-            'output_filename': 'js/app.js'
-        }
-    },
-    'STYLESHEETS': {
-        'style': {
+            'output_filename': 'js/vendor.min.js'
+        },
+        'main': {
             'source_filenames': (
+                'js/main.js'
             ),
-            'output_filename': 'css/main.css'
-        }
+            'output_filename': 'js/main.min.js'
+        },
     }
 }
+
+if not DEBUG:
+    PIPELINE['PIPELINE_ENABLED'] = True
 
 DATABASES = {
     'default': {
