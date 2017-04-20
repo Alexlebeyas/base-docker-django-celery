@@ -14,3 +14,18 @@ function checkError() {
         $( "footer" ).hide();
     }
 }
+
+//Disable scroll when navbar-toggle is open
+//to do: change the object for the good ones! navbar-toggle is the btn to open the menu - nav-primary-group is the menu. body stays the same
+ $(".navbar-toggle" ).click(function () {
+     if($( ".navbar-toggle").hasClass( "collapsed" )) {
+        $("body").css("overflow-y", "hidden");
+        $("body").css("height", $( window ).height());
+        $(".nav-primary-group").css("height", $( window ).height());
+     }
+     else {
+        $("body").css("overflow-y", "auto");
+        $("body").css("height", "auto");
+        $(".nav-primary-group").css("height", "auto");
+     }
+ });
