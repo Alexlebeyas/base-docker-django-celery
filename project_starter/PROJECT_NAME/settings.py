@@ -17,7 +17,6 @@ INSTALLED_APPS = (
     # SITE-PACKAGE
     'debug_toolbar',
     'crispy_forms',
-    'pipeline',
 
     # LIBS
     'libs.startup',
@@ -87,33 +86,7 @@ MIDDLEWARE_CLASSES = (
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    'pipeline.finders.PipelineFinder',
 )
-
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-
-PIPELINE = {
-    'JS_COMPRESSOR': 'pipeline.compressors.uglifyjs.UglifyJSCompressor',
-    'UGLIFYJS_BINARY': '/usr/bin/uglifyjs',
-    'DISABLE_WRAPPER': True,
-    'JAVASCRIPT': {
-        'vendors': {
-            'source_filenames': (
-                'js/vendors.js'
-            ),
-            'output_filename': 'js/vendor.min.js'
-        },
-        'main': {
-            'source_filenames': (
-                'js/main.js'
-            ),
-            'output_filename': 'js/main.min.js'
-        },
-    }
-}
-
-if not DEBUG:
-    PIPELINE['PIPELINE_ENABLED'] = True
 
 DATABASES = {
     'default': {

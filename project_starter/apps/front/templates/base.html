@@ -1,4 +1,4 @@
-{% load staticfiles pipeline %}
+{% load staticfiles %}
 
 <!DOCTYPE html>
 <html lang="{{ request.LANGUAGE_CODE }}">
@@ -28,8 +28,8 @@
     {% block footer %}
         {% include '_footer.html' %}
     {% endblock %}
-    {% javascript 'vendors' %}
-    {% javascript 'main' %}
+    <script src="{% static 'js/vendors.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
 	<!-- cache version {% now 'Y-m-d H:i:s' %} -->
     </body>
