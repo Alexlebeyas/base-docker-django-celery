@@ -29,3 +29,10 @@ function checkError() {
         $(".nav-primary-group").css("height", "auto");
      }
  });
+
+//modal open fix - add class modal open to make sure that the ipad don't lose focus
+$(document).on('hidden.bs.modal', function (event) {
+  if ($('.modal:visible').length) {
+    $('body').addClass('modal-open');
+  }
+});

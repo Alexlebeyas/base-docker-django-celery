@@ -2,4 +2,10 @@
 body {
   position: relative;
   overflow: auto;
+  &.modal-open {
+    width: 100%;
+    @include breakpoint(md) {
+      position: fixed;
+    }
+  }
 }

@@ -380,6 +380,15 @@ a, .btn, button {
 
 /* FOOTER */
 /* PAGES */
+body {
+  position: relative;
+  overflow: auto; }
+  body.modal-open {
+    width: 100%; }
+    @media (min-width: 992px) {
+      body.modal-open {
+        position: fixed; } }
+
 /* HOME */
 /* 404 */
 #page-404 {
