@@ -14,6 +14,7 @@ PROJECT_USER = '((PROJECT_USER))'
 DEPLOY_USER = 'deploy'
 PROD_HOST = '192.168.1.252'  # tODO Prod IP here
 STAGING_HOST = '127.0.0.1'  # tODO Staging IP here
+STAGING_PORT = '127.0.0.1'  # tODO Staging IP here
 
 commands = {}
 command = lambda f: commands.__setitem__(f.__name__, f) or f
@@ -31,8 +32,8 @@ def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, **kwargs):
 def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, branch="develop", **kwargs):
     # STAGING
     if not debug:
-        rsync(user=user, host=host)
-    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh %s' % branch, user=user, host=host)
+        rsync(user=user, host=host, port=STAGING_PORT)
+    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh %s' % branch, user=user, host=host, port=STAGING_PORT)
 
 
 @command
@@ -50,12 +51,13 @@ def git_key_staging(user=DEPLOY_USER, host=STAGING_HOST, project_user=PROJECT_US
 
 
 @command
-def rsync(local='.', remote='/etc/puppet/sync', user=DEPLOY_USER, host=PROD_HOST, **kwargs):
-    call_command('rsync -rtvz -e ssh %(local)s %(user)s@%(host)s:%(remote)s' % {
+def rsync(local='.', remote='/etc/puppet/sync', user=DEPLOY_USER, host=PROD_HOST, port='22', **kwargs):
+    call_command('rsync -rtvz -e "ssh -p %(port)s" %(local)s %(user)s@%(host)s:%(remote)s' % {
         'local': local,
         'user': user,
         'host': host,
         'remote': remote,
+        'port': port,
     })
 
 
@@ -77,10 +79,11 @@ def install_puppet_staging(user='root', host=STAGING_HOST, debug=False, **kwargs
     install_puppet(user=user, host=host, debug=debug)
 
 
-def ssh(cmd, user, host):
-    call_command('ssh %(user)s@%(host)s "%(cmd)s"' % {
+def ssh(cmd, user, host, port='22'):
+    call_command('ssh %(user)s@%(host)s -p %(port)s "%(cmd)s"' % {
         'user': user,
         'host': host,
+        'port': port,
         'cmd': cmd.replace('"', '\\"'),
     })
 
@@ -103,7 +106,6 @@ def parse_args():
     if args.root:
         kwargs['user'] = 'root'
     commands.get(args.command, deploy)(**kwargs)
-
 
 
 parse_args()
