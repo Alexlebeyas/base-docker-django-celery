@@ -1,6 +1,6 @@
 {
   "name": "nixa_gulp",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "description": "Nixa's base Gulp File.",
   "main": "gulpfile.js",
@@ -10,16 +10,29 @@
   "author": "Nixa Geniouses",
   "license": "UNLICENSED",
   "devDependencies": {
+    "bootstrap-sass": "*",
+    "browser-sync": "*",
+    "font-awesome": "*",
+    "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-clean-css": "*",
-    "gulp-plumber": "*",
     "gulp-concat": "*",
+    "gulp-plumber": "*",
     "gulp-rename": "*",
     "gulp-sass": "*",
-    "gulp": "*",
-    "browser-sync": "*",
-    "jquery": "*",
-    "bootstrap-sass": "*",
-    "font-awesome": "*"
+    "gulp-sourcemaps": "*",
+    "babelify": "*",
+    "babel-preset-es2015": "*",
+    "vinyl-source-stream": "*",
+    "watchify": "*",
+    "gulp-uglify": "*",
+    "gulp-streamify": "*",
+    "browserify": "*",
+    "event-stream": "*",
+    "gulp-tap": "*",
+    "path": "*",
+    "gulp-util": "*",
+    "run-sequence": "*",
+    "vinyl-buffer": "*"
   }
 }
