@@ -1,21 +1,31 @@
-version: '2'
+version: '3'
 services:
-  web-startup:
-    build: .
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/PROJECT_NAME
-    command: ./config/web/startup.sh
   web:
     build: .
     ports:
       - "8000:8000"
     volumes:
       - .:/PROJECT_NAME
-    command: ./config/web/run.sh
+    tty: true
+    command: python -u manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
   gulp:
-    build: ./config/gulp
+    build: ./gulp
     volumes:
       - .:/PROJECT_NAME
-    command: ./PROJECT_NAME/config/gulp/gulp.sh
+      - /PROJECT_NAME/gulp/node_modules
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    command: gulp browsersync
+  db:
+   image: postgres:latest
+   environment:
+     - POSTGRES_USER=PROJECT_NAME
+     - POSTGRES_PASSWORD=12345
+     - POSTGRES_DB=PROJECT_NAME
+   volumes:
+     - ./docker/postgresql:/var/lib/postgresql
+   expose:
+    - "5432"
