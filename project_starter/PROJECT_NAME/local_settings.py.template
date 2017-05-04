@@ -14,3 +14,6 @@ DATABASES = {
 PROJECT_PROTOCOL = '//'
 PROJECT_DOMAIN = '127.0.0.1:8000'
 PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
+
+# show_toolbar = lambda x: True
+

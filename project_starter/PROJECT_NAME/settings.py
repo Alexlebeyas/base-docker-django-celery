@@ -193,7 +193,7 @@ COLOR_BORDER_BODY = '#AFB6CC'
 BROKER_URL = 'redis://localhost:6379/1'
 CELERYD_HIJACK_ROOT_LOGGER = False
 
-show_toolbar = lambda r: not r.is_ajax() and (DEBUG or r.user.is_superuser)
+show_toolbar = lambda r: False
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": '%s.settings.show_toolbar' % PROJECT_NAME,
