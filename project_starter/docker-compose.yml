@@ -18,7 +18,7 @@ services:
     ports:
       - "3000:3000"
       - "3001:3001"
-    command: gulp watch
+    command: gulp browsersync
   db:
    image: postgres:latest
    environment:
