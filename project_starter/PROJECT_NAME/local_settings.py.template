@@ -1,14 +1,14 @@
 __author__ = 'snake'
 
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'vagrant',
-        'USER': 'vagrant',
-        'PASSWORD': 'a',
-        'HOST': 'localhost',
-    },
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'PROJECT_NAME',
+       'USER': 'PROJECT_NAME',
+       'PASSWORD': '12345',
+       'HOST': 'db',
+       'PORT': '5432',
+   }
 }
 
 PROJECT_PROTOCOL = '//'

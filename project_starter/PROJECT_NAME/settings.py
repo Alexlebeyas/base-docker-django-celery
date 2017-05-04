@@ -89,10 +89,14 @@ STATICFILES_FINDERS = (
 )
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'default.db',
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'PROJECT_NAME',
+       'USER': 'PROJECT_NAME',
+       'PASSWORD': '12345',
+       'HOST': 'db',
+       'PORT': '5432',
+   }
 }
 
 TEMPLATES = [
