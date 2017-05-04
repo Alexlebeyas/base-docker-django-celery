@@ -93,6 +93,16 @@ const webServer = 'web';
  */
 
 var files = [];
+var scripts = glob.sync(paths.scripts.resolveDir);
+
+function browserifyConfig(entry) {
+  return {
+      entries: [entry],
+      debug: true,
+      paths: scripts.concat(['./node_modules']),
+      cache: {}, packageCache: {}, fullPaths: true
+  }
+}
 
 function watchBundle(bundler, entry) {
     return function () {
@@ -122,16 +132,10 @@ gulp.task('load-files', function () {
 });
 
 gulp.task('browserify', function () {
-    var scripts = glob.sync(paths.scripts.resolveDir);
     var tasks = files.map(function (entry) {
         var bundler = watchify(
-            browserify({
-                entries: [entry],
-                debug: true,
-                paths: scripts.concat(['./node_modules']),
-                cache: {}, packageCache: {}, fullPaths: true
-            }).transform(
-              babelify.configure({
+            browserify(browserifyConfig(entry))
+              .transform(babelify.configure({
                 presets: [es2015],
               })
             ).external(excludedModules));
@@ -139,6 +143,19 @@ gulp.task('browserify', function () {
         bundler.on('update', watch);
         bundler.on('log', util.log);
         return watch();
+    });
+    return es.merge(tasks);
+});
+
+gulp.task('compileJs', function () {
+    var tasks = files.map(function (entry) {
+        var bundler = browserify(browserifyConfig(entry))
+          .transform(babelify.configure({
+                presets: [es2015],
+              })
+            ).external(excludedModules);
+        var bundle = watchBundle(bundler, entry);
+        return bundle();
     });
     return es.merge(tasks);
 });
@@ -199,11 +216,11 @@ gulp.task('fontsvendors', function () {
  * ======================
  */
 
-gulp.task('browsersync', ['styles'], function(){
-  browserSync({
-    proxy: webServer+':8000'
-  });
-  gulp.watch(paths.styles.src, ['styles']);
+gulp.task('js', function () {
+    runSequence(
+        'load-files',
+        'compileJs'
+    );
 });
 
 gulp.task('watchify', function () {
@@ -219,6 +236,12 @@ gulp.task('watch-sass',  ['styles', 'cssadmin'], function () {
     gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
 });
 
-gulp.task('watch', ['watch-sass', 'watchify']);
+gulp.task('watch', ['watch-sass', 'watchify'], browserSync.reload);
+
+gulp.task('browsersync', ['watch'], function(){
+  browserSync({
+    proxy: webServer+':8000'
+  });
+});
 
 gulp.task('default', ['watch']);
