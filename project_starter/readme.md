@@ -3,8 +3,7 @@
 ### PROJECT
 **[Copy your pip configuration file](#markdown-header-copy-your-pip-configuration-file)**      
 **[Build docker containers](#markdown-header-build-docker-containers)**          
-**[Start web instance](#markdown-header-start-web-instance)**          
-**[Start gulp instance](#markdown-header-start-gulp-instance)**          
+**[Start docker instance](#markdown-header-start-docker-instance)**       
 
 
 ### Copy your pip configuration file
@@ -26,19 +25,13 @@ docker-compose build
 ~~~~
 2. This will set up the instance for gulp and web instances.
 
-### Start web instance
-1. Make web startup, **only the first time**:
-~~~~
-docker-compose up web-startup
-~~~~
-2. Startup docker instance:
-~~~~
-docker-compose up web
-~~~~
-
-### Start gulp instance
+### Start docker instance
 1. Startup docker instance:
 ~~~~
-docker-compose up gulp
+docker-compose up
 ~~~~
-2. The first time will be longer, because it install node modules.
+2. Connect to a docker instance, ex : <projet_name>_web_1
+~~~~
+docker exec -it example_web_1 bin/bash
+~~~~
+
