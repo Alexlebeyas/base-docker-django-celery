@@ -11,10 +11,10 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateMessage" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
                     <tr>
                         <td valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #18181a;font-family: Helvetica;font-size: 14px;line-height: 190%;padding-top: 30px;padding-right: 30px;padding-bottom: 50px;padding-left: 30px;text-align: left;">
-                            <p style="font-size: 18px; font-weight: bold;">{% trans "Bonjour" %}{{ contact.name }},</p>
+                            <p style="font-size: 18px; font-weight: bold;">{% trans "Bonjour " %}Albert Einstein,</p>
                             <p style="margin-bottom: 0;">
-                                {% trans "Merci d'avoir acheté des " %}LOREM{% trans " chez " %}IPSUM {% trans "le" %} 10 Mai 2017.<br>
-                                {% trans "Cet achat apparaitra au nom de " %}IPSUM{% trans " sur votre carte " %}VISA{% trans " terminant par " %}1234.
+                                {% trans "Merci d'avoir acheté des " %}Forfait luxe{% trans " chez " %}super compagnie {% trans "le" %} 10 Mai 2017.<br>
+                                {% trans "Cet achat apparaitra au nom de " %}super compagnie{% trans " sur votre carte " %}VISA{% trans " terminant par " %}1234.
                             </p>
                         </td>
                     </tr>
@@ -54,19 +54,19 @@
                         <td valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #18181a;font-family: Helvetica;font-size: 14px;line-height: 190%;padding-right: 30px;padding-bottom: 50px;padding-left: 30px;text-align: left;">
                             <h2 style="font-size: 16px; margin-top: 0;">{% trans "Information de l'achat" %}</h2>
                             <p>
-                                <strong>{% trans "Nom: " %}</strong><br>
-                                <strong>{% trans "Email: " %}</strong><br>
-                                <strong>{% trans "Montant total: " %}</strong><br>
-                                <strong>{% trans "Type de carte: " %}</strong><br>
-                                <strong>{% trans "Adresse de facturation: " %}</strong><br>
-                                <strong>{% trans "Date: " %}</strong>
+                                <strong>{% trans "Nom: " %}</strong>Albert Einstein<br>
+                                <strong>{% trans "Email: " %}</strong>albert@nixa.ca<br>
+                                <strong>{% trans "Montant total: " %}</strong>232$<br>
+                                <strong>{% trans "Type de carte: " %}</strong>Visa<br>
+                                <strong>{% trans "Adresse de facturation: " %}</strong>465 rue Saint-Jean, suite 702, Vieux-Montréal, QC, H2Y 2R6<br>
+                                <strong>{% trans "Date: " %}</strong>10 Mai 2017
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #18181a;font-family: Helvetica;font-size: 14px;line-height: 190%;padding-right: 30px;padding-bottom: 50px;padding-left: 30px;text-align: left;">
                             <div style="padding: 20px; background-color: #f4f4f4; text-align: center;">
-                                <p style="margin: 0;">{% trans "Vous avez des questions ou avez besoin de support? <a href="#" target="_blank;" style="color: #5c19af; text-decoration: none;">Contactez nous!</a>" %}</p>
+                                <p style="margin: 0;">{% trans "Vous avez des questions ou avez besoin de support?" %}<a href="#" target="_blank;" style="color: #5c19af; text-decoration: none;">{% trans "Contactez nous!" %}</a></p>
                             </div>
                         </td>
                     </tr>
