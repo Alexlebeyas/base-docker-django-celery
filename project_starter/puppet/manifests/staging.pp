@@ -3,7 +3,9 @@ $project_name = "((PROJECT_NAME))"
 $db_pass = "((DB_PASS))"
 $git_repo = "git@bitbucket.org:nixateam/project-starter.git"  # tODO git address here
 
-class { "deploy": } ->
+class { "deploy":
+  install     => $::install,
+} ->
 
 class { "django":
   prod         => true,

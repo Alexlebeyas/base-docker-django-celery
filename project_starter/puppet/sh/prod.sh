@@ -1,4 +1,4 @@
 #!/bin/bash
 
-puppet apply ../manifests/prod.pp \
+FACTER_install=$1 puppet apply ../manifests/prod.pp \
   --modulepath=../modules:/etc/puppet/modules

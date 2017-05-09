@@ -20,19 +20,19 @@ command = lambda f: commands.__setitem__(f.__name__, f) or f
 
 
 @command
-def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, **kwargs):
+def deploy(user=DEPLOY_USER, host=PROD_HOST, debug=False, install="false", **kwargs):
     # PROD
     if not debug:
         rsync(user=user, host=host)
-    ssh('cd /etc/puppet/sync/sh && sudo ./prod.sh', user=user, host=host)
+    ssh('cd /etc/puppet/sync/sh && sudo ./prod.sh %s' % install, user=user, host=host)
 
 
 @command
-def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, branch="develop", **kwargs):
+def deploy_staging(user=DEPLOY_USER, host=STAGING_HOST, debug=False, install="false", branch="develop", **kwargs):
     # STAGING
     if not debug:
         rsync(user=user, host=host)
-    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh %s' % branch, user=user, host=host)
+    ssh('cd /etc/puppet/sync/sh && sudo ./staging.sh %s %s' % (install, branch), user=user, host=host)
 
 
 @command
@@ -60,7 +60,7 @@ def rsync(local='.', remote='/etc/puppet/sync', user=DEPLOY_USER, host=PROD_HOST
 
 
 @command
-def install_puppet(user='root', host=PROD_HOST, debug=False, **kwargs):
+def install_puppet(user='root', host=PROD_HOST, debug=False, staging=False, **kwargs):
     # PROD
     ssh('mkdir /etc/puppet', user=user, host=host)
     ssh('mkdir --mode=755 /opt', user=user, host=host)
@@ -68,13 +68,16 @@ def install_puppet(user='root', host=PROD_HOST, debug=False, **kwargs):
     ssh('cd /etc/puppet/sync/sh && chmod 770 *.sh && sudo ./install.sh', user=user, host=host)
 
     if not debug:
-        deploy(user=user, host=host)
+        if not staging:
+            deploy(user=user, host=host, install="true")
+        else:
+            deploy_staging(user=user, host=host, install="true")
 
 
 @command
 def install_puppet_staging(user='root', host=STAGING_HOST, debug=False, **kwargs):
     # STAGING
-    install_puppet(user=user, host=host, debug=debug)
+    install_puppet(user=user, host=host, debug=debug, staging=True)
 
 
 def ssh(cmd, user, host):
@@ -103,7 +106,6 @@ def parse_args():
     if args.root:
         kwargs['user'] = 'root'
     commands.get(args.command, deploy)(**kwargs)
-
 
 
 parse_args()

@@ -72,20 +72,27 @@
     <li>Input the follow settings:
         <ul>
             <li>puppet/manifests/prod.pp =&gt; Set GIT repository URL</li>
-            <li>puppet/deploy.py =&gt; Set the server IP</li>
+            <li>puppet/manifests/staging.pp => Set GIT repository URL</li>
+            <li>puppet/deploy.py =&gt; Set the server IP for prod and staging</li>
             <li>puppet/connect.sh =&gt; Set the server IP</li>
+            <li>puppet/connect_staging.sh => Set the staging server IP</li>
             <li><i>(project_name)</i>/prod.py =&gt; Set the server IP to allowed hosts</li>
+            <li><i>(project_name)</i>/staging.py => Set the staging server IP to allowed hosts</li>
         </ul>
     </li>
     <li>
         From the puppet directory, execute install_puppet to install puppet and puppet modules on the remote server:
         <p class="code">&gt;&gt; python deploy.py install_puppet</p>
+        <p>or</p>
+        <p class="code">>> python deploy.py install_puppet_staging</p>
         This will also rsync all the puppet modules and manifests. At this point, many dependencies
         will fail because the remote server does not have access to the GIT.
     </li>
     <li>
         Retrieve the newly created public key for the project user:
         <p class="code">&gt;&gt; python deploy.py git_key</p>
+        <p>or</p>
+        <p class="code">>> python deploy.py git_key_staging</p>
         And add it to bitbucket in "deployment keys".
     </li>
     <li>You may be now proceed with the normal deployment</li>
@@ -94,6 +101,8 @@
 <h2 id="normal-deploy">Normal deployment</h2>
 <p>The normal deployment flows like this:</p>
 <p class="code">&gt;&gt; python deploy.py</p>
+<p>or</p>
+<p class="code">>> python deploy.py deploy_staging</p>
 <p>
     Executing the deploy.py script with no arguments does the normal deployment.
     Those steps are done automatically:
