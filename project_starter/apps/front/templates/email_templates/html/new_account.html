@@ -1,0 +1,42 @@
+{% extends 'email_templates/html/base.html' %}
+{% load i18n %}
+{% block email_title %}{% trans 'Nouveau message' %}{% endblock %}
+{% block subject %}{% trans 'Nouveau message' %}{% endblock %}
+
+{% block content %}
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #fff;border-collapse: collapse !important;">
+        <tr>
+            <td align="center" valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                <!-- BEGIN BODY // -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateMessage" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                    <tr>
+                        <td valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #18181a;font-family: Helvetica;font-size: 14px;line-height: 190%;padding-top: 30px;padding-right: 30px;padding-bottom: 60px;padding-left: 30px;text-align: left;">
+                            <p style="font-size: 18px; font-weight: bold;">{% trans "Bienvenue" %} Albert Einstein,</p>
+                            <p style="margin-bottom: 25px;">
+                                {% trans "Grâce à votre nouveau compte, vous pourrez bénéficier de plusieurs avantages tels que " %}lorem ipsum dolor sit amet.
+                            </p>
+                            <a href="#" style="text-decoration: none; color: #fff; border: 10px solid #989898; background-color: #989898;" target="_blank" title="{% trans 'Aller sur le site web'%}">{% trans "Aller sur le site web" %}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #18181a;font-family: Helvetica;font-size: 14px;line-height: 190%;padding-right: 30px;padding-bottom: 50px;padding-left: 30px;text-align: left;">
+                            <h2 style="font-size: 16px; margin-top: 0;">{% trans "Information du compte" %}</h2>
+                            <p style="margin: 0;">
+                                <strong>{% trans "Nom d'utlisateur" %}</strong>: AlbertEintein<br>
+                                <strong>{% trans "Mot de passe" %}</strong>: N***********************e
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #18181a;font-family: Helvetica;font-size: 14px;line-height: 190%;padding-right: 30px;padding-bottom: 50px;padding-left: 30px;text-align: left;">
+                            <div style="padding: 20px; background-color: #f4f4f4;">
+                                <p style="margin: 0;">{% trans "Vous avez des questions ou avez besoin de support?" %}<a href="#" target="_blank;" style="color: #5c19af; text-decoration: none;">{% trans "Contactez nous!" %}</a></p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!-- // END BODY -->
+            </td>
+        </tr>
+    </table>
+{% endblock %}
