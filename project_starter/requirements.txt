@@ -11,3 +11,4 @@ sqlparse==0.2.1
 django-suit==0.2.22
 django-pipeline==1.6.12
 django-anymail # Used for mandrill integration. See installation instruction at https://github.com/anymail/
+psycopg2==2.7.1
