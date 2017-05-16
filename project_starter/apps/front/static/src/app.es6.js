@@ -3,8 +3,6 @@ import cookie from './tools/cookie.es6';
 // FUNCTIONALITY
 import ui from './ui.es6';
 import test from './test.es6';
-import {map} from 'map.es6';
-
 $(document).ready(function(){
     /**
      * Ajax setup
@@ -17,5 +15,4 @@ $(document).ready(function(){
      */
     ui.init();
     test.init();
-    map.init();
 });
