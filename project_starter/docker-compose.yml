@@ -23,7 +23,7 @@ services:
     restart: always
     command: gulp browsersync
   db:
-   image: postgres:latest
+   image: postgres:alpine
    environment:
      - POSTGRES_USER=PROJECT_NAME
      - POSTGRES_PASSWORD=12345
