@@ -1,5 +1,6 @@
 class deploy::user (
   $username,
+  $install = "false"
 ) {
   $home = "/home/$username"
 
@@ -31,14 +32,17 @@ class deploy::user (
     require => File[$home],
   }
 
-  file { "$home/.ssh/authorized_keys":
-    ensure  => file,
-    group   => $username,
-    owner   => $username,
-    mode    => 600,
-    content => template("deploy/authorized_keys.erb"),
-    require => File["$home/.ssh"],
+  if $install == "true" {
+      file { "$home/.ssh/authorized_keys":
+      ensure  => file,
+      group   => $username,
+      owner   => $username,
+      mode    => 600,
+      content => template("deploy/authorized_keys.erb"),
+      require => File["$home/.ssh"],
+    }
   }
+
 
   file { "/etc/sudoers.d/${$username}":
     ensure  => file,

@@ -11,16 +11,15 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "bootstrap-sass": "*",
+    "jquery": "*",
     "browser-sync": "*",
     "font-awesome": "*",
     "gulp": "*",
-    "gulp-autoprefixer": "*",
     "gulp-clean-css": "*",
     "gulp-concat": "*",
-    "gulp-plumber": "*",
     "gulp-rename": "*",
     "gulp-sass": "*",
-    "gulp-sourcemaps": "*",
+    "gulp-sourcemaps": "^1.9.1",
     "babelify": "*",
     "babel-preset-es2015": "*",
     "vinyl-source-stream": "*",
@@ -30,9 +29,15 @@
     "browserify": "*",
     "event-stream": "*",
     "gulp-tap": "*",
-    "path": "*",
     "gulp-util": "*",
     "run-sequence": "*",
-    "vinyl-buffer": "*"
+    "vinyl-buffer": "*",
+    "jshint":"*",
+    "gulp-jshint":"*",
+    "jshint-stylish":"*",
+    "jshint-stylish-summary":"*",
+    "path":"*",
+    "bulkify":"*",
+    "glob":"*"
   }
 }

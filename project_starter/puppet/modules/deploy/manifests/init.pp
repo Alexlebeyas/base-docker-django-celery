@@ -1,9 +1,11 @@
 class deploy (
   $username = 'deploy',
+  $install = 'false'
 ) {
 
   class { 'deploy::user':
     username => 'deploy',
+    install  => $install,
   }
 
   class { 'deploy::filesystem':

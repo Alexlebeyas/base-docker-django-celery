@@ -37,7 +37,9 @@ ADMINS = (
 )
 
 from os import path
-
+DB_USER = '((DB_USER))'
+DB_NAME = '((DB_NAME))'
+DB_PASS = '12345'
 PROJECT_PROTOCOL = '//'
 PROJECT_DOMAIN = '127.0.0.1:8000'
 PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
@@ -91,9 +93,9 @@ STATICFILES_FINDERS = (
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': 'PROJECT_NAME',
-       'USER': 'PROJECT_NAME',
-       'PASSWORD': '12345',
+       'NAME': DB_NAME,
+       'USER': DB_USER,
+       'PASSWORD': DB_PASS,
        'HOST': 'db',
        'PORT': '5432',
    }

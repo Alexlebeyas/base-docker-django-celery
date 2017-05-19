@@ -6,9 +6,9 @@ Important: See _mixins for time variables.
 a, .btn, button {
     text-decoration: none;
     @include transition-md();
-	&:focus{
-		outline: none !important;
-	}
+    &:focus{
+      outline: none !important;
+    }
 }
 
 .btn-primary {
