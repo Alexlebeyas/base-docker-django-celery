@@ -7,9 +7,11 @@ services:
     volumes:
       - .:/PROJECT_NAME
     tty: true
-    command: python -u manage.py runserver 0.0.0.0:8000
+    restart: always
+    command: docker/wait-for-it.sh db:5432 -- python -u manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
+      - redis
   gulp:
     build: ./gulp
     volumes:
@@ -18,9 +20,10 @@ services:
     ports:
       - "3000:3000"
       - "3001:3001"
+    restart: always
     command: gulp browsersync
   db:
-   image: postgres:latest
+   image: postgres:alpine
    environment:
      - POSTGRES_USER=PROJECT_NAME
      - POSTGRES_PASSWORD=12345
@@ -29,3 +32,6 @@ services:
      - ./docker/postgresql:/var/lib/postgresql
    expose:
     - "5432"
+  redis:
+    image: redis:alpine
+

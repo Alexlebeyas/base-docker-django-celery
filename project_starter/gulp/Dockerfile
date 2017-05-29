@@ -1,4 +1,4 @@
-FROM node:5
+FROM node:boron-alpine
 
 ADD package.json /PROJECT_NAME/gulp/package.json
 WORKDIR /PROJECT_NAME/gulp/

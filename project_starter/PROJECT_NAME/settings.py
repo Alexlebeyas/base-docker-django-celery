@@ -118,8 +118,11 @@ TEMPLATES = [
 ]
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        'BACKEND': 'redis_cache.RedisCache',
+        "LOCATION": "redis://redis:6379/0",
+        'TIMEOUT': 300,
+        'KEY_PREFIX': 'django-%s-' % PROJECT_NAME,
     }
 }
 
