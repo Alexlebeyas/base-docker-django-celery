@@ -1,0 +1,34 @@
+image: python:3.4.6
+
+pipelines:
+  custom:
+    install:
+      - step:
+          script: # Modify the commands below to build your repository.
+            - echo "install"
+            - apt-get update && apt-get install -y git rsync
+            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
+            - cd puppet && python deploy.py install_puppet
+            - python deploy.py git_key
+    install_staging:
+      - step:
+          script: # Modify the commands below to build your repository.
+            - echo "install_staging"
+            - apt-get update && apt-get install -y git rsync
+            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
+            - cd puppet && python deploy.py install_puppet_staging
+            - python deploy.py git_key_staging
+    deploy:
+      - step:
+          script: # Modify the commands below to build your repository.
+            - echo "deploy"
+            - apt-get update && apt-get install -y git rsync
+            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
+            - cd puppet && python deploy.py
+    deploy_staging:
+      - step:
+          script: # Modify the commands below to build your repository.
+            - echo "deploy_staging"
+            - apt-get update && apt-get install -y git rsync
+            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
+            - cd puppet && python deploy.py deploy_staging

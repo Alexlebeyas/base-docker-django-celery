@@ -81,32 +81,6 @@ def set_prod_settings():
             editor.replace('((DB_PASS))', db_pass)
 
 
-@tasks.add
-def set_puppet_prod_settings():
-    """
-    Insert project variables into puppet's prod.pp.
-    """
-    files = (
-        path.join(project_directory, 'puppet', 'manifests', 'prod.pp'),
-        path.join(project_directory, 'puppet', 'manifests', 'staging.pp'),
-    )
-    for file_path in files:
-        with FileEditor(file_path) as editor:
-            editor.replace_token('PROJECT_USER', project_user)
-            editor.replace_token('PROJECT_NAME', project_name)
-            editor.replace_token('DB_PASS', db_pass)
-
-
-@tasks.add
-def set_puppet_deploy_settings():
-    """
-    Insert project variables into puppet's deploy.py.
-    """
-    puppet_prod_settings_file = path.join(project_directory, 'puppet', 'deploy.py')
-    with FileEditor(puppet_prod_settings_file) as editor:
-        editor.replace_token('PROJECT_USER', project_user)
-
-
 # Must make run_test for docker
 # @tasks.add
 # def run_tests():

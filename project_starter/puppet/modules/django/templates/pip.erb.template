@@ -1,4 +1,0 @@
-[global]
-; Extra index to private pypi dependencies
-extra-index-url = https://{{ username }}:{{ password }}@{{ host }}/simple/
-trusted-host = {{ host }}
