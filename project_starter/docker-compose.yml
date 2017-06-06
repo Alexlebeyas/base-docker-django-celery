@@ -9,9 +9,6 @@ services:
     tty: true
     restart: always
     command: docker/wait-for-it.sh db:5432 -- python -u manage.py runserver 0.0.0.0:8000
-    depends_on:
-      - db
-      - redis
   gulp:
     build: ./gulp
     volumes:

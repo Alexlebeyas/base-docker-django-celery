@@ -119,7 +119,7 @@ TEMPLATES = [
 
 CACHES = {
     "default": {
-        'BACKEND': 'redis_cache.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache',
         "LOCATION": "redis://redis:6379/0",
         'TIMEOUT': 300,
         'KEY_PREFIX': 'django-%s-' % PROJECT_NAME,
