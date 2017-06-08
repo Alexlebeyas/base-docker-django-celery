@@ -1,6 +1,6 @@
 [
   {
-    "model": "nixausers.nixauser",
+    "model": "nixa_users.nixauser",
     "fields": {
       "groups": [],
       "first_name": "Nixa",

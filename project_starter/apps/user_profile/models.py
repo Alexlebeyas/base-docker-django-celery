@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from nixaemails.mixins import EmailMixin
+from nixa_emails.mixins import EmailMixin
 
 
 class Profile(EmailMixin):

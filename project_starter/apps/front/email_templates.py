@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from nixaemails.classes import Email
+from nixa_emails.classes import Email
 
 __author__ = 'Philippe'
 

@@ -22,8 +22,8 @@ INSTALLED_APPS = (
     'libs.startup',
 
     # Nixa libs
-    'nixaemails',
-    'nixausers',
+    'nixa_emails',
+    'nixa_users',
     'nixa_fields',
     'nixa_constant_types',
 
@@ -210,7 +210,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 SECRET_KEY = ''
-AUTH_USER_MODEL = 'nixausers.NixaUser'
+AUTH_USER_MODEL = 'nixa_users.NixaUser'
 STARTUP_INITIAL_FIXTURES = ['apps/user_profile/fixtures/admin_user.json']
 
 try:
