@@ -1,4 +1,7 @@
 class UI {
+    /**
+     * Called on document.ready
+     */
     init() {
         //make the 404 page take 100% of the page height in each devices*
         $('#page-404').css('height', window.innerHeight);
@@ -29,9 +32,6 @@ class UI {
             $('body').addClass('modal-open');
           }
         });
-
-        console.log('test', gettext("This is to be translated"));
-        console.log('test', gettext("This is to be translated too"));
     }
 }
 

@@ -2,7 +2,7 @@
 import cookie from './tools/cookie.es6';
 // FUNCTIONALITY
 import ui from './ui.es6';
-import test from './test.es6';
+
 $(document).ready(function(){
     /**
      * Ajax setup
@@ -12,7 +12,7 @@ $(document).ready(function(){
 
     /**
      * UI utils
+     * class to put JS front-end code
      */
     ui.init();
-    test.init();
 });
