@@ -7,7 +7,7 @@ $(document).ready(function(){
     /**
      * Ajax setup
      */
-    let csrf = cookie.getCookie('crsftoken');
+    let csrf = cookie.getCookie('csrftoken');
     $.ajaxSetup({ headers : {'X-CSRFToken': csrf }});
 
     /**
