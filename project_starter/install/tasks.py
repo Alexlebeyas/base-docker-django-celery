@@ -46,7 +46,8 @@ def set_docker_project_name():
         editor.replace('PROJECT_NAME', project_name)
     docker_compose_file = path.join(project_directory, 'docker-compose.yml')
     with FileEditor(docker_compose_file) as editor:
-        editor.replace('PROJECT_NAME', project_name)
+        editor.replace('DB_NAME', project_name)
+	editor.replace('DB_USER', project_user)
 
     gulp_docker_file = path.join(project_directory, 'gulp', 'Dockerfile')
     with FileEditor(gulp_docker_file) as editor:

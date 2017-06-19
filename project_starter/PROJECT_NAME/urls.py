@@ -21,7 +21,7 @@ urlpatterns = [
         name='django.contrib.sitemaps.views.sitemap'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^hotfix/', include(hotfix)),
-    url(r'^emails/', include('nixaemails.urls')),
+    url(r'^emails/', include('nixa_emails.urls')),
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^', include('apps.front.urls')),
 ]
