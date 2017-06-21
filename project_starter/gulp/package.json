@@ -10,10 +10,7 @@
   "author": "Nixa Geniouses",
   "license": "UNLICENSED",
   "devDependencies": {
-    "bootstrap-sass": "*",
-    "jquery": "*",
     "browser-sync": "*",
-    "font-awesome": "*",
     "gulp": "*",
     "gulp-clean-css": "*",
     "gulp-concat": "*",
