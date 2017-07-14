@@ -46,6 +46,7 @@ def set_docker_project_name():
         editor.replace('PROJECT_NAME', project_name)
     docker_compose_file = path.join(project_directory, 'docker-compose.yml')
     with FileEditor(docker_compose_file) as editor:
+        editor.replace('PROJECT_NAME', project_name)
         editor.replace('DB_NAME', project_name)
         editor.replace('DB_USER', project_user)
 
