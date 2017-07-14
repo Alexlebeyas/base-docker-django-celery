@@ -75,7 +75,8 @@ const paths = {
     src: '../apps/**/src/app*.js',
     resolveFile: '../apps/**/static/**/src/*.js',
     resolveDir: '../apps/**/static/**/src',
-    dist: 'static'
+    dist: 'static',
+    sourceDir: 'src'
   },
   fonts: {
     vendors: ['node_modules/font-awesome/fonts/fontawesome-webfont.ttf', 'node_modules/font-awesome/fonts/fontawesome-webfont.woff',
