@@ -2,7 +2,7 @@
  * Class to handle ajax form
  * # todo remove jQuery usage
  */
-export class FormAjax {
+class FormAjax {
     /**
      * Class to create ajax call with a django form - Handle only post method for now
      * @param {jquery Object} form - requirements: data-action (url to send ajax call)
@@ -49,8 +49,8 @@ export class FormAjax {
      * @private
      */
     _appendErrors(getErrorFormat) {
-        this._form.find('.form-group').each(function () {
-            let $formGroup = $(this);
+        this._form.find('.form-group').each((k, v) => {
+            let $formGroup = $(v);
             let $formGroupInput = $formGroup.find('input');
             if ($formGroupInput.attr('type') != "hidden") {
                 let errorElement = getErrorFormat($formGroupInput.attr('name'));
@@ -70,27 +70,28 @@ export class FormAjax {
      */
     _addSubmitCall() {
         let class_ = this;
-        this._form.submit( function (e) {
+        this._form.submit((e) => {
             e.preventDefault();
-            class_._hideErrors();
+            e.stopImmediatePropagation();
+            this._hideErrors();
             $.ajax({
-                method: class_._form.attr('method'),
-                url: class_._form.attr('action'),
-                data: class_._form.serialize(),
-                beforeSend: function (jqXHR, settings) {
-                    if (class_._beforeSend) {
-                        class_._beforeSend(jqXHR, settings, class_);
+                method: this._form.attr('method'),
+                url: this._form.attr('action'),
+                data: this._form.serialize(),
+                beforeSend: (jqXHR, settings) => {
+                    if (this._beforeSend) {
+                        this._beforeSend(jqXHR, settings, this);
                     }
                 },
-                success: function(response) {
-                    class_._onSuccess(response, class_)
+                success: (response) => {
+                    this._onSuccess(response, this);
                 },
-                error: function(response) {
+                error: (response) => {
                     // handle errors
                     let errors = JSON.parse(response.responseJSON);
-                    class_._displayErrors(errors);
-                    if (class_._onError) {
-                        class_._onError(response, class_)
+                    this._displayErrors(errors);
+                    if (this._onError) {
+                        this._onError(response, this);
                     }
                 }
             })
@@ -116,21 +117,17 @@ export class FormAjax {
      * @private
      */
     _hideErrors() {
-        this._form.find('.ajax_error').each(function (k, v) {
-            $(this).html('');
-        });
-        this._form.find('.has_error').each(function (k, v) {
-            $(this).removeClass('has_error');
-        });
+        this._form.find('.help-block').html("");
+        this._form.find('.has_error').removeClass('has_error');
     }
 
     /**
      * To clear field values
      */
     clearFields() {
-        this._form.find('.form-group input').each(function () {
-            let $input = $(this);
-            if ($input.attr('type') != "hidden") {
+        this._form.find('.form-group input').each((k, v) => {
+            let $input = $(v);
+            if ($input.attr('type') !== "hidden") {
                 $input.val('');
             }
         });
@@ -145,3 +142,5 @@ export class FormAjax {
          return `<span class="ajax_error" id="error_${fieldName}"></span>`;
     }
 }
+
+export default FormAjax

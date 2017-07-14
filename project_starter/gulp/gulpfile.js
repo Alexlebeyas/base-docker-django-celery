@@ -123,7 +123,7 @@ function watchBundle(bundler, entry) {
       .pipe(rename({extname: '.min.js'}))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(function () {
-        return entry.slice(0, entry.indexOf(paths.scripts.dist) + paths.scripts.dist.length) + '/js';
+        return entry.slice(0, entry.indexOf(paths.scripts.sourceDir) -1 ) + '/js';
       }));
   };
 }
