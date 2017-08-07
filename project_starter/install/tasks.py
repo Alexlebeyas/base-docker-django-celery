@@ -7,7 +7,7 @@ main script. Each task needs to have the decorator
 executed in order.
 """
 
-from os import path, renames
+from os import path, renames, rename
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
@@ -44,8 +44,29 @@ def set_docker_project_name():
     docker_file = path.join(project_directory, 'Dockerfile')
     with FileEditor(docker_file) as editor:
         editor.replace('PROJECT_NAME', project_name)
+
+    docker_file_staging = path.join(project_directory, 'Dockerfile-staging')
+    with FileEditor(docker_file_staging) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
+    docker_file_prod = path.join(project_directory, 'Dockerfile-prod')
+    with FileEditor(docker_file_prod) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
     docker_compose_file = path.join(project_directory, 'docker-compose.yml')
     with FileEditor(docker_compose_file) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+        editor.replace('DB_NAME', project_name)
+        editor.replace('DB_USER', project_user)
+
+    docker_compose_file_staging = path.join(project_directory, 'docker-compose-staging.yml')
+    with FileEditor(docker_compose_file_staging) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+        editor.replace('DB_NAME', project_name)
+        editor.replace('DB_USER', project_user)
+
+    docker_compose_file_prod = path.join(project_directory, 'docker-compose-prod.yml')
+    with FileEditor(docker_compose_file_prod) as editor:
         editor.replace('PROJECT_NAME', project_name)
         editor.replace('DB_NAME', project_name)
         editor.replace('DB_USER', project_user)
@@ -53,6 +74,32 @@ def set_docker_project_name():
     gulp_docker_file = path.join(project_directory, 'gulp', 'Dockerfile')
     with FileEditor(gulp_docker_file) as editor:
         editor.replace('PROJECT_NAME', project_name)
+
+    nginx_docker_file_staging = path.join(project_directory, 'docker', 'nginx', 'Dockerfile-staging')
+    with FileEditor(nginx_docker_file_staging) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
+    nginx_docker_file_prod = path.join(project_directory, 'docker', 'nginx', 'Dockerfile-prod')
+    with FileEditor(nginx_docker_file_prod) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
+    nginx_conf = path.join(project_directory, 'docker', 'nginx', 'PROJECT_NAME.conf')
+    with FileEditor(nginx_conf) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+    new_nginx_conf = path.join(project_directory, 'docker', 'nginx', "{}.conf".format(project_name))
+    rename(nginx_conf, new_nginx_conf)
+
+    uwsgi_staging = path.join(project_directory, 'PROJECT_NAME-staging.ini')
+    with FileEditor(uwsgi_staging) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+    new_uwsgi_staging = path.join(project_directory, "{}-staging.ini".format(project_name))
+    rename(uwsgi_staging, new_uwsgi_staging)
+
+    uwsgi_prod = path.join(project_directory, 'PROJECT_NAME-prod.ini')
+    with FileEditor(uwsgi_prod) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+    new_uwsgi_prod = path.join(project_directory, "{}-prod.ini".format(project_name))
+    rename(uwsgi_prod, new_uwsgi_prod)
 
 
 @tasks.add

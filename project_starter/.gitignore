@@ -212,3 +212,6 @@ tags
 
 pip.conf
 pip.erb
+
+docker/postgresql/dumps/*
+.env
