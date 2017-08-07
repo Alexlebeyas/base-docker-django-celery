@@ -2,13 +2,17 @@ version: '3'
 services:
   web:
     build: .
+    environment:
+     - POSTGRES_USER=DB_USER
+     - POSTGRES_PASSWORD=12345
+     - POSTGRES_DB=DB_NAME
     ports:
       - "8000:8000"
     volumes:
       - .:/PROJECT_NAME
     tty: true
     restart: always
-    command: sh -c "./docker/wait-for-it.sh -c 'nc -z db 5432' -t 30 && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "./docker/wait-for.sh -c 'nc -z db 5432' -t 30 && python manage.py runserver 0.0.0.0:8000"
   gulp:
     build: ./gulp
     volumes:
@@ -31,4 +35,3 @@ services:
     - "5432"
   redis:
     image: redis:alpine
-

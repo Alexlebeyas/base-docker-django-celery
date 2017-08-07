@@ -1,6 +1,6 @@
-FROM python:3.5-alpine
+FROM python:3.5-slim
 COPY . /PROJECT_NAME
 WORKDIR /PROJECT_NAME
 COPY pip.conf /root/.pip/pip.conf
-RUN apk update && apk add build-base postgresql-dev gettext-dev # jpeg-dev zlib-dev uncomment this for Pillow package
+RUN apt-get update -y && apt-get install libjpeg-dev libproj-dev gettext libgettextpo-dev netcat -y
 RUN pip install -r requirements.txt

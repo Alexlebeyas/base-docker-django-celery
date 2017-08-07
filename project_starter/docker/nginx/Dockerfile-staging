@@ -1,0 +1,2 @@
+FROM nginx:stable-alpine
+COPY ./PROJECT_NAME.conf /etc/nginx/conf.d/default.conf
