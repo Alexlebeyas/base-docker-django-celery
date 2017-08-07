@@ -7,23 +7,23 @@ from fabric.contrib.files import _expand_path, exists
 
 PROJECT_NAME = '((PROJECT_NAME))'
 # ssh link to repository
-REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'
+REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 
 STAGES = {
     'staging': {
-        'hosts': [''],
+        'hosts': ['24.37.82.222'],
         'default_branch': 'develop',
-        'port': '2227',
+        'port': '',  # todo
         'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': 'PROJECT_NAME.staging',
+        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).staging',
         'docker_compose_file': 'docker-compose-staging.yml',
     },
     'production': {
         'hosts': [''],
         'default_branch': 'master',
         'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': 'PROJECT_NAME.prod',
+        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
         'docker_compose_file': 'docker-compose-prod.yml',
     }
 }

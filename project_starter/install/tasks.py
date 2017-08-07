@@ -37,7 +37,7 @@ def rename_config_files():
     old_file = path.join(project_directory, 'PROJECT_NAME-staging.ini')
     renames(old_file, "{}-staging.ini".format(project_name))
     old_file = path.join(project_directory, 'docker', 'nginx', 'PROJECT_NAME.conf')
-    renames(old_file, "{}.conf".format(project_name))
+    renames(old_file, path.join(project_directory, 'docker', 'nginx', "{}.conf".format(project_name)))
 
 
 @tasks.add
@@ -70,8 +70,8 @@ def set_docker_project_name():
         path.join(project_directory, '{}-prod.ini'.format(project_name))
     )
 
-    for file in files:
-        with FileEditor(file) as editor:
+    for file_path in files:
+        with FileEditor(file_path) as editor:
             editor.replace('PROJECT_NAME', project_name)
 
     docker_compose_file = path.join(project_directory, 'docker-compose.yml')
@@ -96,21 +96,15 @@ def set_secret_key():
 
 
 @tasks.add
-def set_prod_settings():
+def set_settings():
     """
     Insert prod and staging settings path string, ssh
     password and database password.
     """
-    files = (
-        path.join(settings_directory, 'prod.py'),
-        path.join(settings_directory, 'staging.py'),
-        path.join(settings_directory, 'settings.py'),
-    )
-    for file_path in files:
-        with FileEditor(file_path) as editor:
-            editor.replace('((DB_USER))', project_user)
-            editor.replace('((DB_NAME))', project_name)
-            editor.replace('((DB_PASS))', db_pass)
+    with FileEditor(path.join(settings_directory, 'settings.py')) as editor:
+        editor.replace('((DB_USER))', project_user)
+        editor.replace('((DB_NAME))', project_name)
+        editor.replace('((DB_PASS))', db_pass)
 
 
 
