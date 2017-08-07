@@ -1,12 +1,11 @@
-from os import path
+import os
+from .settings import *
 
-DB_USER = '((DB_USER))'
-DB_NAME = '((DB_NAME))'
-DB_PASS = '((DB_PASS))'
-ALLOWED_HOSTS = None,  # tODO add prod IP here.
+ALLOWED_HOSTS = ['']  # tODO add prod IP here.
 PROJECT_PROTOCOL = 'http://'
-PROJECT_DOMAIN = 'todo' # TODO add prod ip here.
+PROJECT_DOMAIN = ''  # TODO add prod ip here.
 PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
+SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
 PROJECT_NAME = path.basename(path.dirname(__file__))
@@ -14,17 +13,18 @@ PROJECT_NAME = path.basename(path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': DB_USER,
-        'NAME': DB_NAME,
-        'PASSWORD': DB_PASS,
-        'HOST': 'localhost',
-    },
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': 'db',
+        'PORT': '5432'
+    }
 }
 
 CACHES = {
     "default": {
-        'BACKEND': 'redis_cache.RedisCache',
-        "LOCATION": "redis://localhost:6379/0",
+        'BACKEND': 'django_redis.cache.RedisCache',
+        "LOCATION": "redis://redis:6379/0",
         'TIMEOUT': 300,
         'KEY_PREFIX': 'django-%s-' % PROJECT_NAME,
     }
@@ -32,6 +32,24 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'stderr': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['stderr'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
 
 TEMPLATES = (
     {
@@ -53,3 +71,4 @@ TEMPLATES = (
         },
     },
 )
+
