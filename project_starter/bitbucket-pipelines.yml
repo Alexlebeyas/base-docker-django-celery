@@ -8,7 +8,7 @@ pipelines:
          script:
           - echo "deploy staging"
           - pip install "fabric==1.13.2"
-          - fab staging deploy --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa
+          - fab staging deploy --abort-on-prompts copy_media_files -i /opt/atlassian/pipelines/agent/data/id_rsa
   custom:
     deploy:
       - step:
@@ -21,4 +21,4 @@ pipelines:
          script: # Modify the commands below to build your repository.
           - echo "deploy staging"
           - pip install "fabric==1.13.2"
-          - fab staging deploy --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa
+          - fab staging deploy copy_media_files --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa

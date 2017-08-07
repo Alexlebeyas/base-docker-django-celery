@@ -27,6 +27,20 @@ def rename_settings_directory():
 
 
 @tasks.add
+def rename_config_files():
+    """
+    Change the config files from
+    'PROJECT_NAME' to the chosen project name.
+    """
+    old_file = path.join(project_directory, 'PROJECT_NAME-prod.ini')
+    renames(old_file, "{}-prod.ini".format(project_name))
+    old_file = path.join(project_directory, 'PROJECT_NAME-staging.ini')
+    renames(old_file, "{}-staging.ini".format(project_name))
+    old_file = path.join(project_directory, 'docker', 'nginx', 'PROJECT_NAME.conf')
+    renames(old_file, "{}.conf".format(project_name))
+
+
+@tasks.add
 def set_manage_project_name():
     """
     Set the settings path string in manage.py.
@@ -41,17 +55,24 @@ def set_docker_project_name():
     """
     Set the project name in docker files
     """
-    docker_file = path.join(project_directory, 'Dockerfile')
-    with FileEditor(docker_file) as editor:
-        editor.replace('PROJECT_NAME', project_name)
 
-    docker_file_staging = path.join(project_directory, 'Dockerfile-staging')
-    with FileEditor(docker_file_staging) as editor:
-        editor.replace('PROJECT_NAME', project_name)
+    files = (
+        path.join(project_directory, 'Dockerfile'),
+        path.join(project_directory, 'Dockerfile-staging'),
+        path.join(project_directory, 'Dockerfile-prod'),
+        path.join(project_directory, 'docker-compose-staging.yml'),
+        path.join(project_directory, 'docker-compose-prod.yml'),
+        path.join(project_directory, 'gulp', 'Dockerfile'),
+        path.join(project_directory, 'docker', 'nginx', 'Dockerfile-staging'),
+        path.join(project_directory, 'docker', 'nginx', 'Dockerfile-prod'),
+        path.join(project_directory, 'docker', 'nginx', '{}.conf'.format(project_name)),
+        path.join(project_directory, '{}-staging.ini'.format(project_name)),
+        path.join(project_directory, '{}-prod.ini'.format(project_name))
+    )
 
-    docker_file_prod = path.join(project_directory, 'Dockerfile-prod')
-    with FileEditor(docker_file_prod) as editor:
-        editor.replace('PROJECT_NAME', project_name)
+    for file in files:
+        with FileEditor(file) as editor:
+            editor.replace('PROJECT_NAME', project_name)
 
     docker_compose_file = path.join(project_directory, 'docker-compose.yml')
     with FileEditor(docker_compose_file) as editor:
@@ -59,51 +80,9 @@ def set_docker_project_name():
         editor.replace('DB_NAME', project_name)
         editor.replace('DB_USER', project_user)
 
-    docker_compose_file_staging = path.join(project_directory, 'docker-compose-staging.yml')
-    with FileEditor(docker_compose_file_staging) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-        editor.replace('DB_NAME', project_name)
-        editor.replace('DB_USER', project_user)
-
-    docker_compose_file_prod = path.join(project_directory, 'docker-compose-prod.yml')
-    with FileEditor(docker_compose_file_prod) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-        editor.replace('DB_NAME', project_name)
-        editor.replace('DB_USER', project_user)
-
-    gulp_docker_file = path.join(project_directory, 'gulp', 'Dockerfile')
-    with FileEditor(gulp_docker_file) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-
-    nginx_docker_file_staging = path.join(project_directory, 'docker', 'nginx', 'Dockerfile-staging')
-    with FileEditor(nginx_docker_file_staging) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-
-    nginx_docker_file_prod = path.join(project_directory, 'docker', 'nginx', 'Dockerfile-prod')
-    with FileEditor(nginx_docker_file_prod) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-
-    nginx_conf = path.join(project_directory, 'docker', 'nginx', 'PROJECT_NAME.conf')
-    with FileEditor(nginx_conf) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-    new_nginx_conf = path.join(project_directory, 'docker', 'nginx', "{}.conf".format(project_name))
-    rename(nginx_conf, new_nginx_conf)
-
-    uwsgi_staging = path.join(project_directory, 'PROJECT_NAME-staging.ini')
-    with FileEditor(uwsgi_staging) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-    new_uwsgi_staging = path.join(project_directory, "{}-staging.ini".format(project_name))
-    rename(uwsgi_staging, new_uwsgi_staging)
-
-    uwsgi_prod = path.join(project_directory, 'PROJECT_NAME-prod.ini')
-    with FileEditor(uwsgi_prod) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-    new_uwsgi_prod = path.join(project_directory, "{}-prod.ini".format(project_name))
-    rename(uwsgi_prod, new_uwsgi_prod)
-
     fabfile = path.join(project_directory, 'fabfile.py')
     with FileEditor(fabfile) as editor:
-        editor.replace('PROJECT_NAME', project_name)
+        editor.replace('((PROJECT_NAME))', project_name)
 
 
 @tasks.add
