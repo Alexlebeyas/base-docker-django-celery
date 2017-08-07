@@ -101,6 +101,10 @@ def set_docker_project_name():
     new_uwsgi_prod = path.join(project_directory, "{}-prod.ini".format(project_name))
     rename(uwsgi_prod, new_uwsgi_prod)
 
+    fabfile = path.join(project_directory, 'fabfile.py')
+    with FileEditor(fabfile) as editor:
+        editor.replace('PROJECT_NAME', project_name)
+
 
 @tasks.add
 def set_secret_key():
