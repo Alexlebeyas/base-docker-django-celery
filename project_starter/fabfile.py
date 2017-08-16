@@ -5,25 +5,25 @@ from fabric.context_managers import prefix, settings, hide, shell_env
 from fabric.operations import require, put, sudo, local
 from fabric.contrib.files import _expand_path, exists
 
-PROJECT_NAME = 'PROJECT_NAME'
+PROJECT_NAME = '((PROJECT_NAME))'
 # ssh link to repository
-REPOSITORY = 'git@bitbucket.org:nixateam/PROJECT_NAME.git'
+REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 
 STAGES = {
     'staging': {
-        'hosts': [''],
+        'hosts': ['24.37.82.222'],
         'default_branch': 'develop',
-        'port': '2227',
+        'port': '',  # todo
         'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': 'PROJECT_NAME.staging',
+        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).staging',
         'docker_compose_file': 'docker-compose-staging.yml',
     },
     'production': {
         'hosts': [''],
         'default_branch': 'master',
         'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': 'PROJECT_NAME.prod',
+        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
         'docker_compose_file': 'docker-compose-prod.yml',
     }
 }
@@ -48,6 +48,8 @@ def production():
 @task
 def install():
     require('stage', provided_by=(staging, production))
+
+    branch = env.default_branch
     # use root for install
     stage_user = env.user
     # install security
@@ -68,6 +70,7 @@ def install():
     sudo('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(stage_user))
     # install git project
     run('git clone {} {}'.format(REPOSITORY, PROJECT_NAME))
+    run('git checkout {}'.format(branch))
     sudo('chown -R {0}:{0} {1}'.format(stage_user, PROJECT_NAME))
     move_env_file(stage_user)
     move_pip_file(stage_user)
@@ -97,6 +100,7 @@ def deploy(branch=None, commit=None):
             run('git checkout {}'.format(branch or commit))
             if commit is None:
                 run('git pull origin {}'.format(branch))
+            run('mkdir -p ./docker/postgresql/dumps')
             run('docker-compose -f {0} exec -T'
                 ' db pg_dump $POSTGRES_DB -U $POSTGRES_USER -h localhost -F c >'
                 ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
@@ -156,3 +160,11 @@ def move_env_file(stage_user):
 
 def move_pip_file(stage_user):
     put('pip.conf', '/home/{}/{}/pip.conf'.format(stage_user, PROJECT_NAME))
+
+
+@task
+def copy_media_files():
+    require('stage', provided_by=(staging, production))
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        web_id = run('echo $(docker-compose -f {} ps -q web)'.format(env.docker_compose_file))
+        run('docker cp ./media/. {}:/{}/media/'.format(web_id, PROJECT_NAME))
