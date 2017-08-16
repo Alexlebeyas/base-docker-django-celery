@@ -125,6 +125,10 @@ def rollback():
                 run('docker-compose -f {} build web'.format(env.docker_compose_file))
                 run('docker-compose -f {} up --no-deps -d web'.format(env.docker_compose_file))
                 # copy over the previous dump.sql to be restored
+            # stop the db container and remove it
+            run('docker stop {0} && docker rm {0}'.format(docker_db_container))
+            # bring the db container back up in detached mode
+            run('docker-compose -f {0} -T db up -d'.format(env.docker_compose_file))
             run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
                 ' {docker_db_container}:/{previous_commit_hash}.sql'.format(**{
                 'previous_commit_hash': previous_commit_hash,
@@ -135,6 +139,8 @@ def rollback():
                 run('docker-compose -f {0} exec -T'
                     ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
                     ' rm ./{0}.sql'.format(env.docker_compose_file, previous_commit_hash))
+                # migrate the database
+                run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
 
 
 def exists_local(path):
