@@ -52,10 +52,24 @@ class FormAjax {
         this._form.find('.form-group').each((k, v) => {
             let $formGroup = $(v);
             let $formGroupInput = $formGroup.find('input');
+            let $formGroupSelect = $formGroup.find('select');
+
+            // if form input is of the input type then get error element
             if ($formGroupInput.attr('type') != "hidden") {
-                let errorElement = getErrorFormat($formGroupInput.attr('name'));
-                $formGroup.append(errorElement);
+                if (typeof  $formGroupInput.attr('name') != "undefined") {
+                    let errorElement = getErrorFormat($formGroupInput.attr('name'));
+                    $formGroup.append(errorElement);
+                }
             }
+
+            // if form input is of the select type then get error element
+            if ($formGroupSelect.attr('type') != "hidden") {
+                if (typeof  $formGroupSelect.attr('name') != "undefined") {
+                    let errorElement = getErrorFormat($formGroupSelect.attr('name'));
+                    $formGroup.append(errorElement);
+                }
+            }
+
         });
 
         // For general messages
