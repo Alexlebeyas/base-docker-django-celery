@@ -33,10 +33,10 @@ export class FormAjax {
         if (!form.attr('action')) {
             console.error('FormAjax constructor error', '=> You must add this action attribute');
             return false;
-        } else if (!form.attr('method') || form.attr('method').toLowerCase() != "post") {
+        } else if (!form.attr('method') || form.attr('method').toLowerCase() !== "post") {
             console.error('FormAjax constructor error', '=> You must set the method attribute to "POST"');
             return false;
-        } else if (!onSuccess || typeof onSuccess != 'function') {
+        } else if (!onSuccess || typeof onSuccess !== 'function') {
             console.error('FormAjax constructor error', '=> You must implement an onSuccess callback');
             return false;
         }
@@ -49,11 +49,13 @@ export class FormAjax {
      * @private
      */
     _appendErrors(getErrorFormat) {
-        this._form.find('.form-group').each(function () {
-            let $formGroup = $(this);
+
+        this._form.find('.form-group').each((k, v) => {
+            let $formGroup = $(v);
             let $formGroupInput = $formGroup.find('input');
-            if ($formGroupInput.attr('type') != "hidden") {
-                let errorElement = getErrorFormat($formGroupInput.attr('name'));
+            if ($formGroupInput.attr('type') !== "hidden") {
+                let name = $formGroupInput.attr('name');
+                let errorElement = getErrorFormat(`${name}`);
                 $formGroup.append(errorElement);
             }
         });
@@ -99,14 +101,18 @@ export class FormAjax {
 
     /**
      * Display errors from Django error response in the html element
+     *  usage when Django form prefix is used -- add data-prefix to the form with form.prefix
      * @param {Object} errors - This object is from django forms: you must return form.errors.as_json()
      * @private
      */
     _displayErrors(errors) {
+        let prefix = this._form.data('prefix');
+
         for (let [key, value] of Object.entries(errors)) {
             for (let i = 0; i < value.length; i++) {
                 let errorObj = value[i];
-                $('#error_' + key).html(errorObj.message);
+                let errorId = (prefix) ? `#error_${prefix}-${key}` : `#error_${key}`;
+                $(errorId).html(errorObj.message);
             }
         }
     }
@@ -130,7 +136,7 @@ export class FormAjax {
     clearFields() {
         this._form.find('.form-group input').each(function () {
             let $input = $(this);
-            if ($input.attr('type') != "hidden") {
+            if ($input.attr('type') !== "hidden") {
                 $input.val('');
             }
         });
@@ -142,6 +148,6 @@ export class FormAjax {
      * @returns {string}
      */
     static getErrorSpan(fieldName) {
-         return `<span class="ajax_error" id="error_${fieldName}"></span>`;
+        return `<span class="ajax_error" id="error_${fieldName}"></span>`;
     }
 }
