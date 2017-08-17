@@ -1,34 +1,24 @@
-image: python:3.4.6
+image: python:2.7
 
 pipelines:
+
+  branches:
+    develop:
+      - step:
+         script:
+          - echo "deploy staging"
+          - pip install "fabric==1.13.2"
+          - fab staging deploy --abort-on-prompts copy_media_files -i /opt/atlassian/pipelines/agent/data/id_rsa
   custom:
-    install:
-      - step:
-          script: # Modify the commands below to build your repository.
-            - echo "install"
-            - apt-get update && apt-get install -y git rsync
-            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
-            - cd puppet && python deploy.py install_puppet
-            - python deploy.py git_key
-    install_staging:
-      - step:
-          script: # Modify the commands below to build your repository.
-            - echo "install_staging"
-            - apt-get update && apt-get install -y git rsync
-            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
-            - cd puppet && python deploy.py install_puppet_staging
-            - python deploy.py git_key_staging
     deploy:
       - step:
-          script: # Modify the commands below to build your repository.
-            - echo "deploy"
-            - apt-get update && apt-get install -y git rsync
-            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
-            - cd puppet && python deploy.py
+         script: # Modify the commands below to build your repository.
+          - echo "deploy"
+          - pip install "fabric==1.13.2"
+          - fab production deploy --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa
     deploy_staging:
       - step:
-          script: # Modify the commands below to build your repository.
-            - echo "deploy_staging"
-            - apt-get update && apt-get install -y git rsync
-            - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/puppet.git
-            - cd puppet && python deploy.py deploy_staging
+         script: # Modify the commands below to build your repository.
+          - echo "deploy staging"
+          - pip install "fabric==1.13.2"
+          - fab staging deploy copy_media_files --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa

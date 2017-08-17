@@ -101,7 +101,7 @@ export class FormAjax {
 
     /**
      * Display errors from Django error response in the html element
-     *  usage when Django form prefix is used -- add data-prefix to the form with form.prefix
+     *  Note: usage when Django form prefix is used -- add data-prefix to the form with form.prefix value
      * @param {Object} errors - This object is from django forms: you must return form.errors.as_json()
      * @private
      */

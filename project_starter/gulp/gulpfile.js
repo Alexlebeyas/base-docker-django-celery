@@ -75,7 +75,8 @@ const paths = {
     src: '../apps/**/src/app*.js',
     resolveFile: '../apps/**/static/**/src/*.js',
     resolveDir: '../apps/**/static/**/src',
-    dist: 'static'
+    dist: 'static',
+    sourceDir: 'src'
   },
   fonts: {
     vendors: ['node_modules/font-awesome/fonts/fontawesome-webfont.ttf', 'node_modules/font-awesome/fonts/fontawesome-webfont.woff',
@@ -123,7 +124,7 @@ function watchBundle(bundler, entry) {
       .pipe(rename({extname: '.min.js'}))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(function () {
-        return entry.slice(0, entry.indexOf(paths.scripts.dist) + paths.scripts.dist.length) + '/js';
+        return entry.slice(0, entry.indexOf(paths.scripts.sourceDir) -1 ) + '/js';
       }));
   };
 }

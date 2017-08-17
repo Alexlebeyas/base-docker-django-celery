@@ -1,2 +1,8 @@
 /* FORMS
-=========================== */ 
+=========================== */
+.form-control {
+  font-size: 16px; //ios form autozoom fix
+  @include breakpoint(sm) {
+    font-size: 14px;
+  }
+}

@@ -1,5 +1,5 @@
 /* FONTS
-=========================== 
+===========================
 Important:
 - Define default font families and font styles here.
 - Design titles only using .d1, .d2... Not h1, h2...
@@ -16,7 +16,10 @@ $baseFontSize : 14;
 html, body {
     font-family: $font-content;
     color: $grey-dark;
-    font-size: $baseFontSize * 1px;
+    font-size: $baseFontSize - 2 * 1px;
+    @include breakpoint(lg) {
+      font-size: $baseFontSize * 1px;
+    }
 }
 
 h1, h2, h3, h4, h5, h6, .d1, .d2, .d3, .d4, .d5, .d6 {

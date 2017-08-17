@@ -1,4 +1,7 @@
 # coding: UTF-8
+from os import path
+import os
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'web', 'localhost']
 
 INSTALLED_APPS = (
     # Admin settings
@@ -36,14 +39,10 @@ ADMINS = (
     ('Nixa', 'errors@nixa.ca'),
 )
 
-from os import path
-DB_USER = '((DB_USER))'
-DB_NAME = '((DB_NAME))'
-DB_PASS = '12345'
 PROJECT_PROTOCOL = '//'
 PROJECT_DOMAIN = '127.0.0.1:8000'
 PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
-PROJECT_TITLE = "Project Starter"
+PROJECT_TITLE = "PROJECT_NAME"
 PROJECT_CONTACT = "contact@nixa.com"
 PROJECT_SETTINGS = path.dirname(__file__)
 BASE_DIR = path.dirname(PROJECT_SETTINGS)
@@ -91,14 +90,14 @@ STATICFILES_FINDERS = (
 )
 
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': DB_NAME,
-       'USER': DB_USER,
-       'PASSWORD': DB_PASS,
-       'HOST': 'db',
-       'PORT': '5432',
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': 'db',
+        'PORT': '5432',
+    }
 }
 
 TEMPLATES = [
