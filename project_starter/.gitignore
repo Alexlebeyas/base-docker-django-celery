@@ -1,9 +1,6 @@
 *.db
 celerybeat-*
 
-.vagrant
-Vagrantfile
-
 local_settings.py
 
 #### joe made this: http://goel.io/joe
@@ -214,4 +211,5 @@ pip.conf
 pip.erb
 
 docker/postgresql/dumps/*
+!docker/postgresql/dumps/.gitfolder
 .env

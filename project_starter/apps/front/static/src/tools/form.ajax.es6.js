@@ -2,7 +2,7 @@
  * Class to handle ajax form
  * # todo remove jQuery usage
  */
-class FormAjax {
+export class FormAjax {
     /**
      * Class to create ajax call with a django form - Handle only post method for now
      * @param {jquery Object} form - requirements: data-action (url to send ajax call)
@@ -33,10 +33,10 @@ class FormAjax {
         if (!form.attr('action')) {
             console.error('FormAjax constructor error', '=> You must add this action attribute');
             return false;
-        } else if (!form.attr('method') || form.attr('method').toLowerCase() != "post") {
+        } else if (!form.attr('method') || form.attr('method').toLowerCase() !== "post") {
             console.error('FormAjax constructor error', '=> You must set the method attribute to "POST"');
             return false;
-        } else if (!onSuccess || typeof onSuccess != 'function') {
+        } else if (!onSuccess || typeof onSuccess !== 'function') {
             console.error('FormAjax constructor error', '=> You must implement an onSuccess callback');
             return false;
         }
@@ -49,25 +49,22 @@ class FormAjax {
      * @private
      */
     _appendErrors(getErrorFormat) {
+
         this._form.find('.form-group').each((k, v) => {
             let $formGroup = $(v);
             let $formGroupInput = $formGroup.find('input');
             let $formGroupSelect = $formGroup.find('select');
 
-            // if form input is of the input type then get error element
-            if ($formGroupInput.attr('type') != "hidden") {
-                if (typeof  $formGroupInput.attr('name') != "undefined") {
-                    let errorElement = getErrorFormat($formGroupInput.attr('name'));
-                    $formGroup.append(errorElement);
-                }
+            if ($formGroupInput.attr('type') !== "hidden") {
+                let name = $formGroupInput.attr('name');
+                let errorElement = getErrorFormat(`${name}`);
+                $formGroup.append(errorElement);
             }
 
-            // if form input is of the select type then get error element
-            if ($formGroupSelect.attr('type') != "hidden") {
-                if (typeof  $formGroupSelect.attr('name') != "undefined") {
-                    let errorElement = getErrorFormat($formGroupSelect.attr('name'));
-                    $formGroup.append(errorElement);
-                }
+            if ($formGroupSelect.attr('type') !== "hidden") {
+                let name = $formGroupSelect.attr('name');
+                let errorElement = getErrorFormat(`${name}`);
+                $formGroup.append(errorElement);
             }
 
         });
@@ -83,10 +80,8 @@ class FormAjax {
      * @private
      */
     _addSubmitCall() {
-        let class_ = this;
         this._form.submit((e) => {
             e.preventDefault();
-            e.stopImmediatePropagation();
             this._hideErrors();
             $.ajax({
                 method: this._form.attr('method'),
@@ -98,14 +93,14 @@ class FormAjax {
                     }
                 },
                 success: (response) => {
-                    this._onSuccess(response, this);
+                    this._onSuccess(response, this)
                 },
                 error: (response) => {
                     // handle errors
                     let errors = JSON.parse(response.responseJSON);
                     this._displayErrors(errors);
                     if (this._onError) {
-                        this._onError(response, this);
+                        this._onError(response, this)
                     }
                 }
             })
@@ -114,14 +109,18 @@ class FormAjax {
 
     /**
      * Display errors from Django error response in the html element
+     *  Note: usage when Django form prefix is used -- add data-prefix to the form with form.prefix value
      * @param {Object} errors - This object is from django forms: you must return form.errors.as_json()
      * @private
      */
     _displayErrors(errors) {
+        let prefix = this._form.data('prefix');
+
         for (let [key, value] of Object.entries(errors)) {
             for (let i = 0; i < value.length; i++) {
                 let errorObj = value[i];
-                $('#error_' + key).html(errorObj.message);
+                let errorId = (prefix) ? `#error_${prefix}-${key}` : `#error_${key}`;
+                $(errorId).html(errorObj.message);
             }
         }
     }
@@ -131,8 +130,12 @@ class FormAjax {
      * @private
      */
     _hideErrors() {
-        this._form.find('.help-block').html("");
-        this._form.find('.has_error').removeClass('has_error');
+        this._form.find('.ajax_error').each((k, v) => {
+            $(v).html('');
+        });
+        this._form.find('.has_error').each((k, v) => {
+            $(v).removeClass('has_error');
+        });
     }
 
     /**
@@ -153,8 +156,6 @@ class FormAjax {
      * @returns {string}
      */
     static getErrorSpan(fieldName) {
-         return `<span class="ajax_error" id="error_${fieldName}"></span>`;
+        return `<span class="ajax_error" id="error_${fieldName}"></span>`;
     }
 }
-
-export default FormAjax

@@ -50,8 +50,6 @@ def install():
     require('stage', provided_by=(staging, production))
 
     branch = env.default_branch
-    # use root for install
-    stage_user = env.user
     # install security
     sudo('apt-get update && apt-get install -y unattended-upgrades apt-transport-https ca-certificates git'
         ' curl software-properties-common && unattended-upgrades')
@@ -67,16 +65,22 @@ def install():
     sudo('apt-get update && apt-get remove docker docker-engine docker.io && apt-get install -y docker-ce')
     sudo('curl -L https://github.com/docker/compose/releases/download/{}/docker-compose-`uname -s`-`uname -m` '
         '> /usr/local/bin/docker-compose'.format(DOCKER_COMPOSE_VERSION))
-    sudo('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(stage_user))
+    sudo('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(env.user))
     # install git project
     run('git clone {} {}'.format(REPOSITORY, PROJECT_NAME))
-    run('git checkout {}'.format(branch))
-    sudo('chown -R {0}:{0} {1}'.format(stage_user, PROJECT_NAME))
-    move_env_file(stage_user)
-    move_pip_file(stage_user)
+    sudo('chown -R {0}:{0} {1}'.format(env.user, PROJECT_NAME))
+    move_env_file(env.user)
+    move_pip_file(env.user)
     # docker-compose up every services
-    with cd('~/{}'.format(PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        run('git checkout {}'.format(branch))
         sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
+    copy_authorized_keys()
+    # setup ssh security
+    sudo('apt-get install fail2ban')
+    sudo("sed -i '/PermitRootLogin /c\PermitRootLogin no' /etc/ssh/sshd_config")
+    sudo("sed -i '/PasswordAuthentication/c\PasswordAuthentication no' /etc/ssh/sshd_config")
+    sudo("service ssh restart")
 
 
 @task
@@ -108,6 +112,7 @@ def deploy(branch=None, commit=None):
                 run('docker-compose -f {} build web'.format(env.docker_compose_file))
                 run('docker-compose -f {} up --no-deps -d web'.format(env.docker_compose_file))
                 run('docker-compose -f {} exec -T web python manage.py migrate'.format(env.docker_compose_file))
+    copy_authorized_keys()
 
 
 @task
@@ -147,6 +152,15 @@ def rollback():
                 run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
 
 
+@task
+def copy_media_files():
+    require('stage', provided_by=(staging, production))
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        web_id = run('echo $(docker-compose -f {} ps -q web)'.format(env.docker_compose_file))
+        run('docker cp ./media/. {}:/{}/media/'.format(web_id, PROJECT_NAME))
+        run('docker exec -ti {} chown -R uwsgi:101 /{}/media/'.format(web_id, PROJECT_NAME))
+
+
 def exists_local(path):
     cmd = 'stat %s' % _expand_path(path)
     with settings(hide('everything'), warn_only=True):
@@ -162,9 +176,6 @@ def move_pip_file(stage_user):
     put('pip.conf', '/home/{}/{}/pip.conf'.format(stage_user, PROJECT_NAME))
 
 
-@task
-def copy_media_files():
-    require('stage', provided_by=(staging, production))
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
-        web_id = run('echo $(docker-compose -f {} ps -q web)'.format(env.docker_compose_file))
-        run('docker cp ./media/. {}:/{}/media/'.format(web_id, PROJECT_NAME))
+def copy_authorized_keys():
+    run('cp ~/{}/config/authorized_keys ~/.ssh/authorized_keys'.format(PROJECT_NAME))
+    run('chmod 600 ~/.ssh/authorized_keys')
