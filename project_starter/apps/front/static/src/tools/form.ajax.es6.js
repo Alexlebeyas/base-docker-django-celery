@@ -71,28 +71,27 @@ export class FormAjax {
      * @private
      */
     _addSubmitCall() {
-        let class_ = this;
-        this._form.submit( function (e) {
+        this._form.submit((e) => {
             e.preventDefault();
-            class_._hideErrors();
+            this._hideErrors();
             $.ajax({
-                method: class_._form.attr('method'),
-                url: class_._form.attr('action'),
-                data: class_._form.serialize(),
-                beforeSend: function (jqXHR, settings) {
-                    if (class_._beforeSend) {
-                        class_._beforeSend(jqXHR, settings, class_);
+                method: this._form.attr('method'),
+                url: this._form.attr('action'),
+                data: this._form.serialize(),
+                beforeSend: (jqXHR, settings) => {
+                    if (this._beforeSend) {
+                        this._beforeSend(jqXHR, settings, this);
                     }
                 },
-                success: function(response) {
-                    class_._onSuccess(response, class_)
+                success: (response) => {
+                    this._onSuccess(response, this)
                 },
-                error: function(response) {
+                error: (response) => {
                     // handle errors
                     let errors = JSON.parse(response.responseJSON);
-                    class_._displayErrors(errors);
-                    if (class_._onError) {
-                        class_._onError(response, class_)
+                    this._displayErrors(errors);
+                    if (this._onError) {
+                        this._onError(response, this)
                     }
                 }
             })
@@ -122,11 +121,11 @@ export class FormAjax {
      * @private
      */
     _hideErrors() {
-        this._form.find('.ajax_error').each(function (k, v) {
-            $(this).html('');
+        this._form.find('.ajax_error').each((k, v) => {
+            $(v).html('');
         });
-        this._form.find('.has_error').each(function (k, v) {
-            $(this).removeClass('has_error');
+        this._form.find('.has_error').each((k, v) => {
+            $(v).removeClass('has_error');
         });
     }
 
@@ -134,8 +133,8 @@ export class FormAjax {
      * To clear field values
      */
     clearFields() {
-        this._form.find('.form-group input').each(function () {
-            let $input = $(this);
+        this._form.find('.form-group input').each((k, v) => {
+            let $input = $(v);
             if ($input.attr('type') !== "hidden") {
                 $input.val('');
             }
