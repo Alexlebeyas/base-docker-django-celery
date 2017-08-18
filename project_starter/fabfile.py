@@ -18,6 +18,7 @@ STAGES = {
         'user': 'deploy',
         'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).staging',
         'docker_compose_file': 'docker-compose-staging.yml',
+        'authorized_keys_file': 'authorized_keys'
     },
     'production': {
         'hosts': [''],
@@ -25,6 +26,7 @@ STAGES = {
         'user': 'deploy',
         'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
         'docker_compose_file': 'docker-compose-prod.yml',
+        'authorized_keys_file': 'authorized_keys_prod',
     }
 }
 
@@ -188,5 +190,5 @@ def move_pip_file(stage_user):
 
 
 def copy_authorized_keys():
-    run('cp ~/{}/config/authorized_keys ~/.ssh/authorized_keys'.format(PROJECT_NAME))
+    run('cp ~/{}/config/authorized_keys ~/.ssh/{}'.format(PROJECT_NAME, env.authorized_keys_file))
     run('chmod 600 ~/.ssh/authorized_keys')
