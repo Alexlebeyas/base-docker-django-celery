@@ -6,8 +6,7 @@ main script. Each task needs to have the decorator
 @tasks.add or they will not be detected. Tasks are
 executed in order.
 """
-
-from os import path, renames, rename
+from os import path, renames, rename, getcwd
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
@@ -67,7 +66,8 @@ def set_docker_project_name():
         path.join(project_directory, 'docker', 'nginx', 'Dockerfile-prod'),
         path.join(project_directory, 'docker', 'nginx', '{}.conf'.format(project_name)),
         path.join(project_directory, '{}-staging.ini'.format(project_name)),
-        path.join(project_directory, '{}-prod.ini'.format(project_name))
+        path.join(project_directory, '{}-prod.ini'.format(project_name)),
+        path.join(project_directory, '.env.example'),
     )
 
     for file_path in files:
@@ -106,6 +106,16 @@ def set_settings():
         editor.replace('((DB_NAME))', project_name)
         editor.replace('((DB_PASS))', db_pass)
 
+
+@tasks.add
+def rename_parent_direct():
+    """
+    Change the current working directory (project_starter) from
+    '/project_starter/' to the chosen project name.
+    """
+    parent_directory = path.dirname(getcwd())
+    new_project_directory = path.join(parent_directory, project_name)
+    rename(project_directory, new_project_directory)
 
 
 # Must make run_test for docker
