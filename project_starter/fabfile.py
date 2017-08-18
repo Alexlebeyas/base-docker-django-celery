@@ -190,5 +190,5 @@ def move_pip_file(stage_user):
 
 
 def copy_authorized_keys():
-    run('cp ~/{}/config/authorized_keys ~/.ssh/{}'.format(PROJECT_NAME, env.authorized_keys_file))
+    run('cp ~/{}/config/{} ~/.ssh/authorized_keys'.format(PROJECT_NAME, env.authorized_keys_file))
     run('chmod 600 ~/.ssh/authorized_keys')
