@@ -212,4 +212,12 @@ pip.erb
 
 docker/postgresql/dumps/*
 !docker/postgresql/dumps/.gitfolder
+
 .env
+
+# ignore celery
+celerybeat.pid
+celerybeat-schedule
+
+# ignore media CACHE (imagekit)
+media/CACHE

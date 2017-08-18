@@ -1,0 +1,69 @@
+version: '2.1'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-staging
+    volumes:
+      - socket:/tmp/uwsgi
+      - static:/PROJECT_NAME/static/
+      - media:/PROJECT_NAME/media/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - SECRET_KEY
+      - DJANGO_SETTINGS_MODULE
+    restart: always
+  nginx:
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile-staging
+    volumes:
+      - socket:/tmp/uwsgi
+      - static:/PROJECT_NAME/static/
+      - media:/PROJECT_NAME/media/
+    ports:
+      - 80:80
+  redis:
+    image: redis:alpine
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - ./docker/postgresql:/var/lib/postgresql
+  celeryworker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: sh -c "./docker/celery/run_celery_worker.sh"
+    volumes:
+      - .:/hitiit360
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - SECRET_KEY
+      - DJANGO_SETTINGS_MODULE
+    tty: true
+  celerybeat:
+    build:
+      context: .
+      dockerfile: ./Dockerfiel
+    command: sh -c "./docker/celery/run_celery_beat_prod.sh"
+    volumes:
+      - .:/hitiit360
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - SECRET_KEY
+      - DJANGO_SETTINGS_MODULE
+    tty: true
+volumes:
+  socket:
+  static:
+  media:
