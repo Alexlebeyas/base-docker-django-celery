@@ -137,7 +137,7 @@ def rollback():
             # stop the db container and remove it
             run('docker stop {0} && docker rm {0}'.format(docker_db_container))
             # bring the db container back up in detached mode
-            run('docker-compose -f {0} -T db up -d'.format(env.docker_compose_file))
+            run('docker-compose -f {0} up db -d'.format(env.docker_compose_file))
             run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
                 ' {docker_db_container}:/{previous_commit_hash}.sql'.format(**{
                 'previous_commit_hash': previous_commit_hash,
