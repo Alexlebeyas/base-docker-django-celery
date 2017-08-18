@@ -84,7 +84,7 @@ def install():
 
 
 @task
-def deploy(branch=None, commit=None):
+def deploy(branch=None, commit=None, service='web'):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
         move_env_file(env.user)
@@ -99,20 +99,29 @@ def deploy(branch=None, commit=None):
 
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
         with prefix(". .env"):
+            compose_services = run('docker-compose -f {0} config --services'.format(env.docker_compose_file))
+            compose_services = compose_services.split('\r\n')
+            if service not in compose_services:
+                print('Please choose to deploy a service in the following list: {}'.format(compose_services[:-1]))
+                raise SystemExit
+
             run('git fetch')
             current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
             run('git checkout {}'.format(branch or commit))
             if commit is None:
                 run('git pull origin {}'.format(branch))
+
             run('mkdir -p ./docker/postgresql/dumps')
             run('docker-compose -f {0} exec -T'
                 ' db pg_dump $POSTGRES_DB -U $POSTGRES_USER -h localhost -F c >'
                 ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
+
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
-                run('docker-compose -f {} build web'.format(env.docker_compose_file))
-                run('docker-compose -f {} up --no-deps -d web'.format(env.docker_compose_file))
-                run('docker-compose -f {} exec -T web python manage.py migrate'.format(env.docker_compose_file))
-    copy_authorized_keys()
+                run('docker-compose -f {} build {}'.format(env.docker_compose_file, service))
+                run('docker-compose -f {} up --no-deps -d {}'.format(env.docker_compose_file, service))
+                run('docker-compose -f {} exec -T {} python manage.py collectstatic --noinput'.format(
+                    env.docker_compose_file, service))
+                run('docker-compose -f {} exec -T {} python manage.py migrate'.format(env.docker_compose_file, service))
 
 
 @task
@@ -149,6 +158,8 @@ def rollback():
                     ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
                     ' rm ./{0}.sql'.format(env.docker_compose_file, previous_commit_hash))
                 # migrate the database
+                run('docker-compose -f {} exec -T web python manage.py collectstatic --noinput'.format(
+                    env.docker_compose_file))
                 run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
 
 
