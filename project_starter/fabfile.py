@@ -121,9 +121,11 @@ def deploy(branch=None, commit=None, service='web'):
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
                 run('docker-compose -f {} build {}'.format(env.docker_compose_file, service))
                 run('docker-compose -f {} up --no-deps -d {}'.format(env.docker_compose_file, service))
-                run('docker-compose -f {} exec -T {} python manage.py collectstatic --noinput'.format(
-                    env.docker_compose_file, service))
-                run('docker-compose -f {} exec -T {} python manage.py migrate'.format(env.docker_compose_file, service))
+                if service == 'web':
+                    run('docker-compose -f {} exec -T {} python manage.py collectstatic --noinput'.format(
+                        env.docker_compose_file, service))
+                    run('docker-compose -f {} exec -T {} python manage.py migrate'.format(
+                        env.docker_compose_file, service))
 
 
 @task
