@@ -9,6 +9,7 @@ PROJECT_NAME = '((PROJECT_NAME))'
 # ssh link to repository
 REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
+WEB_SERVICE = 'web'
 
 STAGES = {
     'staging': {
@@ -86,7 +87,7 @@ def install():
 
 
 @task
-def deploy(branch=None, commit=None, service='web'):
+def deploy(branch=None, commit=None, service=WEB_SERVICE):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
         move_env_file(env.user)
@@ -121,7 +122,7 @@ def deploy(branch=None, commit=None, service='web'):
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
                 run('docker-compose -f {} build {}'.format(env.docker_compose_file, service))
                 run('docker-compose -f {} up --no-deps -d {}'.format(env.docker_compose_file, service))
-                if service == 'web':
+                if service == WEB_SERVICE:
                     run('docker-compose -f {} exec -T {} python manage.py collectstatic --noinput'.format(
                         env.docker_compose_file, service))
                     run('docker-compose -f {} exec -T {} python manage.py migrate'.format(
