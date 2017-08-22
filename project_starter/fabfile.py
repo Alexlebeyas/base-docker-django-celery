@@ -53,9 +53,11 @@ def install():
     require('stage', provided_by=(staging, production))
 
     branch = env.default_branch
+    # add rsyslog repo
+    sudo('add-apt-repository ppa:adiscon/v8-stable')
     # install security
     sudo('apt-get update && apt-get install -y unattended-upgrades apt-transport-https ca-certificates git'
-        ' curl software-properties-common && unattended-upgrades')
+        ' curl software-properties-common rsyslog && unattended-upgrades')
     # git setup
     run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(PROJECT_NAME))
     # building and installing docker-gc to clean up the server every hour
