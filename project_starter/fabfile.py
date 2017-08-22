@@ -22,7 +22,7 @@ STAGES = {
         'authorized_keys_file': 'authorized_keys'
     },
     'production': {
-        'hosts': [''], # todo
+        'hosts': [''],  # todo
         'default_branch': 'master',
         'user': 'deploy',
         'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
