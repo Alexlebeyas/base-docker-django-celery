@@ -77,6 +77,10 @@ def install():
     # docker-compose up every services
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
         run('git checkout {}'.format(branch))
+        # copy rsyslog conf from docker settings to rsyslog config
+        sudo('cp /home/{}/docker/rsyslog/10-docker.conf /etc/rsyslog.d/')
+        sudo('service rsyslog restart')
+        # compose up
         sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
     copy_authorized_keys()
     # setup ssh security
