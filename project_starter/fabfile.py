@@ -10,7 +10,6 @@ PROJECT_NAME = '((PROJECT_NAME))'
 REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 WEB_SERVICE = 'web'
-
 STAGES = {
     'staging': {
         'hosts': ['24.37.82.222'],
@@ -80,7 +79,7 @@ def install():
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
         run('git checkout {}'.format(branch))
         # copy rsyslog conf from docker settings to rsyslog config
-        sudo('cp /home/{}/docker/rsyslog/10-docker.conf /etc/rsyslog.d/')
+        sudo('cp /home/deploy/{}/config/rsyslog/10-docker.conf /etc/rsyslog.d/'.format(PROJECT_NAME))
         sudo('service rsyslog restart')
         # compose up
         sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
