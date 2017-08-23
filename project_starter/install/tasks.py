@@ -6,6 +6,7 @@ main script. Each task needs to have the decorator
 @tasks.add or they will not be detected. Tasks are
 executed in order.
 """
+from shutil import rmtree
 from os import path, renames, rename, getcwd
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
@@ -117,6 +118,11 @@ def rename_parent_direct():
     new_project_directory = path.join(parent_directory, project_name)
     rename(project_directory, new_project_directory)
 
+
+@tasks.add
+def remove_git():
+    if path.exists('./.git'):
+        rmtree('./.git')
 
 # Must make run_test for docker
 # @tasks.add
