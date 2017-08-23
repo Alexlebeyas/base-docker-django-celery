@@ -7,6 +7,7 @@ main script. Each task needs to have the decorator
 executed in order.
 """
 from os import path, renames, rename, getcwd
+from shutil import rmtree
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
@@ -105,6 +106,11 @@ def set_settings():
         editor.replace('((DB_USER))', project_user)
         editor.replace('((DB_NAME))', project_name)
         editor.replace('((DB_PASS))', db_pass)
+
+@tasks.add
+def remove_git():
+    if path.exists('./.git'):
+        rmtree('./.git')
 
 
 @tasks.add
