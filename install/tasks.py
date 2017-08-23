@@ -6,7 +6,7 @@ main script. Each task needs to have the decorator
 @tasks.add or they will not be detected. Tasks are
 executed in order.
 """
-from os import path, renames, rename, getcwd
+from os import path, renames, rename, getcwd, remove
 from shutil import rmtree
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
@@ -107,11 +107,17 @@ def set_settings():
         editor.replace('((DB_NAME))', project_name)
         editor.replace('((DB_PASS))', db_pass)
 
+
 @tasks.add
 def remove_git():
     if path.exists('./.git'):
         rmtree('./.git')
 
+
+@tasks.add
+def remove_project_starter_readme():
+    if path.exists('PROJECT_STARTER_README.md'):
+        remove('PROJECT_STARTER_README.md')
 
 @tasks.add
 def rename_parent_direct():
