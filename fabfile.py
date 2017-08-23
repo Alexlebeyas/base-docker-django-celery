@@ -175,6 +175,28 @@ def rollback():
 
 
 @task
+def get_db_dump(commit=None):
+    require('stage', provided_by=(staging, production))
+    if commit:
+        with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
+            if exists('{}.sql'.format(commit)):
+                get('{}.sql'.format(commit), '%(basename)s')
+    else:
+        print('We are going to make a new database dump and download it for you')
+        time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
+
+        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+            with prefix(". .env"):
+                run('docker-compose -f {0} exec -T'
+                    ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                    ' ./docker/postgresql/dumps/manual_dump_{1}.sql'.format(env.docker_compose_file, time_stamp))
+
+        with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
+            if exists('manual_dump_{}.sql'.format(time_stamp)):
+                get('manual_dump_{}.sql'.format(time_stamp), '%(basename)s')
+
+
+@task
 def get_logs():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
