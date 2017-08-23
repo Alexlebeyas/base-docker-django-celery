@@ -1,8 +1,9 @@
 from __future__ import with_statement
 import os
+from datetime import datetime
 from fabric.api import cd, run, env, task
 from fabric.context_managers import prefix, settings, hide, shell_env
-from fabric.operations import require, put, sudo, local
+from fabric.operations import require, put, sudo, local, get
 from fabric.contrib.files import _expand_path, exists
 
 PROJECT_NAME = '((PROJECT_NAME))'
@@ -171,6 +172,16 @@ def rollback():
                 run('docker-compose -f {} exec -T web python manage.py collectstatic --noinput'.format(
                     env.docker_compose_file))
                 run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
+
+
+@task
+def get_logs():
+    require('stage', provided_by=(staging, production))
+    time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        run('cp /var/log/docker ./log_{}'.format(time_stamp))
+        run('tar -cvzf log_{0}.tgz ./log_{0}'.format(time_stamp))
+        get('log_{}.tgz'.format(time_stamp))
 
 
 @task
