@@ -179,11 +179,10 @@ def get_logs():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
-        run('cp /var/log/docker ./log_{}'.format(time_stamp))
-        run('tar -cvzf log_{0}.tgz ./log_{0}'.format(time_stamp))
-        get('log_{}.tgz'.format(time_stamp))
-
-
+        run('cp -r /var/log/docker /home/{}/log_{}'.format(env.user, time_stamp))
+        run('tar -cvzf log_{1}.tgz /home/{0}/log_{1}'.format(env.user, time_stamp))
+        get('log_{}.tgz'.format(time_stamp), '%(path)s')
+        run('rm -r /home/{0}/log_{1}'.format(env.user, time_stamp))
 @task
 def copy_media_files():
     require('stage', provided_by=(staging, production))
