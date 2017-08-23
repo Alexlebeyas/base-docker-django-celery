@@ -111,7 +111,7 @@ def set_settings():
 def rename_parent_direct():
     """
     Change the current working directory (project_starter) from
-    '/project_starter/' to the chosen project name.
+    '/project-starter/' to the chosen project name.
     """
     parent_directory = path.dirname(getcwd())
     new_project_directory = path.join(parent_directory, project_name)
