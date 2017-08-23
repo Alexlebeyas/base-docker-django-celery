@@ -109,6 +109,12 @@ def set_settings():
 
 
 @tasks.add
+def remove_git():
+    if path.exists('./.git'):
+        rmtree('./.git')
+
+
+@tasks.add
 def rename_parent_direct():
     """
     Change the current working directory (project_starter) from
@@ -117,12 +123,6 @@ def rename_parent_direct():
     parent_directory = path.dirname(getcwd())
     new_project_directory = path.join(parent_directory, project_name)
     rename(project_directory, new_project_directory)
-
-
-@tasks.add
-def remove_git():
-    if path.exists('./.git'):
-        rmtree('./.git')
 
 # Must make run_test for docker
 # @tasks.add
