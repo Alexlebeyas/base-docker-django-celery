@@ -7,7 +7,7 @@ main script. Each task needs to have the decorator
 executed in order.
 """
 from shutil import rmtree
-from os import path, renames, rename, getcwd
+from os import path, renames, rename, getcwd, remove
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
@@ -115,10 +115,15 @@ def remove_git():
 
 
 @tasks.add
+def remove_project_starter_readme():
+    if path.exists('PROJECT_STARTER_README.md'):
+        remove('PROJECT_STARTER_README.md')
+
+@tasks.add
 def rename_parent_direct():
     """
     Change the current working directory (project_starter) from
-    '/project_starter/' to the chosen project name.
+    '/project-starter/' to the chosen project name.
     """
     parent_directory = path.dirname(getcwd())
     new_project_directory = path.join(parent_directory, project_name)

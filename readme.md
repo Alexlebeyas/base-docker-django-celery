@@ -1,4 +1,7 @@
 # ![Nixa](https://nixaca.s3.amazonaws.com/static/nixa2/images/logo-nixa.png)
+## Starting a new Project
+Go to: 
+https://nixaca.atlassian.net/wiki/spaces/PB/pages/125041233/Ultimate+Starter+Guide+for+Django+Projects
 
 ### PROJECT
 **[Copy your pip configuration file](#markdown-header-copy-your-pip-configuration-file)**      
