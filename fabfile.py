@@ -152,6 +152,8 @@ def rollback():
             previous_commit_hash = run('echo $(git show --pretty=format:%h -s)')
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
                 run('docker-compose -f {} build web'.format(env.docker_compose_file))
+                run('docker-compose -f {} exec -T web python manage.py collectstatic --noinput'.format(
+                    env.docker_compose_file))
                 run('docker-compose -f {} up --no-deps -d web'.format(env.docker_compose_file))
                 # copy over the previous dump.sql to be restored
             # stop the db container and remove it
@@ -169,8 +171,6 @@ def rollback():
                     ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
                     ' rm ./{0}.sql'.format(env.docker_compose_file, previous_commit_hash))
                 # migrate the database
-                run('docker-compose -f {} exec -T web python manage.py collectstatic --noinput'.format(
-                    env.docker_compose_file))
                 run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
 
 
