@@ -14,5 +14,9 @@ $(document).ready(function(){
      * UI utils
      * class to put JS front-end code
      */
-    ui.init();
+    ui.ready();
+});
+
+$(window).on('load', () => {
+    ui.loaded();
 });
