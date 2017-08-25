@@ -119,6 +119,7 @@ def remove_project_starter_readme():
     if path.exists('PROJECT_STARTER_README.md'):
         remove('PROJECT_STARTER_README.md')
 
+
 @tasks.add
 def rename_parent_direct():
     """

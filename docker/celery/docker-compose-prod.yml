@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile-prod
     volumes:
       - socket:/tmp/uwsgi
-      - static:/PROJECT_NAME/static/
-      - media:/PROJECT_NAME/media/
+      - static:/PROJECT_NAME/static/ # TODO
+      - media:/PROJECT_NAME/media/ # TODO
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -25,8 +25,8 @@ services:
       dockerfile: Dockerfile-staging
     volumes:
       - socket:/tmp/uwsgi
-      - static:/PROJECT_NAME/static/
-      - media:/PROJECT_NAME/media/
+      - static:/PROJECT_NAME/static/ # TODO
+      - media:/PROJECT_NAME/media/ # TODO
     ports:
       - 80:80
     logging:

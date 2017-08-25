@@ -136,6 +136,42 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
 
 
 @task
+def database_rollback(commit=None):
+    """ WIP: USE AT YOUR OWN RISK! """
+    require('stage', provided_by=(staging, production))
+    if exists_local('.env'):
+        move_env_file(env.user)
+    if commit:
+        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+            with prefix(". .env"):
+                current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
+                docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
+
+                run('docker-compose -f {0} exec -T'
+                    ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                    ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
+
+                run('docker stop {0} && docker rm {0}'.format(docker_db_container))
+                run('docker-compose -f {0} up -d db'.format(env.docker_compose_file))
+
+                docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
+                run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
+                    ' {docker_db_container}:/{previous_commit_hash}.sql'.format(**{
+                    'previous_commit_hash': commit,
+                    'docker_db_container': docker_db_container
+                }))
+                with settings(warn_only=True):
+                    # restore the dump sql
+                    run('docker-compose -f {0} exec -T'
+                        ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
+                        ' rm ./{0}.sql'.format(env.docker_compose_file, commit))
+
+                    run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
+    else:
+        print('feature coming soon')
+
+
+@task
 def rollback():
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
