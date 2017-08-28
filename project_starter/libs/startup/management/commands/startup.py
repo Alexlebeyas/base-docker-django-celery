@@ -30,6 +30,8 @@ class Command(BaseCommand):
             self.drop_tables()
             self.migrate()
             self.load_fixtures()
+        elif not prod and not settings.DEBUG:
+            print("You must add --prod to make a startup in production")
 
     @staticmethod
     def drop_sqlite():
