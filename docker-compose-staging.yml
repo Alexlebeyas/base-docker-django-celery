@@ -1,0 +1,58 @@
+version: '2.1'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-staging
+    volumes:
+      - socket:/tmp/uwsgi
+      - static:/PROJECT_NAME/static/
+      - media:/PROJECT_NAME/media/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - SECRET_KEY
+      - DJANGO_SETTINGS_MODULE
+    restart: always
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_web"
+  nginx:
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile-staging
+    volumes:
+      - socket:/tmp/uwsgi
+      - static:/PROJECT_NAME/static/
+      - media:/PROJECT_NAME/media/
+    ports:
+      - 80:80
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_nginx"
+  redis:
+    image: redis:alpine
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_redis"
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - ./docker/postgresql:/var/lib/postgresql
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_db"
+
+volumes:
+  socket:
+  static:
+  media:

@@ -1,0 +1,12 @@
+FROM python:3.5-slim
+COPY . /PROJECT_NAME
+WORKDIR /PROJECT_NAME
+COPY pip.conf /root/.pip/pip.conf
+RUN apt-get update -y && apt-get update -y && apt-get install build-essential libjpeg-dev libproj-dev netcat -y &&\
+    groupadd uwsgi &&\
+    useradd -g uwsgi uwsgi &&\
+    mkdir /tmp/uwsgi && chown -R uwsgi:101 /tmp/uwsgi &&\
+    chown -R uwsgi:101 /PROJECT_NAME &&\
+    pip install -Ur requirements.txt &&\
+    pip install https://projects.unbit.it/downloads/uwsgi-lts.tar.gz
+CMD sh -c "./docker/wait-for.sh -c 'nc -z db 5432' && uwsgi PROJECT_NAME-staging.ini"
