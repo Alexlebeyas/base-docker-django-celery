@@ -57,9 +57,9 @@ def set_docker_project_name():
     """
 
     files = (
-        path.join(project_directory, 'Dockerfile'),
-        path.join(project_directory, 'Dockerfile-staging'),
-        path.join(project_directory, 'Dockerfile-prod'),
+        path.join(project_directory, 'docker', 'django', 'Dockerfile'),
+        path.join(project_directory, 'docker', 'django', 'Dockerfile-staging'),
+        path.join(project_directory, 'docker', 'django', 'Dockerfile-prod'),
         path.join(project_directory, 'docker-compose-staging.yml'),
         path.join(project_directory, 'docker-compose-prod.yml'),
         path.join(project_directory, 'gulp', 'Dockerfile'),
