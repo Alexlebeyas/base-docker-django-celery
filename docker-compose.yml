@@ -1,7 +1,9 @@
 version: '3'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
     environment:
      - POSTGRES_USER=DB_USER
      - POSTGRES_PASSWORD=12345
