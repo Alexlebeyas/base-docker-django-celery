@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile-staging
+      dockerfile: ./docker/django/Dockerfile-staging
     volumes:
       - socket:/tmp/uwsgi
       - static:/PROJECT_NAME/static/

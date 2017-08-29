@@ -11,6 +11,7 @@ PROJECT_NAME = '((PROJECT_NAME))'
 REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 WEB_SERVICE = 'web'
+DOCKER_GC_CONTENT = "#!/bin/bash\ndocker system prune -a -f\nrm -rf /var/lib/docker/aufs/diff/*-removing"
 STAGES = {
     'staging': {
         'hosts': ['24.37.82.222'],
@@ -62,7 +63,7 @@ def install():
     run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(PROJECT_NAME))
     # building and installing docker-gc to clean up the server every hour
     run('rm -rf *')
-    sudo('echo "#!/bin/bash\ndocker system prune -a -f" > /etc/cron.hourly/docker-gc')
+    sudo('echo "{}" > /etc/cron.hourly/docker-gc'.format(DOCKER_GC_CONTENT))
     sudo('chmod +x /etc/cron.hourly/docker-gc')
     # install docker
     sudo('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
@@ -188,8 +189,6 @@ def rollback():
             previous_commit_hash = run('echo $(git show --pretty=format:%h -s)')
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
                 run('docker-compose -f {} build web'.format(env.docker_compose_file))
-                run('docker-compose -f {} exec -T web python manage.py collectstatic --noinput'.format(
-                    env.docker_compose_file))
                 run('docker-compose -f {} up --no-deps -d web'.format(env.docker_compose_file))
                 # copy over the previous dump.sql to be restored
             # stop the db container and remove it
@@ -208,6 +207,8 @@ def rollback():
                     ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
                     ' rm ./{0}.sql'.format(env.docker_compose_file, previous_commit_hash))
                 # migrate the database
+                run('docker-compose -f {} exec -T web python manage.py collectstatic --noinput'.format(
+                    env.docker_compose_file))
                 run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
 
 
