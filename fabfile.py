@@ -94,6 +94,24 @@ def install():
 
 
 @task
+def reup(branch=None):
+    require('stage', provided_by=(staging, production))
+
+    if exists_local('.env'):
+        move_env_file(env.user)
+
+    branch = branch or env.default_branch
+
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with prefix(". .env"):
+            run('git fetch')
+            run('git checkout {}'.format(branch))
+
+            with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
+                sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
+
+
+@task
 def deploy(branch=None, commit=None, service=WEB_SERVICE):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
@@ -137,44 +155,19 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
 
 
 @task
-def database_rollback(commit=None):
-    """ WIP: USE AT YOUR OWN RISK! """
+def rollback(commit=None):
     require('stage', provided_by=(staging, production))
-    if exists_local('.env'):
-        move_env_file(env.user)
+
     if commit:
         with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
-            with prefix(". .env"):
-                current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
-                docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
-
-                run('docker-compose -f {0} exec -T'
-                    ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
-                    ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
-
-                run('docker stop {0} && docker rm {0}'.format(docker_db_container))
-                run('docker-compose -f {0} up -d db'.format(env.docker_compose_file))
-
-                docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
-                run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
-                    ' {docker_db_container}:/{previous_commit_hash}.sql'.format(**{
-                    'previous_commit_hash': commit,
-                    'docker_db_container': docker_db_container
-                }))
-                with settings(warn_only=True):
-                    # restore the dump sql
-                    run('docker-compose -f {0} exec -T'
-                        ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
-                        ' rm ./{0}.sql'.format(env.docker_compose_file, commit))
-
-                    run('docker-compose -f {0} exec -T web python manage.py migrate'.format(env.docker_compose_file))
+            if exists('docker/postgresql/dumps/{}.sql'.format(commit)):
+                pass
+            else:
+                print("We could not find the sql dump you were requesting")
+                raise SystemExit
     else:
-        print('feature coming soon')
+        commit = 'HEAD~1'
 
-
-@task
-def rollback():
-    require('stage', provided_by=(staging, production))
     if exists_local('.env'):
         move_env_file(env.user)
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
@@ -185,7 +178,7 @@ def rollback():
             run('docker-compose -f {0} exec -T'
                 ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
                 ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
-            run('git checkout HEAD~1')
+            run('git checkout {}'.format(commit))
             previous_commit_hash = run('echo $(git show --pretty=format:%h -s)')
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
                 run('docker-compose -f {} build web'.format(env.docker_compose_file))
@@ -193,7 +186,6 @@ def rollback():
                 # copy over the previous dump.sql to be restored
             # stop the db container and remove it
             run('docker stop {0} && docker rm {0}'.format(docker_db_container))
-            # bring the db container back up in detached mode
             run('docker-compose -f {0} up -d db'.format(env.docker_compose_file))
             docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
             run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
@@ -231,7 +223,7 @@ def get_db_dump(commit=None):
 
         with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
             if exists('manual_dump_{}.sql'.format(time_stamp)):
-                get('manual_dump_{}.sql'.format(time_stamp), '%(basename)s')
+                get('manual_dump_{}.sql'.format(time_stamp), '%(dirname)s')
 
 
 @task
@@ -239,7 +231,7 @@ def get_logs():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
-        get('/var/log/docker', 'logs_{}/%(dirname)s'.format(time_stamp))
+        get('/var/log/docker', 'logs/{}_{}/%(path)s'.format(env.stage, time_stamp))
 
 
 @task
