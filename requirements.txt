@@ -9,7 +9,6 @@ requests
 django-redis
 six==1.10.0
 sqlparse==0.2.1
-django-suit
 django-pipeline
 django-anymail # Used for mandrill integration. See installation instruction at https://github.com/anymail/
 psycopg2
