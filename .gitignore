@@ -219,5 +219,10 @@ docker/postgresql/dumps/*
 celerybeat.pid
 celerybeat-schedule
 
-# ignore media CACHE (imagekit)
+# ignore media CACHE
 media/CACHE
+
+# ignore sql dumps and logs from staging and production
+*.sql
+logs/staging_*
+logs/production_*
