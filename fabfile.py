@@ -11,7 +11,10 @@ PROJECT_NAME = '((PROJECT_NAME))'
 REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 WEB_SERVICE = 'web'
-DOCKER_GC_CONTENT = "#!/bin/bash\ndocker system prune -a -f\nrm -rf /var/lib/docker/aufs/diff/*-removing"
+DOCKER_GC_CONTENT = "#!/bin/bash\n" \
+                    "docker container prune -f\n" \
+                    "docker image prune -a -f\n" \
+                    "rm -rf /var/lib/docker/aufs/diff/*-removing"
 STAGES = {
     'staging': {
         'hosts': ['24.37.82.222'],
@@ -106,7 +109,7 @@ def reup(branch=None):
         with prefix(". .env"):
             run('git fetch')
             run('git checkout {}'.format(branch))
-
+            run('git pull')
             with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
                 sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
 
@@ -152,6 +155,42 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
                         env.docker_compose_file, service))
                     run('docker-compose -f {} exec -T {} python manage.py migrate'.format(
                         env.docker_compose_file, service))
+
+
+@task
+def database_rollback(commit=None):
+    require('stage', provided_by=(staging, production))
+    if exists_local('.env'):
+        move_env_file(env.user)
+    if commit:
+        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+            with prefix(". .env"):
+                current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
+                docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
+
+                run('docker-compose -f {0} exec -T'
+                    ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                    ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
+
+                run('docker stop {0} && docker rm {0}'.format(docker_db_container))
+                run('docker-compose -f {0} up -d db'.format(env.docker_compose_file))
+
+                docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
+                run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
+                    ' {docker_db_container}:/{previous_commit_hash}.sql'.format(**{
+                    'previous_commit_hash': commit,
+                    'docker_db_container': docker_db_container
+                }))
+                with settings(warn_only=True):
+                    # restore the dump sql
+                    run('docker-compose -f {0} exec -T'
+                        ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
+                        ' rm ./{0}.sql'.format(env.docker_compose_file, commit))
+
+                    run('docker-compose -f {0} exec -T web python manage.py migrate --noinput'.format(env.docker_compose_file))
+    else:
+        print('feature coming soon')
+        raise SystemExit
 
 
 @task
