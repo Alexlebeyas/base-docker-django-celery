@@ -4,36 +4,10 @@ from datetime import datetime
 from fabric.api import cd, run, env, task
 from fabric.context_managers import prefix, settings, hide, shell_env
 from fabric.operations import require, put, sudo, local, get
-from fabric.contrib.files import _expand_path, exists
+from fabric.contrib.files import _expand_path, exists, append
 
-PROJECT_NAME = '((PROJECT_NAME))'
-# ssh link to repository
-REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
-DOCKER_COMPOSE_VERSION = '1.14.0'
-WEB_SERVICE = 'web'
-DOCKER_GC_CONTENT = "#!/bin/bash\n" \
-                    "docker container prune -f\n" \
-                    "docker image prune -a -f\n" \
-                    "rm -rf /var/lib/docker/aufs/diff/*-removing"
-STAGES = {
-    'staging': {
-        'hosts': ['24.37.82.222'],
-        'default_branch': 'develop',
-        'port': '',  # todo
-        'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).staging',
-        'docker_compose_file': 'docker-compose-staging.yml',
-        'authorized_keys_file': 'authorized_keys'
-    },
-    'production': {
-        'hosts': [''],  # todo
-        'default_branch': 'master',
-        'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
-        'docker_compose_file': 'docker-compose-prod.yml',
-        'authorized_keys_file': 'authorized_keys_prod',
-    }
-}
+from fabric_nixa.upstart_file import UpStartFile
+from .settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, PROJECT_NAME
 
 
 def set_stage(stage='staging'):
@@ -80,6 +54,16 @@ def install():
     sudo('chown -R {0}:{0} {1}'.format(env.user, PROJECT_NAME))
     move_env_file(env.user)
     move_pip_file(env.user)
+
+    with cd('/etc/init/'):
+        upstartfile = UpStartFile(
+            django=env.DJANGO_SETTINGS_MODULE,
+            user=env.user,
+            project_name=PROJECT_NAME,
+            docker_compose_file=env.docker_compose_file,
+        )
+        append('nixa_docker.conf', upstartfile.output())
+
     # docker-compose up every services
     with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
         run('git checkout {}'.format(branch))
@@ -94,24 +78,6 @@ def install():
     sudo("sed -i '/PermitRootLogin /c\PermitRootLogin no' /etc/ssh/sshd_config")
     sudo("sed -i '/PasswordAuthentication/c\PasswordAuthentication no' /etc/ssh/sshd_config")
     sudo("service ssh restart")
-
-
-@task
-def reup(branch=None):
-    require('stage', provided_by=(staging, production))
-
-    if exists_local('.env'):
-        move_env_file(env.user)
-
-    branch = branch or env.default_branch
-
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
-        with prefix(". .env"):
-            run('git fetch')
-            run('git checkout {}'.format(branch))
-            run('git pull')
-            with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
-                sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
 
 
 @task
