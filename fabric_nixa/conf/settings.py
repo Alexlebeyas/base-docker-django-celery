@@ -13,19 +13,21 @@ rm -rf /var/lib/docker/aufs/diff/*-removing"""
 
 STAGES = {
     'staging': {
-        'hosts': ['24.37.82.222'],
+        'hosts': ['192.168.2.105'],
         'default_branch': 'develop',
         'port': '',  # todo
-        'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).staging',
+        # 'user': 'root',
+        'deploy_user': 'deploy',
+        'root_user': 'root',
+        'DJANGO_SETTINGS_MODULE': 'dockertest.staging',
         'docker_compose_file': 'docker-compose-staging.yml',
         'authorized_keys_file': 'authorized_keys'
     },
     'production': {
         'hosts': [''],  # todo
         'default_branch': 'master',
-        'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
+        # 'user': 'deploy',
+        'DJANGO_SETTINGS_MODULE': 'dockertest.prod',
         'docker_compose_file': 'docker-compose-prod.yml',
         'authorized_keys_file': 'authorized_keys_prod',
     }

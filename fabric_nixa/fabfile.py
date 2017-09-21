@@ -1,13 +1,16 @@
 from __future__ import with_statement
-import os
+
 from datetime import datetime
+
 from fabric.api import cd, run, env, task
 from fabric.context_managers import prefix, settings, hide, shell_env
-from fabric.operations import require, put, sudo, local, get
 from fabric.contrib.files import _expand_path, exists, append
+from fabric.decorators import with_settings
+from fabric.operations import require, put, sudo, local, get
 
-from fabric_nixa.upstart_file import UpStartFile
-from .settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, PROJECT_NAME
+from .conf.settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
+    PROJECT_NAME, ROOT_USER, DEPLOY_USER
+from .conf.install_files import UpStartFile, RsysDockerConf
 
 
 def set_stage(stage='staging'):
@@ -26,61 +29,102 @@ def production():
     set_stage('production')
 
 
+def create_deploy_user():
+    run('useradd -m -s /bin/bash deploy')
+    run('usermod -a -G sudo deploy')
+    put('../')
+
+
 @task
 def install():
     require('stage', provided_by=(staging, production))
 
-    branch = env.default_branch
-    # add rsyslog repo
-    sudo('add-apt-repository ppa:adiscon/v8-stable')
-    # install security
-    sudo('apt-get update && apt-get install -y unattended-upgrades apt-transport-https ca-certificates git'
-        ' curl software-properties-common rsyslog && unattended-upgrades')
-    # git setup
-    run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(PROJECT_NAME))
-    # building and installing docker-gc to clean up the server every hour
-    run('rm -rf *')
-    sudo('echo "{}" > /etc/cron.hourly/docker-gc'.format(DOCKER_GC_CONTENT))
-    sudo('chmod +x /etc/cron.hourly/docker-gc')
-    # install docker
-    sudo('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
-    sudo('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
-    sudo('apt-get update && apt-get remove docker docker-engine docker.io && apt-get install -y docker-ce')
-    sudo('curl -L https://github.com/docker/compose/releases/download/{}/docker-compose-`uname -s`-`uname -m` '
-        '> /usr/local/bin/docker-compose'.format(DOCKER_COMPOSE_VERSION))
-    sudo('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(env.user))
-    # install git project
-    run('git clone {} {}'.format(REPOSITORY, PROJECT_NAME))
-    sudo('chown -R {0}:{0} {1}'.format(env.user, PROJECT_NAME))
-    move_env_file(env.user)
-    move_pip_file(env.user)
+    with settings(user=ROOT_USER):
+        branch = env.default_branch
+        # add rsyslog repo
+        run('add-apt-repository ppa:adiscon/v8-stable')
+        # install security
+        run('apt-get update && apt-get install -y unattended-upgrades apt-transport-https ca-certificates git'
+            ' curl software-properties-common rsyslog && unattended-upgrades')
 
-    with cd('/etc/init/'):
-        upstartfile = UpStartFile(
-            django=env.DJANGO_SETTINGS_MODULE,
-            user=env.user,
-            project_name=PROJECT_NAME,
-            docker_compose_file=env.docker_compose_file,
-        )
-        append('nixa_docker.conf', upstartfile.output())
+        # building and installing docker-gc to clean up the server every hour
+        run('rm -rf *')
+        run('echo "{}" > /etc/cron.hourly/docker-gc'.format(DOCKER_GC_CONTENT))
+        run('chmod +x /etc/cron.hourly/docker-gc')
+        # install docker
+        run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+        run('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
+        run('apt-get update && apt-get remove docker docker-engine docker.io && apt-get install -y docker-ce')
+        run('curl -L https://github.com/docker/compose/releases/download/{}/docker-compose-`uname -s`-`uname -m` '
+            '> /usr/local/bin/docker-compose'.format(DOCKER_COMPOSE_VERSION))
+        run('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(DEPLOY_USER))
+        append('/etc/rsyslog.d/10-docker.conf', RsysDockerConf().output(),)
+        run('service rsyslog restart')
 
-    # docker-compose up every services
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
-        run('git checkout {}'.format(branch))
-        # copy rsyslog conf from docker settings to rsyslog config
-        sudo('cp /home/deploy/{}/config/rsyslog/10-docker.conf /etc/rsyslog.d/'.format(PROJECT_NAME))
-        sudo('service rsyslog restart')
-        # compose up
-        sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
-    copy_authorized_keys()
-    # setup ssh security
-    sudo('apt-get install fail2ban')
-    sudo("sed -i '/PermitRootLogin /c\PermitRootLogin no' /etc/ssh/sshd_config")
-    sudo("sed -i '/PasswordAuthentication/c\PasswordAuthentication no' /etc/ssh/sshd_config")
-    sudo("service ssh restart")
+        with cd('/etc/init/'):
+            upstartfile = UpStartFile(
+                django=env.DJANGO_SETTINGS_MODULE,
+                user=env.user,
+                project_name=PROJECT_NAME,
+                docker_compose_file=env.docker_compose_file,
+            )
+            append('nixa_docker.conf', upstartfile.output())
+
+    with settings(user=DEPLOY_USER):
+        # git setup
+        run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(PROJECT_NAME))
+
+        # install git project
+        run('git clone -b {0} {1} {2}'.format(branch, REPOSITORY, PROJECT_NAME))
+        run('chown -R {0}:{0} {1}'.format(DEPLOY_USER, PROJECT_NAME))
+        move_env_file(DEPLOY_USER)
+        move_pip_file(DEPLOY_USER)
+
+        # docker-compose up every services
+        with cd('/home/{}/{}'.format(DEPLOY_USER, PROJECT_NAME)):
+            run('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
+        copy_authorized_keys()
+
+    with settings(user=ROOT_USER):
+        # setup ssh security
+        run('apt-get install fail2ban')
+        run("sed -i '/PermitRootLogin /c\PermitRootLogin no' /etc/ssh/sshd_config")
+        run("sed -i '/PasswordAuthentication/c\PasswordAuthentication no' /etc/ssh/sshd_config")
+        run("service ssh restart")
 
 
 @task
+@with_settings(user=DEPLOY_USER)
+def down():
+    require('stage', provided_by=(staging, production))
+    run('docker ps $(docker ps -q)')
+
+
+@task
+@with_settings(user=DEPLOY_USER)
+def reup(branch=None, nobuild=False):
+    require('stage', provided_by=(staging, production))
+
+    if exists_local('.env'):
+        move_env_file(env.user)
+
+    branch = branch or env.default_branch
+
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with prefix(". .env"):
+            run('git fetch')
+            run('git checkout {}'.format(branch))
+            run('git pull')
+
+            with shell_env(DJANGO_SETTINGS_MODULE=env.DJANGO_SETTINGS_MODULE):
+                if nobuild:
+                    sudo('docker-compose -f {} up -d'.format(env.docker_compose_file))
+                else:
+                    sudo('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
+
+
+@task
+@with_settings(user=DEPLOY_USER)
 def deploy(branch=None, commit=None, service=WEB_SERVICE):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
@@ -124,6 +168,7 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
 
 
 @task
+@with_settings(user=DEPLOY_USER)
 def database_rollback(commit=None):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
@@ -160,6 +205,7 @@ def database_rollback(commit=None):
 
 
 @task
+@with_settings(user=DEPLOY_USER)
 def rollback(commit=None):
     require('stage', provided_by=(staging, production))
 
@@ -210,6 +256,7 @@ def rollback(commit=None):
 
 
 @task
+@with_settings(user=DEPLOY_USER)
 def get_db_dump(commit=None):
     require('stage', provided_by=(staging, production))
     if commit:
@@ -232,6 +279,7 @@ def get_db_dump(commit=None):
 
 
 @task
+@with_settings(user=DEPLOY_USER)
 def get_logs():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
@@ -260,7 +308,7 @@ def move_env_file(stage_user):
 
 
 def move_pip_file(stage_user):
-    put('pip.conf', '/home/{}/{}/pip.conf'.format(stage_user, PROJECT_NAME))
+    put('~/.pip/pip.conf', '/home/{}/{}/pip.conf'.format(stage_user, PROJECT_NAME))
 
 
 def copy_authorized_keys():
