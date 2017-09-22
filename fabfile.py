@@ -8,9 +8,9 @@ from fabric.contrib.files import _expand_path, exists, append
 from fabric.decorators import with_settings
 from fabric.operations import require, put, sudo, local, get
 
-from .conf.settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
-    PROJECT_NAME, ROOT_USER, DEPLOY_USER
-from .conf.install_files import UpStartFile, RsysDockerConf
+from fabconfig.settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
+    PROJECT_NAME, ROOT_USER
+from fabconfig.install_files import UpStartFile, RsysDockerConf
 
 
 def set_stage(stage='staging'):
@@ -29,6 +29,7 @@ def production():
     set_stage('production')
 
 
+@with_settings(user=ROOT_USER)
 def create_deploy_user():
     run('useradd -m -s /bin/bash deploy')
     run('usermod -a -G sudo deploy')
@@ -46,21 +47,25 @@ def install():
         # install security
         run('apt-get update && apt-get install -y unattended-upgrades apt-transport-https ca-certificates git'
             ' curl software-properties-common rsyslog && unattended-upgrades')
+        run('rm -rf *')
 
         # building and installing docker-gc to clean up the server every hour
-        run('rm -rf *')
         run('echo "{}" > /etc/cron.hourly/docker-gc'.format(DOCKER_GC_CONTENT))
         run('chmod +x /etc/cron.hourly/docker-gc')
+
         # install docker
         run('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
         run('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
         run('apt-get update && apt-get remove docker docker-engine docker.io && apt-get install -y docker-ce')
         run('curl -L https://github.com/docker/compose/releases/download/{}/docker-compose-`uname -s`-`uname -m` '
             '> /usr/local/bin/docker-compose'.format(DOCKER_COMPOSE_VERSION))
-        run('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(DEPLOY_USER))
+        run('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(STAGES[env.stage]['user']))
+
+        # install rsys config
         append('/etc/rsyslog.d/10-docker.conf', RsysDockerConf().output(),)
         run('service rsyslog restart')
 
+        # configure upstart
         with cd('/etc/init/'):
             upstartfile = UpStartFile(
                 django=env.DJANGO_SETTINGS_MODULE,
@@ -70,18 +75,18 @@ def install():
             )
             append('nixa_docker.conf', upstartfile.output())
 
-    with settings(user=DEPLOY_USER):
+    with settings(user=env.user):
         # git setup
         run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(PROJECT_NAME))
 
         # install git project
         run('git clone -b {0} {1} {2}'.format(branch, REPOSITORY, PROJECT_NAME))
-        run('chown -R {0}:{0} {1}'.format(DEPLOY_USER, PROJECT_NAME))
-        move_env_file(DEPLOY_USER)
-        move_pip_file(DEPLOY_USER)
+        run('chown -R {0}:{0} {1}'.format(env.user, PROJECT_NAME))
+        move_env_file(env.user)
+        move_pip_file(env.user)
 
         # docker-compose up every services
-        with cd('/home/{}/{}'.format(DEPLOY_USER, PROJECT_NAME)):
+        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
             run('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
         copy_authorized_keys()
 
@@ -94,14 +99,12 @@ def install():
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def down():
     require('stage', provided_by=(staging, production))
     run('docker ps $(docker ps -q)')
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def reup(branch=None, nobuild=False):
     require('stage', provided_by=(staging, production))
 
@@ -124,7 +127,6 @@ def reup(branch=None, nobuild=False):
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def deploy(branch=None, commit=None, service=WEB_SERVICE):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
@@ -168,7 +170,6 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def database_rollback(commit=None):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
@@ -205,7 +206,6 @@ def database_rollback(commit=None):
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def rollback(commit=None):
     require('stage', provided_by=(staging, production))
 
@@ -256,7 +256,6 @@ def rollback(commit=None):
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def get_db_dump(commit=None):
     require('stage', provided_by=(staging, production))
     if commit:
@@ -279,7 +278,6 @@ def get_db_dump(commit=None):
 
 
 @task
-@with_settings(user=DEPLOY_USER)
 def get_logs():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
@@ -312,5 +310,5 @@ def move_pip_file(stage_user):
 
 
 def copy_authorized_keys():
-    run('cp ~/{}/config/{} ~/.ssh/authorized_keys'.format(PROJECT_NAME, env.authorized_keys_file))
+    run('cp ~/{}/fabconfig/templates/{} ~/.ssh/authorized_keys'.format(PROJECT_NAME, env.authorized_keys_file))
     run('chmod 600 ~/.ssh/authorized_keys')

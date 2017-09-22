@@ -1,8 +1,8 @@
 from uuid import uuid4
 
-PROJECT_NAME = 'dockertest'
+PROJECT_NAME = '((PROJECT_NAME))'
 # ssh link to repository
-REPOSITORY = 'git@bitbucket.org:rsampana/dockertest.git'  # todo
+REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 WEB_SERVICE = 'web'
 DOCKER_GC_CONTENT = """
@@ -13,7 +13,7 @@ rm -rf /var/lib/docker/aufs/diff/*-removing"""
 
 STAGES = {
     'staging': {
-        'hosts': ['24.37.82.222'],
+        'hosts': ['22.37.82.222'],
         'default_branch': 'develop',
         'port': '',  # todo
         'user': 'deploy',
@@ -31,7 +31,6 @@ STAGES = {
     }
 }
 
-DEPLOY_USER = 'deploy'
 ROOT_USER = 'root'
 
 random_password = lambda: str(uuid4()).replace('-', '')

@@ -1,7 +1,7 @@
 from os.path import join, realpath, dirname
 
 
-class UpStartFile(object):
+class UpStartFile:
 
     def __init__(self, django='none', user='none', project_name='none', docker_compose_file='none'):
         with open(join(dirname(realpath(__file__)), 'templates', 'upstart_file.conf'), 'r') as template_file:
@@ -20,7 +20,7 @@ class UpStartFile(object):
         })
 
 
-class RsysDockerConf(object):
+class RsysDockerConf:
 
     def __init__(self):
         with open(join(dirname(realpath(__file__)), 'templates', '10-docker.conf'), 'r') as template_file:
