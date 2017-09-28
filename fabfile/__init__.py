@@ -8,9 +8,9 @@ from fabric.contrib.files import _expand_path, exists, append
 from fabric.decorators import with_settings
 from fabric.operations import require, put, sudo, local, get
 
-from fabconfig.settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
+from fabfile.settings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
     PROJECT_NAME, ROOT_USER
-from fabconfig.install_files import UpStartFile, RsysDockerConf
+from fabfile.install_files import UpStartFile, RsysDockerConf
 
 
 def set_stage(stage='staging'):
