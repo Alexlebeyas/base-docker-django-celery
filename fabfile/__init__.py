@@ -170,11 +170,11 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
 
 
 @task
-def database_rollback(commit=None):
+def database_rollback(dumpfile=None):
     require('stage', provided_by=(staging, production))
     if exists_local('.env'):
         move_env_file(env.user)
-    if commit:
+    if dumpfile:
         with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
             with prefix(". .env"):
                 current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
@@ -188,16 +188,16 @@ def database_rollback(commit=None):
                 run('docker-compose -f {0} up -d db'.format(env.docker_compose_file))
 
                 docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
-                run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
-                    ' {docker_db_container}:/{previous_commit_hash}.sql'.format(**{
-                    'previous_commit_hash': commit,
+                run('docker cp ./docker/postgresql/dumps/{dumpfile}.sql'
+                    ' {docker_db_container}:/{dumpfile}.sql'.format(**{
+                    'dumpfile': dumpfile,
                     'docker_db_container': docker_db_container
                 }))
                 with settings(warn_only=True):
                     # restore the dump sql
                     run('docker-compose -f {0} exec -T'
                         ' db pg_restore -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}} -C -c ./{1}.sql &&'
-                        ' rm ./{0}.sql'.format(env.docker_compose_file, commit))
+                        ' rm ./{0}.sql'.format(env.docker_compose_file, dumpfile))
 
                     run('docker-compose -f {0} exec -T web python manage.py migrate --noinput'.format(env.docker_compose_file))
     else:
