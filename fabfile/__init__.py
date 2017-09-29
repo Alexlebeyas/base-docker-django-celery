@@ -201,7 +201,7 @@ def database_rollback(commit=None):
 
                     run('docker-compose -f {0} exec -T web python manage.py migrate --noinput'.format(env.docker_compose_file))
     else:
-        print('feature coming soon')
+        print('Please use commit variable.')
         raise SystemExit
 
 
