@@ -181,9 +181,9 @@ hr {
 }
 
 .row-no-padding {
-  margin: 0;
-  [class*="col-"] {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  }
+    margin: 0;
+    [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
