@@ -48,36 +48,6 @@ $time-lg: 900ms;
     -moz-transform: translate3d(0, 0, 0)
 }
 
-@mixin gradient-linear($baseColor, $secondColor, $basePercentage, $secondPercentage) {
-    background: $baseColor; /* Old browsers */
-    background: -moz-linear-gradient(top, $baseColor $basePercentage, $secondColor $secondPercentage); /* FF3.6+ */
-    background: -webkit-gradient(linear, top, left bottom, color-stop($basePercentage, $baseColor), color-stop($secondPercentage, $secondColor)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, $baseColor $basePercentage, $secondColor $secondPercentage); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, $baseColor $basePercentage, $secondColor $secondPercentage); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, $baseColor $basePercentage, $secondColor $secondPercentage); /* IE10+ */
-    background: linear-gradient(to bottom, $baseColor $basePercentage, $secondColor $secondPercentage); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$baseColor, endColorstr=$secondColor, GradientType=0); /* IE6-9 */
-}
-
-@mixin border-radius($radius) {
-    -webkit-border-radius: $radius;
-    -moz-border-radius: $radius;
-    -ms-border-radius: $radius;
-    border-radius: $radius;
-}
-
-@mixin box-shadow($top, $left, $blur, $margin, $color, $inset: false) {
-    @if $inset {
-        -webkit-box-shadow: inset $top $left $blur $margin $color;
-        -moz-box-shadow: inset $top $left $blur $margin $color;
-        box-shadow: inset $top $left $blur $margin $color;
-    } @else {
-        -webkit-box-shadow: $top $left $blur $margin $color;
-        -moz-box-shadow: $top $left $blur $margin $color;
-        box-shadow: $top $left $blur $margin $color;
-    }
-}
-
 @mixin cover-image() {
     background-size: cover;
     background-position: center center;
@@ -90,6 +60,14 @@ $time-lg: 900ms;
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
+}
+
+@mixin io-icon ($icon) {
+  content: $icon;
+  font-family: "Ionicons";
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
 }
 
 @mixin placeholder-color($color) {

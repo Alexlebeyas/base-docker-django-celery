@@ -1,15 +1,19 @@
 /* BUTTONS
 ===========================
-Important: See _mixins for time variables.
+Important:
+- Place button variations in btn mixin
+- You should be able to combine all variants without any issue
  */
 
 a, .btn, button {
     text-decoration: none;
     @include transition-md();
-    &:focus{
-      outline: none !important;
+    &:focus, &:active {
+        outline: none !important;
+        text-decoration: none;
     }
 }
+
 .btn-default, .btn {
     font-family: $font-title;
     font-size: 14px;
@@ -43,24 +47,6 @@ a, .btn, button {
     .open>&.dropdown-toggle {
         &, &:focus, &:active, &:focus {
             background-color: darken($background, 5%);
-        }
-    }
-    &.btn-action {
-        overflow: hidden;
-        padding: 0;
-        .btn-action-text {
-            width: calc(100% - 52px);
-            float: left;
-            padding: 16px 50px;
-        }
-        .btn-action-icon {
-            width: 52px;
-            height: 52px;
-            line-height: 52px;
-            float: right;
-            font-size: 22px;
-            background-color: lighten($background, 5%);
-            @include transition-md();
         }
     }
     &.btn-outline {
