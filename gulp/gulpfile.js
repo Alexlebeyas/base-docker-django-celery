@@ -65,7 +65,7 @@ const paths = {
     src: 'scss/**/*.scss',
     main: 'scss/main.scss',
     admin: 'scss/admin.scss',
-    vendors: ['vendors/bootstrap.scss', 'node_modules/font-awesome/scss/font-awesome.scss'],
+    vendors: [''],
     dist: {
       css: '../apps/front/static/css/',
       admin: '../apps/custom_admin/static/custom_admin/css/'
@@ -79,8 +79,7 @@ const paths = {
     sourceDir: 'src'
   },
   fonts: {
-    vendors: ['node_modules/font-awesome/fonts/fontawesome-webfont.ttf', 'node_modules/font-awesome/fonts/fontawesome-webfont.woff',
-      'node_modules/font-awesome/fonts/fontawesome-webfont.woff2', 'node_modules/font-awesome/fonts/fontawesome-webfont.eot', 'node_modules/font-awesome/fonts/fontawesome-webfont.svg'],
+    vendors: [''],
     dist: '../apps/front/static/fonts/'
   }
 };
