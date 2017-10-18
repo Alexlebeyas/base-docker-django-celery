@@ -1,3 +1,12 @@
-{% load i18n %}
+{% load staticfiles i18n %}
 
-{% trans 'Footer' %}
+<footer>
+    <div class="container text-center">
+        <a href="//nixa.ca" class="nixa-widget">
+            <div class="nixa-logo">
+                <img class="nixa-logo-img" src="{% static 'img/nixa.svg' %}" alt="">
+            </div>
+            <div class="nixa-text">{% trans 'Développement web par Nixa' %}</div>
+        </a>
+    </div>
+</footer>

@@ -12,6 +12,10 @@ $ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
   animation-fill-mode: forwards;
 }
 
+.scroll {
+  animation: scroll 5000ms infinite linear;
+}
+
 @keyframes scaleIn {
   0% {
     transform: scale(0);
@@ -20,5 +24,14 @@ $ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 396px;
   }
 }
