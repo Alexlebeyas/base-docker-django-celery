@@ -10,7 +10,7 @@ from fabric.operations import require, put, sudo, local, get
 
 from fabfile.fabsettings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
     PROJECT_NAME, ROOT_USER
-from fabfile.install_files import UpStartFile, RsysDockerConf
+from fabfile.install_files import UpStartFile
 
 
 def set_stage(stage='staging'):
@@ -62,7 +62,7 @@ def install():
         run('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(STAGES[env.stage]['user']))
 
         # install rsys config
-        append('/etc/rsyslog.d/10-docker.conf', RsysDockerConf().output(),)
+        put('/fabfile/templates/10-docker.conf', '/etc/rsyslog.d/10-docker.conf')
         run('service rsyslog restart')
 
         # configure upstart
