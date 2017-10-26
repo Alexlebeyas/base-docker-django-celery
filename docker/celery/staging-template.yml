@@ -69,24 +69,6 @@ services:
       driver: syslog
       options:
         tag: "docker_celeryworker"
-  celerybeat:
-    build:
-      context: .
-      dockerfile: ./Dockerfiel
-    command: sh -c "./docker/celery/run_celery_beat.sh"
-    volumes:
-      - .:/hitiit360
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - SECRET_KEY
-      - DJANGO_SETTINGS_MODULE
-    tty: true
-    logging:
-      driver: syslog
-      options:
-        tag: "docker_celerybeat"
 volumes:
   socket:
   static:
