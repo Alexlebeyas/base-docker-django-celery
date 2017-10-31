@@ -19,6 +19,7 @@
     "gulp-sourcemaps": "^1.9.1",
     "babelify": "*",
     "babel-preset-es2015": "*",
+    "babel-core": "*",
     "vinyl-source-stream": "*",
     "watchify": "*",
     "gulp-uglify": "*",
