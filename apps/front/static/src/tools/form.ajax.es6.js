@@ -9,14 +9,13 @@ export class FormAjax {
      * @param {function} onSuccess - function params: {Anything} response, {Object} instance - current instance
      * @param {function} onError - default = null - function params: {jqXHR} response, {Object} instance - current instance
      * @param {function} beforeSend - default = null - function params: {jqXHR} jqXHR, {Object} settings, {Object} instance - current instance
-    */
-    constructor(form, onSuccess, onError=null, beforeSend=null) {
+     */
+    constructor(form, onSuccess, onError = null, beforeSend = null) {
         if (this._validForm(form, onSuccess)) {
             this._form = form;
             this._onSuccess = onSuccess;
             this._onError = onError;
             this._beforeSend = beforeSend;
-            this._appendErrors(FormAjax.getErrorSpan);
             this._addSubmitCall();
         }
         return this;
@@ -54,15 +53,18 @@ export class FormAjax {
             let $formGroup = $(v);
             let $formGroupInput = $formGroup.find('input');
             let $formGroupSelect = $formGroup.find('select');
+            let $formGroupTextArea = $formGroup.find('textarea');
 
             if ($formGroupInput.attr('type') !== "hidden") {
                 let name = $formGroupInput.attr('name');
                 let errorElement = getErrorFormat(`${name}`);
                 $formGroup.append(errorElement);
-            }
-
-            if ($formGroupSelect.attr('type') !== "hidden") {
+            } else if ($formGroupSelect.attr('type') !== "hidden") {
                 let name = $formGroupSelect.attr('name');
+                let errorElement = getErrorFormat(`${name}`);
+                $formGroup.append(errorElement);
+            } else if ($formGroupTextArea.attr('type') !== "hidden") {
+                let name = $formGroupTextArea.attr('name');
                 let errorElement = getErrorFormat(`${name}`);
                 $formGroup.append(errorElement);
             }
@@ -99,6 +101,7 @@ export class FormAjax {
                     // handle errors
                     let errors = JSON.parse(response.responseJSON);
                     this._displayErrors(errors);
+
                     if (this._onError) {
                         this._onError(response, this)
                     }
@@ -114,6 +117,13 @@ export class FormAjax {
      * @private
      */
     _displayErrors(errors) {
+        if (!this._form.find('span.ajax_error').length) {
+            this._appendErrors(FormAjax.getErrorSpan);
+        }
+        this._form.find('.form-group').each((k, v) => {
+            let $formGroup = $(v);
+            $formGroup.addClass('has-error');
+        });
         let prefix = this._form.data('prefix');
 
         for (let [key, value] of Object.entries(errors)) {
@@ -156,6 +166,8 @@ export class FormAjax {
      * @returns {string}
      */
     static getErrorSpan(fieldName) {
-        return `<span class="ajax_error" id="error_${fieldName}"></span>`;
+        return `<span class="ajax_error help-block" id="error_${fieldName}"></span>`;
     }
 }
+
+export default FormAjax

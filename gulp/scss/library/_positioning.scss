@@ -1,98 +1,67 @@
 /* POSITIONING
 =========================== */
 
+
+/* SPACING
+===========================
+Adding a size:
+- Create a variable containing value
+- Add a label and value in $spacing-sizes, it will create all desired variants
+*/
+
+$spacing-xs: 5px;
 $spacing-sm: 15px;
 $spacing-md: 60px;
 $spacing-lg: 100px;
 
-/* SPACING
-=========================== */
+$spacing-sizes: (
+    (sm, $spacing-sm),
+    (md, $spacing-md),
+    (lg, $spacing-lg)
+);
 
-.padding-sm {
-    padding-top: $spacing-sm;
-    padding-bottom: $spacing-sm;
+@each $label, $size in $spacing-sizes {
+    .padding-#{$label} {
+        padding-top: #{$size};
+        padding-bottom: #{$size};
+    }
+    .padding-side-#{$label} {
+        padding-left: #{$size};
+        padding-right: #{$size};
+    }
+    .padding-top-#{$label} {
+        padding-top: #{$size};
+    }
+    .padding-right-#{$label} {
+        padding-right: #{$size};
+    }
+    .padding-bottom-#{$label} {
+        padding-bottom: #{$size};
+    }
+    .padding-left-#{$label} {
+        padding-left: #{$size};
+    }
+    .margin-#{$label} {
+        margin-top: #{$size};
+        margin-bottom: #{$size};
+    }
+    .margin-side-#{$label} {
+        margin-left: #{$size};
+        margin-right: #{$size};
+    }
+    .margin-top-#{$label} {
+        margin-top: #{$size};
+    }
+    .margin-right-#{$label} {
+        margin-right: #{$size};
+    }
+    .margin-bottom-#{$label} {
+        margin-bottom: #{$size};
+    }
+    .margin-left-#{$label} {
+        margin-left: #{$size};
+    }
 }
-
-.padding-md {
-    padding-top: $spacing-md;
-    padding-bottom: $spacing-md;
-}
-
-.padding-lg {
-    padding-top: $spacing-lg;
-    padding-bottom: $spacing-lg;
-}
-
-.padding-side-sm {
-    padding-left: $spacing-sm;
-    padding-right: $spacing-sm;
-}
-
-.padding-side-md {
-    padding-left: $spacing-md;
-    padding-right: $spacing-md;
-}
-
-.padding-side-lg {
-    padding-left: $spacing-lg;
-    padding-right: $spacing-lg;
-}
-
-.padding-top-sm { padding-top: $spacing-sm }
-.padding-top-md { padding-top: $spacing-md }
-.padding-top-lg { padding-top: $spacing-lg }
-.padding-bottom-sm { padding-bottom: $spacing-sm }
-.padding-bottom-md { padding-bottom: $spacing-md }
-.padding-bottom-lg { padding-bottom: $spacing-lg }
-.padding-left-sm { padding-left: $spacing-sm }
-.padding-left-md { padding-left: $spacing-md }
-.padding-left-lg { padding-left: $spacing-lg }
-.padding-right-sm { padding-right: $spacing-sm }
-.padding-right-md { padding-right: $spacing-md }
-.padding-right-lg { padding-right: $spacing-lg }
-
-.margin-sm {
-    margin-top: $spacing-sm;
-    margin-bottom: $spacing-sm;
-}
-
-.margin-md {
-    margin-top: $spacing-md;
-    margin-bottom: $spacing-md;
-}
-
-.margin-lg {
-    margin-top: $spacing-lg;
-    margin-bottom: $spacing-lg;
-}
-
-.margin-side-sm {
-    margin-left: $spacing-sm;
-    margin-right: $spacing-sm;
-}
-
-.margin-side-md {
-    margin-left: $spacing-md;
-    margin-right: $spacing-md;
-}
-
-.margin-side-lg {
-    margin-left: $spacing-lg;
-    margin-right: $spacing-lg;
-}
-
-.margin-top-sm { margin-top: $spacing-sm }
-.margin-top-md { margin-top: $spacing-md }
-.margin-top-lg { margin-top: $spacing-lg }
-.margin-bottom-sm { margin-bottom: $spacing-sm }
-.margin-bottom-md { margin-bottom: $spacing-md }
-.margin-bottom-lg { margin-bottom: $spacing-lg }
-.margin-left-sm { margin-left: $spacing-sm }
-.margin-left-md { margin-left: $spacing-md }
-.margin-left-lg { margin-left: $spacing-lg }
-.margin-right-sm { margin-right: $spacing-sm }
-.margin-right-md { margin-right: $spacing-md }
-.margin-right-lg { margin-right: $spacing-lg }
 
 /* SEPARATORS
 =========================== */
@@ -107,61 +76,10 @@ hr {
 /* ALIGNMENT
 =========================== */
 
-.vcenter-parent{
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-.vcenter-middle {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.vcenter-top {
-    display: table-cell;
-    vertical-align: top;
-}
-
-.vcenter-bottom {
-    display: table-cell;
-    vertical-align: bottom;
-}
-
-/* FIVE COLUMN
-=========================== */
-
-.col-xs-15,
-.col-sm-15,
-.col-md-15,
-.col-lg-15 {
-    position: relative;
-    min-height: 1px;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
-.col-xs-15 {
-    width: 20%;
-    float: left;
-}
-@include breakpoint(sm) {
-    .col-sm-15 {
-        width: 20%;
-        float: left;
-    }
-}
-@include breakpoint(md) {
-    .col-md-15 {
-        width: 20%;
-        float: left;
-    }
-}
-@include breakpoint(lg) {
-    .col-lg-15 {
-        width: 20%;
-        float: left;
-    }
+.vcenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container-sm {
@@ -181,9 +99,9 @@ hr {
 }
 
 .row-no-padding {
-  margin: 0;
-  [class*="col-"] {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  }
+    margin: 0;
+    [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }

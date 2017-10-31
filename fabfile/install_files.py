@@ -18,14 +18,3 @@ class UpStartFile:
             'project_name': self.project_name,
             'docker_compose_file': self.docker_compose_file,
         })
-
-
-class RsysDockerConf:
-
-    def __init__(self):
-        with open(join(dirname(realpath(__file__)), 'templates', '10-docker.conf'), 'r') as template_file:
-            self.TEMPLATE = template_file.read()
-
-    def output(self):
-        return self.TEMPLATE
-

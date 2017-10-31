@@ -30,12 +30,12 @@
     "gulp-util": "*",
     "run-sequence": "*",
     "vinyl-buffer": "*",
-    "jshint":"*",
-    "gulp-jshint":"*",
-    "jshint-stylish":"*",
-    "jshint-stylish-summary":"*",
-    "path":"*",
-    "bulkify":"*",
-    "glob":"*"
+    "jshint": "*",
+    "gulp-jshint": "*",
+    "jshint-stylish": "*",
+    "jshint-stylish-summary": "*",
+    "path": "*",
+    "bulkify": "*",
+    "glob": "*"
   }
 }

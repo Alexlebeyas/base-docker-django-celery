@@ -22,6 +22,23 @@ html, body {
     }
 }
 
+body {
+    // Typekit loading transition
+    &:before {
+        content: "";
+        background-color: $white;
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+        z-index: 10000;
+        transition: opacity ease 1000ms;
+        pointer-events: none;
+        -webkit-touch-callout: none;
+    }
+    .wf-active &:before, .wf-inactive &:before {
+        opacity: 0;
+    }
+}
+
 h1, h2, h3, h4, h5, h6, .d1, .d2, .d3, .d4, .d5, .d6 {
     font-family: $font-title;
 }

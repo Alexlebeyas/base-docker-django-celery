@@ -1,24 +1,78 @@
 /* BUTTONS
 ===========================
-Important: See _mixins for time variables.
+Important:
+- Place button variations in btn mixin
+- You should be able to combine all variants without any issue
  */
 
 a, .btn, button {
     text-decoration: none;
     @include transition-md();
-    &:focus{
-      outline: none !important;
+    &:focus, &:active {
+        outline: none !important;
+        text-decoration: none;
     }
 }
 
-.btn-primary {
-    background-color: $color-primary;
-    border-color: $color-primary;
-    &:hover, &:focus {
-    	background-color: transparent;
-    	border-color: $color-primary;
+.btn-default, .btn {
+    font-family: $font-title;
+    font-size: 14px;
+    padding: 10px 50px;
+    border-radius: 0;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+@mixin btn ($background, $color) {
+    @extend .btn-default;
+    background-color: $background;
+    color: $color;
+    &:hover, &:focus, &.active {
+        background-color: lighten($background, 5%);
+        box-shadow: 0 4px 30px -5px lighten($background, 5%);
+        color: $color;
+        &.btn-action .btn-action-icon {
+            background-color: lighten($background, 15%);
+        }
+    }
+    &:active, &:active:focus, &:active:hover {
+        background-color: darken($background, 5%);
+        box-shadow: 0 4px 15px -5px darken($background, 5%);
+        color: $color;
+        .btn-action-icon {
+            background-color: $background;
+        }
+    }
+    .open>&.dropdown-toggle {
+        &, &:focus, &:active, &:focus {
+            background-color: darken($background, 5%);
+        }
+    }
+    &.btn-outline {
+        background-color: transparent;
+        color: $background;
+        border: 2px solid $background;
+        &:hover, &:focus, &.active {
+            background-color: $background;
+            box-shadow: 0 4px 30px -5px lighten($background, 5%);
+            color: $color;
+        }
+        &:active, &:active:focus, &:active:hover {
+            background-color: darken($background, 5%);
+            box-shadow: 0 4px 15px -5px darken($background, 5%);
+            color: $color;
+        }
+    }
+    &.btn-sm {
+        padding: 2px 40px;
     }
 }
+
+.btn-primary { @include btn($color-primary, $white) }
+.btn-grey { @include btn($grey-light, $color-primary) }
+.btn-grey-dark { @include btn($grey, $white) }
+.btn-white { @include btn($white, $color-primary) }
 
 .btn-full {
     width: 100%;
