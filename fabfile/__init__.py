@@ -181,7 +181,7 @@ def database_rollback(dumpfile=None):
                 docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
 
                 run('docker-compose -f {0} exec -T'
-                    ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                    ' db pg_dump -d ${{POSTGRES_DB}} -U ${{POSTGRES_USER}} -h localhost -F c >'
                     ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
 
                 run('docker stop {0} && docker rm {0}'.format(docker_db_container))
@@ -227,7 +227,7 @@ def rollback(commit=None):
             current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
             docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
             run('docker-compose -f {0} exec -T'
-                ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                ' db pg_dump -d ${{POSTGRES_DB}} -U ${{POSTGRES_USER}} -h localhost -F c >'
                 ' ./docker/postgresql/dumps/{1}.sql'.format(env.docker_compose_file, current_commit_hash))
             run('git checkout {}'.format(commit))
             previous_commit_hash = run('echo $(git show --pretty=format:%h -s)')
@@ -269,7 +269,7 @@ def get_db_dump(commit=None):
         with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
             with prefix(". .env"):
                 run('docker-compose -f {0} exec -T'
-                    ' db pg_dump ${{DB_NAME}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                    ' db pg_dump -d ${{POSTGRES_DB}} -U ${{POSTGRES_USER}} -h localhost -F c >'
                     ' ./docker/postgresql/dumps/manual_dump_{1}.sql'.format(env.docker_compose_file, time_stamp))
 
         with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
