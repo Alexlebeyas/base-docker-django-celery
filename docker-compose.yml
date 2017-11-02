@@ -14,7 +14,12 @@ services:
       - .:/PROJECT_NAME
     tty: true
     restart: always
-    command: sh -c "./docker/wait-for.sh -c 'nc -z db 5432' -t 30 && python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
   gulp:
     build: ./gulp
     volumes:
