@@ -1,6 +1,7 @@
 from __future__ import with_statement
 
 from datetime import datetime
+from time import sleep
 
 from fabric.api import cd, run, env, task
 from fabric.context_managers import prefix, settings, hide, shell_env
@@ -236,7 +237,7 @@ def rollback(commit=None):
                 run('docker-compose -f {} up --no-deps -d web'.format(env.docker_compose_file))
                 # copy over the previous dump.sql to be restored
             # stop the db container and remove it
-            run('docker stop {0} && docker rm {0}'.format(docker_db_container))
+            run('docker stop {0} && docker rm -v {0}'.format(docker_db_container))
             run('docker-compose -f {0} up -d db'.format(env.docker_compose_file))
             docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
             run('docker cp ./docker/postgresql/dumps/{previous_commit_hash}.sql'
@@ -312,3 +313,66 @@ def move_pip_file(stage_user):
 def copy_authorized_keys():
     run('cp ~/{}/fabconfig/templates/{} ~/.ssh/authorized_keys'.format(PROJECT_NAME, env.authorized_keys_file))
     run('chmod 600 ~/.ssh/authorized_keys')
+
+
+@task
+def replicate_db_on_local():
+    require('stage', provided_by=(staging, production))
+    time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
+
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with prefix(". .env"):
+            run('docker-compose -f {0} exec -T'
+                ' db pg_dump -d ${{POSTGRES_DB}} -U ${{POSTGRES_USER}} -h localhost -F c >'
+                ' ./docker/postgresql/dumps/manual_dump_{1}.sql'.format(env.docker_compose_file, time_stamp))
+
+    with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
+        if exists('manual_dump_{}.sql'.format(time_stamp)):
+            get('manual_dump_{}.sql'.format(time_stamp), '%(dirname)s')
+
+    # stop all containers
+    local('docker stop $(docker ps -a -q)')
+
+    # bring up old db
+    local('docker-compose up -d db')
+    db_container = local('docker-compose -f {} ps -q db'.format(env.docker_compose_file), capture=True)
+
+    # remove old db
+    local('docker stop {docker_container}'.format(docker_container=db_container))
+    local('docker rm -v {docker_container}'.format(docker_container=db_container))
+
+    # create new db
+    local('docker-compose up -d')
+    db_container = local('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file), capture=True)
+    local_pg_user = local("docker exec -ti {} bash -c \'echo $POSTGRES_USER\'".format(db_container), capture=True)
+    local_pg_db = local("docker exec -ti {} bash -c \'echo $POSTGRES_DB\'".format(db_container), capture=True)
+
+    # copy dump on new db
+    local('docker cp ./manual_dump_{time_stamp}.sql {db_container}:/'.format(
+        time_stamp=time_stamp, db_container=db_container))
+
+    # restore on new db
+    with settings(warn_only=True):
+        local('docker-compose -f docker-compose.yml exec -T '
+              'db pg_restore -U {local_pg_user} -d {local_pg_db} -C -c ./manual_dump_{time_stamp}.sql'.format(
+                    time_stamp=time_stamp, local_pg_db=local_pg_db, local_pg_user=local_pg_user))
+
+    # stop new db
+    local('docker stop $(docker ps -q)')
+    print('Task done. Ready to run docker-compose up')
+
+
+@task
+def replicate_media_on_local():
+    require('stage', provided_by=(staging, production))
+    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with prefix(". .env"):
+            run('docker-compose -f {0} exec -T'
+                ' web tar -czvf ./media.tar.gz  media'.format(env.docker_compose_file))
+            web_container = run('echo $(docker-compose -f {} ps -q web)'.format(env.docker_compose_file))
+            run('docker cp {web_container}:/{project_name}/media.tar.gz ./'.format(
+                web_container=web_container, project_name=PROJECT_NAME))
+            if exists('media.tar.gz'):
+                get('media.tar.gz', '%(dirname)s')
+    local('tar -xzvf ./media.tar.gz')
+    local('rm media.tar.gz')
