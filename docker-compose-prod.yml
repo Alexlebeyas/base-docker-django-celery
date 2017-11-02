@@ -46,7 +46,7 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_DB
     volumes:
-      - ./docker/postgresql:/var/lib/postgresql
+      - data:/var/lib/postgresql/data
     logging:
       driver: syslog
       options:
@@ -56,3 +56,4 @@ volumes:
   socket:
   static:
   media:
+  data:

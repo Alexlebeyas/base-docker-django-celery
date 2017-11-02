@@ -194,6 +194,8 @@ def database_rollback(dumpfile=None):
                     'dumpfile': dumpfile,
                     'docker_db_container': docker_db_container
                 }))
+                # wait for the db container to be up
+                sleep(10)
                 with settings(warn_only=True):
                     # restore the dump sql
                     run('docker-compose -f {0} exec -T'

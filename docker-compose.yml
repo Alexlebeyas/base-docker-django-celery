@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 services:
   web:
     build:
@@ -31,9 +31,16 @@ services:
      - POSTGRES_USER=DB_USER
      - POSTGRES_PASSWORD=12345
      - POSTGRES_DB=DB_NAME
+   healthcheck:
+     test: ["CMD-SHELL", "pg_isready"]
+     interval: 30s
+     timeout: 30s
+     retries: 3
    volumes:
-     - ./docker/postgresql:/var/lib/postgresql
+     - data:/var/lib/postgresql/data
    expose:
-    - "5432"
+     - "5432"
   redis:
     image: redis:alpine
+volumes:
+  data:
