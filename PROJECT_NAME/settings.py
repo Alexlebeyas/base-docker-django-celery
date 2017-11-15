@@ -1,6 +1,7 @@
 # coding: UTF-8
 from os import path
 import os
+
 ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'web', 'localhost']
 
 INSTALLED_APPS = (
@@ -203,6 +204,61 @@ DEBUG_TOOLBAR_CONFIG = {
 # Project specific  #
 ######################
 
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'enterMode': 2,
+        'shiftEnterMode': 1,
+        'forcePasteAsPlainText': True,
+        'height': 400,
+        'width': 500,
+        'toolbar': 'Custom',
+        'format_tags':'p;h2;h3;h4',
+        'toolbar_Custom': [
+            ['Source', 'Save'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'Undo', 'Redo'],
+            ['Find', 'Replace', 'SelectAll'],
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Table', 'HorizontalRule'],
+            ['Format'],
+            ['Maximize'],
+        ]
+    },
+    'front': {
+        'enterMode': 2,
+        'shiftEnterMode': 1,
+        'forcePasteAsPlainText': True,
+        'height': 400,
+        'width': 500,
+        'toolbar': 'Custom',
+        'format_tags':'p;h2;h3;h4',
+        'toolbar_Custom': [
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'Undo', 'Redo'],
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'],
+            ['JustifyLeft', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['Format'],
+        ]
+    },
+    'client': {
+        'enterMode': 2,
+        'shiftEnterMode': 1,
+        'forcePasteAsPlainText': True,
+        'height': 400,
+        'width': 500,
+        'toolbar': 'Custom',
+        'format_tags':'p;h2;h3;h4',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'],
+            ['Format'],
+        ]
+    }
+}
 
 SECRET_KEY = ''
 AUTH_USER_MODEL = 'nixa_users.NixaUser'
