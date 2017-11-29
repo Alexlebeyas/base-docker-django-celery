@@ -76,6 +76,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 STATICFILES_FINDERS = (
@@ -259,7 +260,7 @@ CKEDITOR_CONFIGS = {
 
 SECRET_KEY = ''
 AUTH_USER_MODEL = 'nixa_users.NixaUser'
-STARTUP_INITIAL_FIXTURES = ['apps/user_profile/fixtures/admin_user.json']
+STARTUP_INITIAL_FIXTURES = []
 
 try:
     from .local_settings import *
