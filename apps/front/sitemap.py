@@ -1,7 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 from django.core.urlresolvers import reverse
 
-__author__ = 'marcantoine'
 
 class FrontendSitemap(Sitemap):
     changefreq = 'monthly'
