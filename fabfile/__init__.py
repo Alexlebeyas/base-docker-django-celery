@@ -168,7 +168,7 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
                         env.docker_compose_file, service))
                     run('docker-compose -f {} exec -T {} python manage.py migrate'.format(
                         env.docker_compose_file, service))
-
+    copy_authorized_keys()
 
 @task
 def database_rollback(dumpfile=None):
