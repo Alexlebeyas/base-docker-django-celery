@@ -31,4 +31,7 @@ LOGGING = {
 }
 
 # removes debug context processor in production.
-TEMPLATES['OPTIONS']['context_processors'].remove('django.template.context_processors.debug')
+try:
+    TEMPLATES['OPTIONS']['context_processors'].remove('django.template.context_processors.debug')
+except ValueError:
+    pass
