@@ -24,12 +24,9 @@ INSTALLED_APPS = (
     # Nixa libs
     'nixa_emails',
     'nixa_users',
-    'nixa_fields',
-    'nixa_constant_types',
 
     # APPS
     'apps.front',
-    'apps.user_profile',
 )
 
 ADMINS = (
