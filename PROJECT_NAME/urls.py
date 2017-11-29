@@ -1,4 +1,3 @@
-import hotfix
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -20,7 +19,6 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^hotfix/', include(hotfix)),
     url(r'^emails/', include('nixa_emails.urls')),
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^', include('apps.front.urls')),
