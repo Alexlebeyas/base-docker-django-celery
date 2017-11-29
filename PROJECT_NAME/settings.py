@@ -45,9 +45,8 @@ SITE_ID = 1
 
 DEBUG = True
 
-LANGUAGE_CODE = "fr"
+LANGUAGE_CODE = "en"
 LANGUAGES = (
-    ('fr', 'Français'),
     ('en', 'English'),
 )
 
