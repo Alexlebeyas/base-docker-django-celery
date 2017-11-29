@@ -1,4 +1,4 @@
-from django.utils.log import getLogger
+from logging import getLogger
 
 
 logger = getLogger('main')
