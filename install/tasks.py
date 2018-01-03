@@ -81,7 +81,7 @@ def set_docker_project_name():
         editor.replace('DB_NAME', project_name)
         editor.replace('DB_USER', project_user)
 
-    fabfile = path.join(project_directory, 'fabfile', 'settings.py')
+    fabfile = path.join(project_directory, 'fabfile', 'fabsettings.py')
     with FileEditor(fabfile) as editor:
         editor.replace('((PROJECT_NAME))', project_name)
 
