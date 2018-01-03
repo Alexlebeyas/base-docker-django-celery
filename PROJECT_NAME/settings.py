@@ -30,6 +30,9 @@ INSTALLED_APPS = (
     # APPS
     'apps.front',
     'apps.user_profile',
+    'hijack',
+    'hijack_admin',
+
 )
 
 ADMINS = (
@@ -260,7 +263,15 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-SECRET_KEY = ''
+
+HIJACK_USE_BOOTSTRAP = True
+HIJACK_ALLOW_GET_REQUESTS = True
+HIJACK_REGISTER_ADMIN = False
+
+HIJACK_LOGIN_REDIRECT_URL = '/?edit=true'  # Where admins are redirected to after hijacking a user
+HIJACK_LOGOUT_REDIRECT_URL = '/admin/nixa_users/nixauser/'  # Where admins are redirected to after releasing a user
+
+SECRET_KEY = 'test'
 AUTH_USER_MODEL = 'nixa_users.NixaUser'
 STARTUP_INITIAL_FIXTURES = ['apps/user_profile/fixtures/admin_user.json']
 

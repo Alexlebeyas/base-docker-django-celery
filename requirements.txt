@@ -12,6 +12,8 @@ sqlparse==0.2.1
 django-pipeline
 django-anymail # Used for mandrill integration. See installation instruction at https://github.com/anymail/
 psycopg2
+django-hijack==2.1.4
+django-hijack-admin==2.1.4
 
 # private requirements
 nixa-admin-register==1.0.0
