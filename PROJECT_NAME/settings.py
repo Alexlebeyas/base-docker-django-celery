@@ -188,7 +188,7 @@ COLOR_BORDER_BODY = '#AFB6CC'
 ################
 
 
-BROKER_URL = 'redis://localhost:6379/1'
+BROKER_URL = 'redis://redis:6379/1'
 CELERYD_HIJACK_ROOT_LOGGER = False
 
 show_toolbar = lambda r: False
