@@ -27,7 +27,6 @@ INSTALLED_APPS = (
 
     # APPS
     'apps.front',
-    'apps.user_profile',
     'hijack',
     'hijack_admin',
 
@@ -80,6 +79,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 STATICFILES_FINDERS = (
