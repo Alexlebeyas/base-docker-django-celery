@@ -24,8 +24,6 @@ INSTALLED_APPS = (
     # Nixa libs
     'nixa_emails',
     'nixa_users',
-    'nixa_fields',
-    'nixa_constant_types',
 
     # APPS
     'apps.front',
@@ -194,7 +192,7 @@ COLOR_BORDER_BODY = '#AFB6CC'
 ################
 
 
-BROKER_URL = 'redis://localhost:6379/1'
+BROKER_URL = 'redis://redis:6379/1'
 CELERYD_HIJACK_ROOT_LOGGER = False
 
 show_toolbar = lambda r: False
@@ -273,7 +271,7 @@ HIJACK_LOGOUT_REDIRECT_URL = '/admin/nixa_users/nixauser/'  # Where admins are r
 
 SECRET_KEY = 'test'
 AUTH_USER_MODEL = 'nixa_users.NixaUser'
-STARTUP_INITIAL_FIXTURES = ['apps/user_profile/fixtures/admin_user.json']
+STARTUP_INITIAL_FIXTURES = []
 
 try:
     from .local_settings import *

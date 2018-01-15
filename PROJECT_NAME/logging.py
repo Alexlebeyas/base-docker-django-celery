@@ -1,6 +1,4 @@
-from django.utils.log import getLogger
-
-__author__ = 'snake'
+from logging import getLogger
 
 
 logger = getLogger('main')

@@ -1,34 +1,13 @@
 import os
 from .settings import *
 
-ALLOWED_HOSTS = ['']  # tODO add prod IP here.
+ALLOWED_HOSTS = ['']  # TODO add allowed hosts
 PROJECT_PROTOCOL = 'http://'
-PROJECT_DOMAIN = ''  # TODO add prod ip here.
+PROJECT_DOMAIN = ''  # TODO add production domain
 PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
-PROJECT_NAME = path.basename(path.dirname(__file__))
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['POSTGRES_DB'],
-        'USER': os.environ['POSTGRES_USER'],
-        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-        'HOST': 'db',
-        'PORT': '5432'
-    }
-}
-
-CACHES = {
-    "default": {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        "LOCATION": "redis://redis:6379/0",
-        'TIMEOUT': 300,
-        'KEY_PREFIX': 'django-%s-' % PROJECT_NAME,
-    }
-}
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
@@ -51,24 +30,8 @@ LOGGING = {
     },
 }
 
-TEMPLATES = (
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ('templates/', ),
-        'APP_DIRS': False,
-        'OPTIONS': {
-            'context_processors': (
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ),
-            'loaders': (
-                ('django.template.loaders.cached.Loader', (
-                    'django.template.loaders.app_directories.Loader',
-                    'django.template.loaders.filesystem.Loader',
-                )),
-            ),
-        },
-    },
-)
-
+# removes debug context processor in production.
+try:
+    TEMPLATES['OPTIONS']['context_processors'].remove('django.template.context_processors.debug')
+except ValueError:
+    pass

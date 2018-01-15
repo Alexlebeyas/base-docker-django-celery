@@ -1,4 +1,4 @@
-FROM python:3.5-slim
+FROM python:3.6-slim
 COPY . /PROJECT_NAME
 WORKDIR /PROJECT_NAME
 COPY pip.conf /root/.pip/pip.conf
