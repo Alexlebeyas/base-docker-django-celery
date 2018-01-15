@@ -10,6 +10,6 @@ django-anymail # Used for mandrill integration. See installation instruction at 
 psycopg2
 
 # private requirements
-nixa-emails
-nixa-users
+nixa-emails==1.4.0
+nixa-users==1.3.0
 nixa-login
