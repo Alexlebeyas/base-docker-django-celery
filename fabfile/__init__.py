@@ -63,7 +63,7 @@ def install():
         run('chmod +x /usr/local/bin/docker-compose && usermod -aG docker {}'.format(STAGES[env.stage]['user']))
 
         # install rsys config
-        put('/fabfile/templates/10-docker.conf', '/etc/rsyslog.d/10-docker.conf')
+        put('fabfile/templates/10-docker.conf', '/etc/rsyslog.d/10-docker.conf')
         run('service rsyslog restart')
 
         # configure upstart
