@@ -9,23 +9,24 @@ from django.views.generic import TemplateView
 
 js_info_dict = {
     'domain': 'djangojs',
-    'packages': ('apps.custom_admin', 'apps.front', 'apps.user_profile', )
+    'packages': ('apps.custom_admin', 'apps.front', 'apps.user_profile',)
 }
 
 urlpatterns = [
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), {
         'PROJECT_URI': settings.PROJECT_URI
     }),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
-        name='django.contrib.sitemaps.views.sitemap'),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^emails/', include('nixa_emails.urls')),
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
+    url(r'^', include('nixa_users.urls')),
     url(r'^', include('apps.front.urls')),
 ]
 
 if settings.DEBUG:
     from django.conf.urls.static import static
+
     urlpatterns.append(
         url(r'^error', error, name='error')
     )
