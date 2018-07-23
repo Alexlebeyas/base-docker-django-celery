@@ -6,7 +6,7 @@ RUN apt-get update -y && apt-get update -y && apt-get install build-essential li
     groupadd uwsgi &&\
     useradd -g uwsgi uwsgi &&\
     mkdir /tmp/uwsgi && chown -R uwsgi:101 /tmp/uwsgi &&\
-    chown -R uwsgi:101 /agneau &&\
+    chown -R uwsgi:101 /PROJECT_NAME &&\
     pip install pip==9.0.3 &&\
     pip install -Ur requirements.txt &&\
     pip install https://projects.unbit.it/downloads/uwsgi-lts.tar.gz
