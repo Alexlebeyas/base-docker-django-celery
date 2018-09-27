@@ -1,0 +1,46 @@
+/* COLORS
+===========================
+Important: Always define primary color
+*/
+
+$color-primary: #2abfd4;
+//$color-secondary: #ff0000; (Use or remove)
+//$color-extra:  #00ff00; (Use or remove)
+
+$white: #FFF;
+$grey-light: #e2e4e7;
+$grey: #b1b3b7;
+$grey-dark: #626467;
+$black: #000;
+
+/* SOCIAL MEDIA */
+
+$facebook-color: #3b5999;
+$twitter-color: #55acee;
+$linkedin-color: #0077b5;
+$youtube-color: #cd201f;
+$pinterest-color: #cb2026;
+$googleplus-color: #dd5044;
+$instagram-color: #e4405f;
+
+
+/* TEXT COLORS
+=========================== */
+
+.text-primary { color: $color-primary !important }
+.text-white { color: $white !important }
+.text-grey-light { color: $grey-light !important }
+.text-grey { color: $grey !important }
+.text-grey-dark { color: $grey-dark !important }
+.text-black { color: $black !important }
+
+
+/* BACKGROUND COLORS
+=========================== */
+
+.bg-primary { background-color: $color-primary !important }
+.bg-white { background-color: $white !important }
+.bg-grey-light { background-color: $grey-light !important }
+.bg-grey { background-color: $grey !important }
+.bg-grey-dark { background-color: $grey-dark !important }
+.bg-black { background-color: $black !important }

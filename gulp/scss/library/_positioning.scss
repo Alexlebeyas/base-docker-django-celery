@@ -1,0 +1,107 @@
+/* POSITIONING
+=========================== */
+
+
+/* SPACING
+===========================
+Adding a size:
+- Create a variable containing value
+- Add a label and value in $spacing-sizes, it will create all desired variants
+*/
+
+$spacing-xs: 5px;
+$spacing-sm: 15px;
+$spacing-md: 60px;
+$spacing-lg: 100px;
+
+$spacing-sizes: (
+    (sm, $spacing-sm),
+    (md, $spacing-md),
+    (lg, $spacing-lg)
+);
+
+@each $label, $size in $spacing-sizes {
+    .padding-#{$label} {
+        padding-top: #{$size};
+        padding-bottom: #{$size};
+    }
+    .padding-side-#{$label} {
+        padding-left: #{$size};
+        padding-right: #{$size};
+    }
+    .padding-top-#{$label} {
+        padding-top: #{$size};
+    }
+    .padding-right-#{$label} {
+        padding-right: #{$size};
+    }
+    .padding-bottom-#{$label} {
+        padding-bottom: #{$size};
+    }
+    .padding-left-#{$label} {
+        padding-left: #{$size};
+    }
+    .margin-#{$label} {
+        margin-top: #{$size};
+        margin-bottom: #{$size};
+    }
+    .margin-side-#{$label} {
+        margin-left: #{$size};
+        margin-right: #{$size};
+    }
+    .margin-top-#{$label} {
+        margin-top: #{$size};
+    }
+    .margin-right-#{$label} {
+        margin-right: #{$size};
+    }
+    .margin-bottom-#{$label} {
+        margin-bottom: #{$size};
+    }
+    .margin-left-#{$label} {
+        margin-left: #{$size};
+    }
+}
+
+/* SEPARATORS
+=========================== */
+
+hr {
+    margin-top: $spacing-sm;
+    margin-bottom: $spacing-sm;
+    border: 0;
+    border-top: 2px solid $black;
+}
+
+/* ALIGNMENT
+=========================== */
+
+.vcenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-sm {
+    max-width: 500px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: auto;
+}
+
+.row-narrow {
+    margin-left: -7px;
+    margin-right: -7px;
+    [class*="col"] {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+}
+
+.row-no-padding {
+    margin: 0;
+    [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}

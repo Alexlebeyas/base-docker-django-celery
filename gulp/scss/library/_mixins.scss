@@ -1,0 +1,113 @@
+/* MIXINS
+=========================== */
+
+$time-sm: 300ms;
+$time-md: 600ms;
+$time-lg: 900ms;
+
+@function rem($pixels, $context: $baseFontSize) {
+    @if (unitless($pixels)) {
+        $pixels: $pixels * 1px;
+    }
+
+    @if (unitless($context)) {
+        $context: $context * 1px;
+    }
+
+    @return $pixels / $context * 1rem;
+}
+
+@mixin transition-sm($type:all, $ease:ease) {
+    @include transition-fix();
+    -webkit-transition: $type $time-sm $ease;
+    -moz-transition: $type $time-sm $ease;
+    -o-transition: $type $time-sm $ease;
+    transition: $type $time-sm $ease;
+}
+
+@mixin transition-md($type:all, $ease:ease) {
+    @include transition-fix();
+    -webkit-transition: $type $time-md $ease;
+    -moz-transition: $type $time-md $ease;
+    -o-transition: $type $time-md $ease;
+    transition: $type $time-md $ease;
+}
+
+@mixin transition-lg($type:all, $ease:ease) {
+    @include transition-fix();
+    -webkit-transition: $type $time-lg $ease;
+    -moz-transition: $type $time-lg $ease;
+    -o-transition: $type $time-lg $ease;
+    transition: $type $time-lg $ease;
+}
+
+@mixin transition-fix() {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0)
+}
+
+@mixin cover-image() {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+@mixin fa-icon($icon) {
+    content: $icon;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
+
+@mixin io-icon ($icon) {
+  content: $icon;
+  font-family: "Ionicons";
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+}
+
+@mixin placeholder-color($color) {
+    ::-webkit-input-placeholder {
+        color: $color;
+    }
+    :-moz-placeholder {
+        color: $color;
+    }
+    ::-moz-placeholder {
+        color: $color;
+    }
+    :-ms-input-placeholder {
+        color: $color;
+    }
+}
+
+@mixin list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list-reset {
+    @include list-reset;
+}
+
+.list-inline {
+    @include list-reset;
+    margin: 0;
+    li {
+        padding: 0;
+        display: inline-block;
+    }
+}
+
+.clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}

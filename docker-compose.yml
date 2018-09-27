@@ -1,0 +1,41 @@
+version: '2.1'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    environment:
+     - POSTGRES_USER=DB_USER
+     - POSTGRES_PASSWORD=12345
+     - POSTGRES_DB=DB_NAME
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/PROJECT_NAME
+    tty: true
+    restart: always
+    command: sh -c "./docker/wait-for.sh -c 'nc -z db 5432' -t 30 && python manage.py runserver 0.0.0.0:8000"
+  gulp:
+    build: ./gulp
+    volumes:
+      - .:/PROJECT_NAME
+      - /PROJECT_NAME/gulp/node_modules
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    restart: always
+    command: gulp browsersync
+  db:
+   image: postgres:10-alpine
+   environment:
+     - POSTGRES_USER=DB_USER
+     - POSTGRES_PASSWORD=12345
+     - POSTGRES_DB=DB_NAME
+   volumes:
+     - data:/var/lib/postgresql/data
+   expose:
+     - "5432"
+  redis:
+    image: redis:alpine
+volumes:
+  data:

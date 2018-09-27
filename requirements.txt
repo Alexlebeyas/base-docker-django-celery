@@ -1,0 +1,17 @@
+celery
+Django>=1.10,<2.0
+django-crispy-forms
+django-debug-toolbar
+redis
+requests
+django-redis
+six
+django-anymail # Used for mandrill integration. See installation instruction at https://github.com/anymail/
+psycopg2
+django-hijack==2.1.4
+django-hijack-admin==2.1.4
+
+# private requirements
+nixa-emails==1.4.0
+nixa-users==1.3.2
+nixa-login

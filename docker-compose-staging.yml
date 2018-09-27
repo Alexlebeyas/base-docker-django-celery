@@ -1,0 +1,69 @@
+version: '2.1'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile-staging
+    volumes:
+      - socket:/tmp/uwsgi
+      - static:/PROJECT_NAME/static/
+      - media:/PROJECT_NAME/media/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - SECRET_KEY
+      - DJANGO_SETTINGS_MODULE
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_web"
+  nginx:
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile-staging
+    volumes:
+      - socket:/tmp/uwsgi
+      - static:/PROJECT_NAME/static/
+      - media:/PROJECT_NAME/media/
+    ports:
+      - 80:80
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_nginx"
+  redis:
+    image: redis:alpine
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_redis"
+  db:
+    image: postgres:10-alpine
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    healthcheck:
+     test: ["CMD-SHELL", "pg_isready"]
+     interval: 30s
+     timeout: 30s
+     retries: 3
+    volumes:
+      - data:/var/lib/postgresql/data
+    logging:
+      driver: syslog
+      options:
+        tag: "docker_db"
+
+volumes:
+  socket:
+  static:
+  media:
+  data:

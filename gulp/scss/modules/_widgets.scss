@@ -1,0 +1,105 @@
+/* WIDGETS
+=========================== */
+
+.nixa-widget {
+  padding: 20px 20px 20px 10px;
+  display: inline-block;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 0;
+  text-decoration: none!important;
+  .nixa-logo {
+    position: absolute;
+    top: 2px; bottom: 0; left: 20px;
+    width: 30px; height: 30px;
+    margin: auto;
+    transform: scale(0);
+    opacity: 0;
+    transition: all 500ms ease;
+    .nixa-logo-img {
+      max-width: 100%;
+    }
+  }
+  .nixa-text {
+    text-transform: uppercase;
+    color: $black;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    transition: all 500ms ease;
+  }
+  &:after, &:before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    transition: all 500ms ease;
+    transform: scaleX(0);
+    border-radius: 100px;
+    box-shadow: none;
+    opacity: 0;
+  }
+  &:before {
+    background-color: $color-primary;
+  }
+  &:after {
+    background-image: url('../img/nixa-pattern.png');
+    opacity: 0.1!important;
+    @extend .scroll;
+  }
+  &:hover, &:focus {
+    text-decoration: none;
+    transform: translateX(-25px);
+    .nixa-logo {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .nixa-text {
+      color: $white;
+      transform: translateX(50px);
+    }
+    &:after, &:before {
+      right: -50px;
+      transform: scaleX(1);
+      box-shadow: 0 5px 15px 0 rgba($color-primary, 0.4);
+    }
+    &:before {
+      opacity: 1;
+    }
+  }
+  &:focus {
+    &:after, &:before {
+      opacity: 0.9;
+    }
+  }
+  &:active {
+    &:after, &:before {
+      opacity: 0.8;
+      box-shadow: none;
+      transform: scaleX(0.95);
+    }
+  }
+}
+
+.widget-loading {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: rgba($black, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    .widget-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $white;
+        color: $color-primary;
+        border-radius: 100px;
+        box-shadow: 0 5px 30px 0 rgba(0,0,0,.1);
+        @extend .scale-in;
+        animation-duration: 500ms;
+    }
+}

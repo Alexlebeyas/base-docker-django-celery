@@ -1,0 +1,57 @@
+/* FONTS
+===========================
+Important:
+- Define default font families and font styles here.
+- Design titles only using .d1, .d2... Not h1, h2...
+- Use EM font sizes and adjust responsive by setting body font size.
+- Default body font size is 16px.
+*/
+
+$font-title: '', sans-serif;
+$font-content: '', sans-serif;
+$font-fancy: '', sans-serif;
+
+$baseFontSize : 14;
+
+html, body {
+    font-family: $font-content;
+    color: $grey-dark;
+    font-size: $baseFontSize - 2 * 1px;
+    @include breakpoint(lg) {
+      font-size: $baseFontSize * 1px;
+    }
+}
+
+// Typekit loading transition.
+// (Use or remove)
+//body {
+//    &:before {
+//        content: "";
+//        background-color: $white;
+//        position: fixed;
+//        top: 0; right: 0; bottom: 0; left: 0;
+//        z-index: 10000;
+//        transition: opacity ease 1000ms;
+//        pointer-events: none;
+//        -webkit-touch-callout: none;
+//    }
+//    .wf-active &:before, .wf-inactive &:before {
+//        opacity: 0;
+//    }
+//}
+
+h1, h2, h3, h4, h5, h6, .d1, .d2, .d3, .d4, .d5, .d6 {
+    font-family: $font-title;
+}
+
+* { outline: none }
+
+.text-uppercase { text-transform: uppercase }
+.text-capitalize { text-transform: capitalize }
+
+.text-thin { font-weight: 100 }
+.text-normal { font-weight: 400 }
+.text-bold { font-weight: 700 }
+.text-extrabold { font-weight: 900 }
+
+.text-fancy { font-family: $font-fancy }
