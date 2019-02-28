@@ -95,7 +95,6 @@ def set_docker_project_name():
         path.join(project_directory, 'docker', 'nginx', '{}.conf'.format(project_name)),
         path.join(project_directory, '{}-staging.ini'.format(project_name)),
         path.join(project_directory, '{}-prod.ini'.format(project_name)),
-        path.join(project_directory, '.env.example'),
     )
 
     for file_path in files:
@@ -118,13 +117,19 @@ def set_secret_key():
     """
     Put the secret key into settings.py.
     """
-    files = (
-        path.join(settings_directory, 'settings.py'),
-        path.join(project_directory, '.env.example'),
-    )
-    for file_path in files:
-        with FileEditor(file_path) as editor:
-            editor.replace('SECRET_KEY = \'\'', 'SECRET_KEY = \'%s\'' % secret_key)
+    file_path = path.join(settings_directory, 'settings.py')
+    with FileEditor(file_path) as editor:
+        editor.replace('SECRET_KEY = \'\'', 'SECRET_KEY = \'%s\'' % secret_key)
+
+
+@tasks.add
+def set_secret_key_env():
+    """
+    Put the secret key into settings.py.
+    """
+    file_path = path.join(project_directory, '.env.example')
+    with FileEditor(file_path) as editor:
+        editor.replace('SECRET_KEY=', 'SECRET_KEY={}'.format(secret_key))
 
 
 @tasks.add
