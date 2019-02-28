@@ -1,24 +1,33 @@
 image: python:2.7
 
 pipelines:
-
   branches:
     develop:
       - step:
          script:
           - echo "deploy staging"
           - pip install "fabric==1.13.2"
+          - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/dockerdeploy.git fabfile
           - fab staging deploy --abort-on-prompts copy_media_files -i /opt/atlassian/pipelines/agent/data/id_rsa
   custom:
-    deploy:
+    branch:
       - step:
          script: # Modify the commands below to build your repository.
-          - echo "deploy"
+          - echo "deploy branch $BITBUCKET_BRANCH staging"
           - pip install "fabric==1.13.2"
-          - fab production deploy --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa
-    deploy_staging:
+          - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/dockerdeploy.git fabfile
+          - fab staging deploy:branch=$BITBUCKET_BRANCH --abort-on-prompts copy_media_files -i /opt/atlassian/pipelines/agent/data/id_rsa
+    tag:
       - step:
          script: # Modify the commands below to build your repository.
-          - echo "deploy staging"
+          - echo "deploy tag $BITBUCKET_TAG staging"
           - pip install "fabric==1.13.2"
-          - fab staging deploy copy_media_files --abort-on-prompts -i /opt/atlassian/pipelines/agent/data/id_rsa
+          - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/dockerdeploy.git fabfile
+          - fab staging deploy:branch=$BITBUCKET_TAG --abort-on-prompts copy_media_files -i /opt/atlassian/pipelines/agent/data/id_rsa
+    commit:
+      - step:
+         script: # Modify the commands below to build your repository.
+          - echo "deploy commit $BITBUCKET_COMMIT staging"
+          - pip install "fabric==1.13.2"
+          - git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASS@bitbucket.org/nixateam/dockerdeploy.git fabfile
+          - fab staging deploy:commit=$BITBUCKET_COMMIT --abort-on-prompts copy_media_files -i /opt/atlassian/pipelines/agent/data/id_rsa
