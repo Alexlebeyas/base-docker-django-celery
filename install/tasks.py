@@ -6,8 +6,8 @@ main script. Each task needs to have the decorator
 @tasks.add or they will not be detected. Tasks are
 executed in order.
 """
-from shutil import rmtree
-from os import path, renames, rename, getcwd, remove
+from shutil import rmtree, copy
+from os import path, renames, rename, getcwd, remove, system
 from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
@@ -51,6 +51,33 @@ def set_manage_project_name():
 
 
 @tasks.add
+def set_docker_deploy():
+    """
+    Clone docker deploy and move settings and authorized keys
+    """
+    fabfile_folder = path.join(project_directory, 'fabfile')
+    # if folder already exists, delete it
+    if path.exists(fabfile_folder):
+        rmtree(fabfile_folder)
+
+    system("git clone git@bitbucket.org:nixateam/dockerdeploy.git fabfile")
+
+    # move fabsettings example to deploy folder
+    src = path.join(project_directory, 'fabfile', 'fabsettings.py.example')
+    if path.exists(src):
+        copy(src, path.join(project_directory, 'deploy', 'fabsettings.py'))
+
+    # move authorized_keys
+    keys_files = (
+        path.join(project_directory, 'fabfile', 'templates', 'authorized_keys'),
+        path.join(project_directory, 'fabfile', 'templates', 'authorized_keys_prod'),
+    )
+    for keys_file in keys_files:
+        if path.exists(keys_file):
+            copy(keys_file, path.join(project_directory, 'deploy'))
+
+
+@tasks.add
 def set_docker_project_name():
     """
     Set the project name in docker files
@@ -68,7 +95,6 @@ def set_docker_project_name():
         path.join(project_directory, 'docker', 'nginx', '{}.conf'.format(project_name)),
         path.join(project_directory, '{}-staging.ini'.format(project_name)),
         path.join(project_directory, '{}-prod.ini'.format(project_name)),
-        path.join(project_directory, '.env.example'),
     )
 
     for file_path in files:
@@ -81,7 +107,7 @@ def set_docker_project_name():
         editor.replace('DB_NAME', project_name)
         editor.replace('DB_USER', project_user)
 
-    fabfile = path.join(project_directory, 'fabfile', 'fabsettings.py')
+    fabfile = path.join(project_directory, 'deploy', 'fabsettings.py')
     with FileEditor(fabfile) as editor:
         editor.replace('((PROJECT_NAME))', project_name)
 
@@ -91,9 +117,19 @@ def set_secret_key():
     """
     Put the secret key into settings.py.
     """
-    settings_file = path.join(settings_directory, 'settings.py')
-    with FileEditor(settings_file) as editor:
+    file_path = path.join(settings_directory, 'settings.py')
+    with FileEditor(file_path) as editor:
         editor.replace('SECRET_KEY = \'\'', 'SECRET_KEY = \'%s\'' % secret_key)
+
+
+@tasks.add
+def set_secret_key_env():
+    """
+    Put the secret key into settings.py.
+    """
+    file_path = path.join(project_directory, '.env.example')
+    with FileEditor(file_path) as editor:
+        editor.replace('SECRET_KEY=', 'SECRET_KEY={}'.format(secret_key))
 
 
 @tasks.add
@@ -129,14 +165,3 @@ def rename_parent_direct():
     parent_directory = path.dirname(getcwd())
     new_project_directory = path.join(parent_directory, project_name)
     rename(project_directory, new_project_directory)
-
-# Must make run_test for docker
-# @tasks.add
-# def run_tests():
-#     """
-#     Make sure the project installed correctly
-#     by executing management startup and test.
-#     """
-#     manage('makemigrations nixaemails')
-#     manage('startup')
-#     manage('test')
