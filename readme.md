@@ -1,40 +1,57 @@
-# ![Nixa](https://nixaca.s3.amazonaws.com/static/nixa2/images/logo-nixa.png)
-## Starting a new Project
-Go to: 
-https://nixaca.atlassian.net/wiki/spaces/PB/pages/125041233/Ultimate+Starter+Guide+for+Django+Projects
+# ![Nixa](https://nixaca.s3.amazonaws.com/static/nixa/images/logo-home.png)
 
-### PROJECT
-**[Copy your pip configuration file](#markdown-header-copy-your-pip-configuration-file)**      
-**[Build docker containers](#markdown-header-build-docker-containers)**          
-**[Start docker instance](#markdown-header-start-docker-instance)**       
+# To create a new project from project-starter, follow these steps:
 
-
-### Copy your pip configuration file
-1. If you have not made a pip.config file on your user folder, you must make a new directory inside the user folder and call it ‘pip’. 
-2. Inside this pip folder, create a file called ‘pip.conf’
-3. Copy this file and put is inside the project folder
-4. Take the following code and put it in the file, and replace the placeholder text (e.g. USERNAME, PASSWORD) with the appropriate information.
+If your project will use nixa app, you need a pip configuration file
+~~~~
+cd ~
+vim pip.conf
+~~~~
+Here is the content of pip.conf
 ~~~~
 [global]
 ; Extra index to private pypi dependencies
 extra-index-url = https://{{ USERNAME }}:{{ PASSWORD }}@pip.nixa.ca/simple/
-trusted-host = pip.nixa.ca
 ~~~~
 
-### Build docker containers
-1. Build docker containers: 
+## 1. Create a new repo on bitbucket:
+my-project.git
+
+## 2. Create a new project based on project-starter:
+~~~~
+git clone git@bitbucket.org:nixateam/project-starter.git
+cd project-starter
+cp ~/pip.conf .
+python install my-project
+git init
+git remote add origin git@bitbucket.org:nixateam/my-project.git
+git pull origin master
+git add .
+git commit -m “project creation based on project-starter”
+git push --set-upstream origin master
+git flow init
+git checkout develop
+~~~~
+
+## 3. Build docker containers:
+Frist, check requirement.txt and then
 ~~~~
 docker-compose build
 ~~~~
-2. This will set up the instance for gulp and web instances.
 
-### Start docker instance
-1. Startup docker instance:
+## 4. Start containers:
 ~~~~
 docker-compose up
 ~~~~
-2. Connect to a docker instance, ex : <projet_name>_web_1
+
+## 5. Start project:
 ~~~~
-docker exec -it example_web_1 bin/bash
+docker exec -it my-project_web_1 bash
+python manage.py startup
 ~~~~
 
+### For more informations:
+**[Copy your pip configuration file](#markdown-header-copy-your-pip-configuration-file)**      
+**[Build docker containers](#markdown-header-build-docker-containers)**          
+**[Start docker instance](#markdown-header-start-docker-instance)**       
+**https://nixaca.atlassian.net/wiki/spaces/PB/pages/125041233/Ultimate+Starter+Guide+for+Django+Projects**
