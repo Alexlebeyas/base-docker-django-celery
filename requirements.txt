@@ -7,7 +7,7 @@ requests
 django-redis
 six
 django-anymail # Used for mandrill integration. See installation instruction at https://github.com/anymail/
-psycopg2
+psycopg2-binary==2.8
 django-hijack==2.1.4
 django-hijack-admin==2.1.4
 
