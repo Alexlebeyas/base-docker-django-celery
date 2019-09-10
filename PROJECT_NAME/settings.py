@@ -70,7 +70,7 @@ FIXTURE_DIRS = 'fixtures/',
 LOCALE_PATHS = 'locale/',
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -269,7 +269,7 @@ HIJACK_REGISTER_ADMIN = False
 HIJACK_LOGIN_REDIRECT_URL = '/?edit=true'  # Where admins are redirected to after hijacking a user
 HIJACK_LOGOUT_REDIRECT_URL = '/admin/nixa_users/nixauser/'  # Where admins are redirected to after releasing a user
 
-SECRET_KEY = ''
+SECRET_KEY = 'abc123...'
 AUTH_USER_MODEL = 'nixa_users.NixaUser'
 STARTUP_INITIAL_FIXTURES = []
 

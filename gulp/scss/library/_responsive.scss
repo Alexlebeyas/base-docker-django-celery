@@ -1,19 +1,16 @@
 /* RESPONSIVE
 ===========================
 */
-$screen-xxl: 1680px; // Desktop
-$screen-xl: 1360px; // HD Laptop
-$screen-lg: 1200px; // iPad Landscape, Old Laptop
-$screen-md: 992px; // iPad Portrait
-$screen-sm: 768px; // Phone landscape
-$screen-xs: 480px; // iPhone 6
+/* breakpoints based on bootstrap 4 */
+$screen-xxxl: 1680px; // Desktop
+$screen-xxl: 1360px; // HD Laptop
+$screen-xl: 1200px; // Extra large devices (large desktops, 1200px and up)
+$screen-lg: 992px; // Large devices (desktops, 992px and up)
+$screen-md: 768px; // Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint
+$screen-sm: 576px; // Small devices (landscape phones, 576px and up)
 
 @mixin breakpoint($class) {
-    @if $class == xs {
-        @media (min-width: $screen-xs) {
-            @content;
-        }
-    } @else if $class == sm {
+    @if $class == sm {
         @media (min-width: $screen-sm) {
             @content;
         }
@@ -33,7 +30,11 @@ $screen-xs: 480px; // iPhone 6
         @media (min-width: $screen-xxl) {
             @content;
         }
+    } @else if $class == xxxl {
+        @media (min-width: $screen-xxxl) {
+            @content;
+        }
     } @else {
-        @warn "Breakpoint mixin supports: xxs, xs, sm, md, lg, xl, xxl";
+        @warn "Breakpoint mixin supports: sm, md, lg, xl, xxl, xxxl";
     }
 }
