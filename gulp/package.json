@@ -11,7 +11,7 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "browser-sync": "*",
-    "gulp": "3.9.1",
+    "gulp": "^4",
     "gulp-clean-css": "*",
     "gulp-concat": "*",
     "gulp-rename": "*",

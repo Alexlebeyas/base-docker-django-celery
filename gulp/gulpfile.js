@@ -65,7 +65,7 @@ const paths = {
     src: 'scss/**/*.scss',
     main: 'scss/main.scss',
     admin: 'scss/admin.scss',
-    vendors: [''],
+    vendors: ['scss/**/*.scss'],
     dist: {
       css: '../apps/front/static/css/',
       admin: '../apps/custom_admin/static/custom_admin/css/'
@@ -79,7 +79,7 @@ const paths = {
     sourceDir: 'src'
   },
   fonts: {
-    vendors: [''],
+    vendors: ['scss/**/*.scss'],
     dist: '../apps/front/static/fonts/'
   }
 };
@@ -128,14 +128,14 @@ function watchBundle(bundler, entry) {
   };
 }
 
-gulp.task('load-files', function () {
+function loadfiles() {
   return gulp.src(paths.scripts.src)
     .pipe(tap(function (file) {
       files.push(file.path);
     }));
-});
+}
 
-gulp.task('browserify', function () {
+function startbrowserify() {
   var tasks = files.map(function (entry) {
     var bundler = watchify(browser(entry));
     var watch = watchBundle(bundler, entry);
@@ -144,24 +144,33 @@ gulp.task('browserify', function () {
     return watch();
   });
   return es.merge(tasks);
-});
+}
 
-gulp.task('compileJs', function () {
-  var tasks = files.map(function (entry) {
-    var bundler = browser(entry);
-    var bundle = watchBundle(bundler, entry);
-    return bundle();
-  });
-  return es.merge(tasks);
-});
+// function compilejs() {
+//   var tasks = files.map(function (entry) {
+//     var bundler = browser(entry);
+//     var bundle = watchBundle(bundler, entry);
+//     return bundle();
+//   });
+//   return es.merge(tasks);
+// }
 
-gulp.task('lint', function () {
+function compilejs() {
+    return gulp.src([paths.scripts.src])
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.min.js'))
+    .pipe(uglify())
+    .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
+    .pipe(gulp.dest(paths.scripts.dist));
+}
+
+function lint() {
   return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshintSummary.collect())
     .on('end', jshintSummary.summarize());
-});
+}
 
 /**
  *=======================
@@ -169,8 +178,8 @@ gulp.task('lint', function () {
  * ======================
  */
 
-gulp.task('styles', function () {
-  gulp.src([paths.styles.main])
+function styles() {
+  return gulp.src([paths.styles.main])
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.mapSources('./'))
     .pipe(sass({outputStyle: 'compact', sourceComments: 'map'}))
@@ -178,32 +187,34 @@ gulp.task('styles', function () {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css))
     .pipe(reload({stream: true}));
-});
+}
 
-gulp.task('cssadmin', function () {
-  gulp.src(paths.styles.admin, {sourcemap: true})
+function cssadmin() {
+  return gulp.src(paths.styles.admin, {sourcemap: true})
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(concat('admin.css'))
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.admin));
-});
+}
 
-gulp.task('cssvendors', function () {
-  gulp.src(paths.styles.vendors)
+/* to make this work, put stuff in paths.styles.vendors - but prioritise CDN! */
+function cssvendors() {
+  return gulp.src(paths.styles.vendors)
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(concat('vendors.css'))
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css));
-});
+}
 
-gulp.task('fontsvendors', function () {
-  gulp.src(paths.fonts.vendors)
+/* to make this work, put stuff in paths.fonts.vendors - but prioritise CDN! */
+function fontsvendors() {
+  return gulp.src(paths.fonts.vendors)
     .pipe(gulp.dest(paths.fonts.dist));
-});
+}
 
 /**
  *=======================
@@ -211,32 +222,69 @@ gulp.task('fontsvendors', function () {
  * ======================
  */
 
-gulp.task('js', function () {
-  runSequence(
-    'load-files',
-    'compileJs'
-  );
-});
+function js() {
+  return gulp.parallel(
+    loadfiles,
+    compilejs
+  )
+}
 
-gulp.task('watchify', function () {
-  runSequence(
-    'load-files',
-    'browserify'
-  );
-});
 
-gulp.task('vendors', ['cssvendors', 'fontsvendors']);
+function startwatchify() {
+  return gulp.parallel(
+    loadfiles,
+    startbrowserify
+  )
+}
 
-gulp.task('watch-sass', ['styles', 'cssadmin'], function () {
-  gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
-});
+function vendors() {
+  return gulp.parallel(
+    cssvendors,
+    fontsvendors
+  )
+}
 
-gulp.task('watch', ['watch-sass', 'watchify'], browserSync.reload);
+function watchsass() {
+  return gulp.watch(
+    paths.styles.src,
+    gulp.series([styles, cssadmin])
+  )
+}
 
-gulp.task('browsersync', ['watch'], function () {
-  browserSync({
-    proxy: webServer + ':8000'
-  });
-});
+// gulp.task('watch-sass', ['styles', 'cssadmin'], function () {
+//   gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
+// });
+//
+gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
+//
+// gulp.task('browsersync', ['watch'], function () {
+//   browserSync({
+//     proxy: webServer + ':8000'
+//   });
+// });
+//
+// gulp.task('default', ['watch']);
 
-gulp.task('default', ['watch']);
+/**
+ *=======================
+ *     GULP TASK LIST
+ * ======================
+ */
+
+/* JS */
+exports.loadfiles = loadfiles;
+exports.startbrowserify = startbrowserify;
+exports.compilejs = compilejs;
+exports.lint = lint;
+
+/* SASS / FONTS */
+exports.styles = styles;
+exports.cssadmin = cssadmin;
+exports.cssvendors = cssvendors;
+exports.fontsvendors = fontsvendors;
+
+/* BUILD TASKS */
+exports.js = js;
+exports.startwatchify = startwatchify;
+exports.vendors = vendors;
+exports.watchsass = watchsass;
