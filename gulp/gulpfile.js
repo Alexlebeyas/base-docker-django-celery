@@ -65,7 +65,7 @@ const paths = {
     src: 'scss/**/*.scss',
     main: 'scss/main.scss',
     admin: 'scss/admin.scss',
-    vendors: ['scss/**/*.scss'],
+    vendors: [''],
     dist: {
       css: '../apps/front/static/css/',
       admin: '../apps/custom_admin/static/custom_admin/css/'
@@ -79,7 +79,7 @@ const paths = {
     sourceDir: 'src'
   },
   fonts: {
-    vendors: ['scss/**/*.scss'],
+    vendors: [''],
     dist: '../apps/front/static/fonts/'
   }
 };
@@ -92,92 +92,83 @@ const webServer = 'web';
  * ======================
  */
 
-var files = [];
-var scripts = glob.sync(paths.scripts.resolveDir);
-
-function browser(entry) {
-  return browserify({
-      entries: [entry],
-      debug: true,
-      paths: scripts.concat(['./node_modules']),
-      cache: {}, packageCache: {}, fullPaths: true
-    })
-    .transform(babelify.configure({
-        presets: [es2015]
-      })
-    ).external(excludedModules);
-}
-
-function watchBundle(bundler, entry) {
-  return function () {
-    return bundler.bundle()
-      .on('error', function (err) {
-        util.log(err);
-        this.emit('end');
-      })
-      .pipe(source('app.js'))
-      .pipe(buffer())
-      .pipe(sourcemaps.init())
-      .pipe(sourcemaps.mapSources('./'))
-      .pipe(streamify(uglify()))
-      .pipe(rename({extname: '.min.js'}))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(function () {
-        return entry.slice(0, entry.indexOf(paths.scripts.sourceDir) -1 ) + '/js';
-      }));
-  };
-}
-
-function loadfiles() {
-  return gulp.src(paths.scripts.src)
-    .pipe(tap(function (file) {
-      files.push(file.path);
-    }));
-}
-
-function startbrowserify() {
-  var tasks = files.map(function (entry) {
-    var bundler = watchify(browser(entry));
-    var watch = watchBundle(bundler, entry);
-    bundler.on('update', watch);
-    bundler.on('log', util.log);
-    return watch();
-  });
-  return es.merge(tasks);
-}
-
-// function compilejs() {
+// var files = [];
+// var scripts = glob.sync(paths.scripts.resolveDir);
+//
+// function browser(entry) {
+//   return browserify({
+//       entries: [entry],
+//       debug: true,
+//       paths: scripts.concat(['./node_modules']),
+//       cache: {}, packageCache: {}, fullPaths: true
+//     })
+//     .transform(babelify.configure({
+//         presets: [es2015]
+//       })
+//     ).external(excludedModules);
+// }
+//
+// function watchBundle(bundler, entry) {
+//   return function () {
+//     return bundler.bundle()
+//       .on('error', function (err) {
+//         util.log(err);
+//         this.emit('end');
+//       })
+//       .pipe(source('app.js'))
+//       .pipe(buffer())
+//       .pipe(sourcemaps.init())
+//       .pipe(sourcemaps.mapSources('./'))
+//       .pipe(streamify(uglify()))
+//       .pipe(rename({extname: '.min.js'}))
+//       .pipe(sourcemaps.write('./'))
+//       .pipe(gulp.dest(function () {
+//         return entry.slice(0, entry.indexOf(paths.scripts.sourceDir) -1 ) + '/js';
+//       }));
+//   };
+// }
+//
+// function loadfiles() {
+//   return gulp.src(paths.scripts.src)
+//     .pipe(tap(function (file) {
+//       files.push(file.path);
+//     }));
+// }
+//
+// function startbrowserify() {
 //   var tasks = files.map(function (entry) {
-//     var bundler = browser(entry);
-//     var bundle = watchBundle(bundler, entry);
-//     return bundle();
+//     var bundler = watchify(browser(entry));
+//     var watch = watchBundle(bundler, entry);
+//     bundler.on('update', watch);
+//     bundler.on('log', util.log);
+//     return watch();
 //   });
 //   return es.merge(tasks);
 // }
-
-function compilejs() {
-    return gulp.src([paths.scripts.src])
-    .pipe(sourcemaps.init())
-    .pipe(concat('app.min.js'))
-    .pipe(uglify())
-    .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
-    .pipe(gulp.dest(paths.scripts.dist));
-}
-
-function lint() {
-  return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshintSummary.collect())
-    .on('end', jshintSummary.summarize());
-}
-
-/**
- *=======================
- *      SASS / FONTS
- * ======================
- */
-
+//
+// function compilejs() {
+//     return gulp.src([paths.scripts.src])
+//     .pipe(sourcemaps.init())
+//     .pipe(concat('app.min.js'))
+//     .pipe(uglify())
+//     .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
+//     .pipe(gulp.dest(paths.scripts.dist));
+// }
+//
+// function lint() {
+//   return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
+//     .pipe(jshint('.jshintrc'))
+//     .pipe(jshint.reporter('jshint-stylish'))
+//     .pipe(jshintSummary.collect())
+//     .on('end', jshintSummary.summarize());
+// }
+//
+// /**
+//  *=======================
+//  *      SASS / FONTS
+//  * ======================
+//  */
+//
 function styles() {
   return gulp.src([paths.styles.main])
     .pipe(sourcemaps.init())
@@ -200,7 +191,7 @@ function cssadmin() {
 }
 
 /* to make this work, put stuff in paths.styles.vendors - but prioritise CDN! */
-function cssvendors() {
+function cssvendors(done) {
   return gulp.src(paths.styles.vendors)
     .pipe(sourcemaps.init())
     .pipe(sass())
@@ -208,12 +199,14 @@ function cssvendors() {
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css));
+    done();
 }
 
 /* to make this work, put stuff in paths.fonts.vendors - but prioritise CDN! */
-function fontsvendors() {
+function fontsvendors(done) {
   return gulp.src(paths.fonts.vendors)
     .pipe(gulp.dest(paths.fonts.dist));
+    done();
 }
 
 /**
@@ -222,48 +215,53 @@ function fontsvendors() {
  * ======================
  */
 
-function js() {
-  return gulp.parallel(
-    loadfiles,
-    compilejs
-  )
-}
+// function js() {
+//   return gulp.parallel(
+//     loadfiles,
+//     compilejs
+//   )
+// }
+//
+//
+// function startwatchify() {
+//   return gulp.parallel(
+//     loadfiles,
+//     startbrowserify
+//   )
+// }
+//
 
-
-function startwatchify() {
-  return gulp.parallel(
-    loadfiles,
-    startbrowserify
-  )
-}
-
-function vendors() {
-  return gulp.parallel(
+function vendors(done) {
+  return gulp.series(
     cssvendors,
-    fontsvendors
-  )
+    fontsvendors,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
 }
 
-function watchsass() {
-  return gulp.watch(
-    paths.styles.src,
-    gulp.series([styles, cssadmin])
-  )
-}
-
-// gulp.task('watch-sass', ['styles', 'cssadmin'], function () {
-//   gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
-// });
 //
-gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
+// function watchsass() {
+//   return gulp.watch(
+//     paths.styles.src,
+//     gulp.series([styles, cssadmin])
+//   )
+// }
 //
-// gulp.task('browsersync', ['watch'], function () {
-//   browserSync({
-//     proxy: webServer + ':8000'
-//   });
-// });
-//
-// gulp.task('default', ['watch']);
+// // gulp.task('watch-sass', ['styles', 'cssadmin'], function () {
+// //   gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
+// // });
+// //
+// gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
+// //
+// // gulp.task('browsersync', ['watch'], function () {
+// //   browserSync({
+// //     proxy: webServer + ':8000'
+// //   });
+// // });
+// //
+// // gulp.task('default', ['watch']);
 
 /**
  *=======================
@@ -272,10 +270,10 @@ gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
  */
 
 /* JS */
-exports.loadfiles = loadfiles;
-exports.startbrowserify = startbrowserify;
-exports.compilejs = compilejs;
-exports.lint = lint;
+// exports.loadfiles = loadfiles;
+// exports.startbrowserify = startbrowserify;
+// exports.compilejs = compilejs;
+// exports.lint = lint;
 
 /* SASS / FONTS */
 exports.styles = styles;
@@ -284,7 +282,7 @@ exports.cssvendors = cssvendors;
 exports.fontsvendors = fontsvendors;
 
 /* BUILD TASKS */
-exports.js = js;
-exports.startwatchify = startwatchify;
+// exports.js = js;
+// exports.startwatchify = startwatchify;
 exports.vendors = vendors;
-exports.watchsass = watchsass;
+// exports.watchsass = watchsass;
