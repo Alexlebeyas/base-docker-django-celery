@@ -92,69 +92,70 @@ const webServer = 'web';
  * ======================
  */
 
-// var files = [];
-// var scripts = glob.sync(paths.scripts.resolveDir);
-//
-// function browser(entry) {
-//   return browserify({
-//       entries: [entry],
-//       debug: true,
-//       paths: scripts.concat(['./node_modules']),
-//       cache: {}, packageCache: {}, fullPaths: true
-//     })
-//     .transform(babelify.configure({
-//         presets: [es2015]
-//       })
-//     ).external(excludedModules);
-// }
-//
-// function watchBundle(bundler, entry) {
-//   return function () {
-//     return bundler.bundle()
-//       .on('error', function (err) {
-//         util.log(err);
-//         this.emit('end');
-//       })
-//       .pipe(source('app.js'))
-//       .pipe(buffer())
-//       .pipe(sourcemaps.init())
-//       .pipe(sourcemaps.mapSources('./'))
-//       .pipe(streamify(uglify()))
-//       .pipe(rename({extname: '.min.js'}))
-//       .pipe(sourcemaps.write('./'))
-//       .pipe(gulp.dest(function () {
-//         return entry.slice(0, entry.indexOf(paths.scripts.sourceDir) -1 ) + '/js';
-//       }));
-//   };
-// }
-//
-// function loadfiles() {
-//   return gulp.src(paths.scripts.src)
-//     .pipe(tap(function (file) {
-//       files.push(file.path);
-//     }));
-// }
-//
-// function startbrowserify() {
-//   var tasks = files.map(function (entry) {
-//     var bundler = watchify(browser(entry));
-//     var watch = watchBundle(bundler, entry);
-//     bundler.on('update', watch);
-//     bundler.on('log', util.log);
-//     return watch();
-//   });
-//   return es.merge(tasks);
-// }
-//
-// function compilejs() {
-//     return gulp.src([paths.scripts.src])
+var files = [];
+var scripts = glob.sync(paths.scripts.resolveDir);
+
+function browser(entry) {
+  return browserify({
+      entries: [entry],
+      debug: true,
+      paths: scripts.concat(['./node_modules']),
+      cache: {}, packageCache: {}, fullPaths: true
+    })
+    .transform(babelify.configure({
+        presets: [es2015]
+      })
+    ).external(excludedModules);
+}
+
+function watchBundle(bundler, entry) {
+  return function () {
+    return bundler.bundle()
+      .on('error', function (err) {
+        util.log(err);
+        this.emit('end');
+      })
+      .pipe(source('app.js'))
+      .pipe(buffer())
+      .pipe(sourcemaps.init())
+      .pipe(sourcemaps.mapSources('./'))
+      .pipe(streamify(uglify()))
+      .pipe(rename({extname: '.min.js'}))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest(function () {
+        return entry.slice(0, entry.indexOf(paths.scripts.sourceDir) -1 ) + '/js';
+      }));
+  };
+}
+
+function loadfiles() {
+  return gulp.src(paths.scripts.src)
+    .pipe(tap(function (file) {
+      files.push(file.path);
+    }));
+}
+
+function startbrowserify(done) {
+  var tasks = files.map(function (entry) {
+    var bundler = watchify(browser(entry));
+    var watch = watchBundle(bundler, entry);
+    bundler.on('update', watch);
+    bundler.on('log', util.log);
+    return watch();
+  });
+  return es.merge(tasks), done();
+}
+
+// function compilejs(done) {
+//   return gulp.src([paths.scripts.src])
 //     .pipe(sourcemaps.init())
 //     .pipe(concat('app.min.js'))
 //     .pipe(uglify())
 //     .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
-//     .pipe(gulp.dest(paths.scripts.dist));
+//     .pipe(gulp.dest(paths.scripts.dist)),
+//     done();
 // }
-//
+
 // function lint() {
 //   return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
 //     .pipe(jshint('.jshintrc'))
@@ -268,8 +269,8 @@ function watchsass() {
  */
 
 /* JS */
-// exports.loadfiles = loadfiles;
-// exports.startbrowserify = startbrowserify;
+exports.loadfiles = loadfiles;
+exports.startbrowserify = startbrowserify;
 // exports.compilejs = compilejs;
 // exports.lint = lint;
 
