@@ -169,7 +169,7 @@ const webServer = 'web';
 //  * ======================
 //  */
 //
-function styles() {
+function styles(done) {
   return gulp.src([paths.styles.main])
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.mapSources('./'))
@@ -178,9 +178,10 @@ function styles() {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css))
     .pipe(reload({stream: true}));
+    done();
 }
 
-function cssadmin() {
+function cssadmin(done) {
   return gulp.src(paths.styles.admin, {sourcemap: true})
     .pipe(sourcemaps.init())
     .pipe(sass())
@@ -188,6 +189,7 @@ function cssadmin() {
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.admin));
+    done();
 }
 
 /* to make this work, put stuff in paths.styles.vendors - but prioritise CDN! */
@@ -231,6 +233,8 @@ function fontsvendors(done) {
 // }
 //
 
+/* to make this work, put stuff in paths.styles.vendors paths.fonts.vendors - but prioritise CDN! */
+
 function vendors(done) {
   return gulp.series(
     cssvendors,
@@ -241,17 +245,16 @@ function vendors(done) {
   })();
 }
 
-//
-// function watchsass() {
-//   return gulp.watch(
-//     paths.styles.src,
-//     gulp.series([styles, cssadmin])
-//   )
-// }
-//
-// // gulp.task('watch-sass', ['styles', 'cssadmin'], function () {
-// //   gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
-// // });
+function watchsass() {
+  return gulp.watch(
+      paths.styles.src,
+      gulp.series(
+          styles,
+          cssadmin
+      )
+  );
+}
+
 // //
 // gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
 // //
@@ -285,4 +288,4 @@ exports.fontsvendors = fontsvendors;
 // exports.js = js;
 // exports.startwatchify = startwatchify;
 exports.vendors = vendors;
-// exports.watchsass = watchsass;
+exports.watchsass = watchsass;
