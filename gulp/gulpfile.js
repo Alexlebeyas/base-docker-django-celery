@@ -146,15 +146,15 @@ function startbrowserify(done) {
   return es.merge(tasks), done();
 }
 
-// function compilejs(done) {
-//   return gulp.src([paths.scripts.src])
-//     .pipe(sourcemaps.init())
-//     .pipe(concat('app.min.js'))
-//     .pipe(uglify())
-//     .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
-//     .pipe(gulp.dest(paths.scripts.dist)),
-//     done();
-// }
+function compilejs(done) {
+  return gulp.src([paths.scripts.src])
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.min.js'))
+    .pipe(uglify())
+    .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
+    .pipe(gulp.dest(paths.scripts.dist)),
+    done();
+}
 
 // function lint() {
 //   return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
@@ -271,7 +271,7 @@ function watchsass() {
 /* JS */
 exports.loadfiles = loadfiles;
 exports.startbrowserify = startbrowserify;
-// exports.compilejs = compilejs;
+exports.compilejs = compilejs;
 // exports.lint = lint;
 
 /* SASS / FONTS */
