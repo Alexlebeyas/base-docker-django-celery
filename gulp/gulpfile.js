@@ -191,7 +191,7 @@ function cssadmin() {
 }
 
 /* to make this work, put stuff in paths.styles.vendors - but prioritise CDN! */
-function cssvendors(done) {
+function cssvendors() {
   return gulp.src(paths.styles.vendors)
     .pipe(sourcemaps.init())
     .pipe(sass())
@@ -199,14 +199,12 @@ function cssvendors(done) {
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css));
-    done();
 }
 
 /* to make this work, put stuff in paths.fonts.vendors - but prioritise CDN! */
-function fontsvendors(done) {
+function fontsvendors() {
   return gulp.src(paths.fonts.vendors)
     .pipe(gulp.dest(paths.fonts.dist));
-    done();
 }
 
 /**
