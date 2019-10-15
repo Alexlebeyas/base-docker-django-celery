@@ -169,7 +169,7 @@ const webServer = 'web';
 //  * ======================
 //  */
 //
-function styles(done) {
+function styles() {
   return gulp.src([paths.styles.main])
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.mapSources('./'))
@@ -178,10 +178,9 @@ function styles(done) {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css))
     .pipe(reload({stream: true}));
-    done();
 }
 
-function cssadmin(done) {
+function cssadmin() {
   return gulp.src(paths.styles.admin, {sourcemap: true})
     .pipe(sourcemaps.init())
     .pipe(sass())
@@ -189,7 +188,6 @@ function cssadmin(done) {
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.admin));
-    done();
 }
 
 /* to make this work, put stuff in paths.styles.vendors - but prioritise CDN! */
@@ -234,7 +232,6 @@ function fontsvendors(done) {
 //
 
 /* to make this work, put stuff in paths.styles.vendors paths.fonts.vendors - but prioritise CDN! */
-
 function vendors(done) {
   return gulp.series(
     cssvendors,
