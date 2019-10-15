@@ -2,8 +2,11 @@
 
 const gulp = require('gulp');
 const util = require('gulp-util');
+
+const babel = require('gulp-babel');
 const babelify = require('babelify');
-const es2015 = require('babel-preset-es2015');
+const es2015 = require('@babel/preset-env');
+
 const browserify = require('browserify');
 const streamify = require('gulp-streamify');
 const source = require('vinyl-source-stream');
@@ -75,7 +78,7 @@ const paths = {
     src: '../apps/**/src/app*.js',
     resolveFile: '../apps/**/static/**/src/*.js',
     resolveDir: '../apps/**/static/**/src',
-    dist: 'static',
+    dist: '../apps/front/static/js/app.min.js',
     sourceDir: 'src'
   },
   fonts: {
@@ -146,14 +149,16 @@ function startbrowserify(done) {
   return es.merge(tasks), done();
 }
 
-function compilejs(done) {
+function compilejs() {
   return gulp.src([paths.scripts.src])
     .pipe(sourcemaps.init())
     .pipe(concat('app.min.js'))
+    .pipe(babel({
+      "presets": ["@babel/preset-env"]
+    }))
     .pipe(uglify())
     .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
-    .pipe(gulp.dest(paths.scripts.dist)),
-    done();
+    .pipe(gulp.dest(paths.scripts.dist));
 }
 
 // function lint() {
@@ -164,12 +169,12 @@ function compilejs(done) {
 //     .on('end', jshintSummary.summarize());
 // }
 //
-// /**
-//  *=======================
-//  *      SASS / FONTS
-//  * ======================
-//  */
-//
+/**
+ *=======================
+ *      SASS / FONTS
+ * ======================
+ */
+
 function styles() {
   return gulp.src([paths.styles.main])
     .pipe(sourcemaps.init())
