@@ -1,6 +1,6 @@
 {
   "name": "nixa_gulp",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "description": "Nixa's base Gulp File.",
   "main": "gulpfile.js",
@@ -18,7 +18,6 @@
     "gulp-sass": "*",
     "gulp-sourcemaps": "^1.9.1",
     "babelify": "*",
-    "babel-preset-es2015": "*",
     "@babel/preset-env": "*",
     "@babel/core": "*",
     "gulp-babel": "*",

@@ -16,7 +16,6 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const es = require('event-stream');
 const tap = require('gulp-tap');
-const runSequence = require('run-sequence');
 const buffer = require('vinyl-buffer');
 const browserSync = require('browser-sync');
 const reload = browserSync.reload;
