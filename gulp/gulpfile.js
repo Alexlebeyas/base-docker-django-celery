@@ -268,12 +268,15 @@ function watch(done) {
   })();
 }
 
+function browsersync() {
+
+}
+
 // gulp.task('browsersync', ['watch'], function () {
 //   browserSync({
 //     proxy: webServer + ':8000'
 //   });
 // });
-
 
 /**
  *=======================
@@ -299,4 +302,5 @@ exports.startwatchify = startwatchify;
 exports.vendors = vendors;
 exports.watchsass = watchsass;
 exports.watch = watch;
+exports.browsersync = browsersync;
 exports.default = watch;
