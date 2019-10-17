@@ -261,13 +261,12 @@ function watch(done) {
   return gulp.parallel(
     watchsass,
     startwatchify,
+    browserSync.reload,
     (seriesDone) => {
       seriesDone();
       done();
   })();
 }
-
-//gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
 
 // gulp.task('browsersync', ['watch'], function () {
 //   browserSync({
@@ -275,7 +274,6 @@ function watch(done) {
 //   });
 // });
 
-// // gulp.task('default', ['watch']);
 
 /**
  *=======================
@@ -301,3 +299,4 @@ exports.startwatchify = startwatchify;
 exports.vendors = vendors;
 exports.watchsass = watchsass;
 exports.watch = watch;
+exports.default = watch;
