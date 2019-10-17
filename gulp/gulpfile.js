@@ -258,7 +258,7 @@ function watchsass() {
 }
 
 function watch(done) {
-  return gulp.series(
+  return gulp.parallel(
     watchsass,
     startwatchify,
     (seriesDone) => {
