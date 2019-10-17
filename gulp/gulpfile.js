@@ -78,7 +78,7 @@ const paths = {
     src: '../apps/**/src/app*.js',
     resolveFile: '../apps/**/static/**/src/*.js',
     resolveDir: '../apps/**/static/**/src',
-    dist: '../apps/front/static/js/app.min.js',
+    dist: '../apps/front/static/js/',
     sourceDir: 'src'
   },
   fonts: {
@@ -106,9 +106,9 @@ function browser(entry) {
       cache: {}, packageCache: {}, fullPaths: true
     })
     .transform(babelify.configure({
-        presets: [es2015]
-      })
-    ).external(excludedModules);
+      presets: ["\"@babel/preset-env"]
+    }))
+    .external(excludedModules);
 }
 
 function watchBundle(bundler, entry) {
@@ -161,13 +161,13 @@ function compilejs() {
     .pipe(gulp.dest(paths.scripts.dist));
 }
 
-// function lint() {
-//   return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
-//     .pipe(jshint('.jshintrc'))
-//     .pipe(jshint.reporter('jshint-stylish'))
-//     .pipe(jshintSummary.collect())
-//     .on('end', jshintSummary.summarize());
-// }
+function lint() {
+  return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshintSummary.collect())
+    .on('end', jshintSummary.summarize());
+}
 //
 /**
  *=======================
@@ -219,14 +219,17 @@ function fontsvendors() {
  * ======================
  */
 
-// function js() {
-//   return gulp.parallel(
-//     loadfiles,
-//     compilejs
-//   )
-// }
-//
-//
+function js(done) {
+  return gulp.series(
+    loadfiles,
+    compilejs,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
+
+
 // function startwatchify() {
 //   return gulp.parallel(
 //     loadfiles,
@@ -277,7 +280,7 @@ function watchsass() {
 exports.loadfiles = loadfiles;
 exports.startbrowserify = startbrowserify;
 exports.compilejs = compilejs;
-// exports.lint = lint;
+exports.lint = lint;
 
 /* SASS / FONTS */
 exports.styles = styles;
@@ -286,7 +289,7 @@ exports.cssvendors = cssvendors;
 exports.fontsvendors = fontsvendors;
 
 /* BUILD TASKS */
-// exports.js = js;
+exports.js = js;
 // exports.startwatchify = startwatchify;
 exports.vendors = vendors;
 exports.watchsass = watchsass;
