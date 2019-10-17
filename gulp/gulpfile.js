@@ -268,15 +268,19 @@ function watch(done) {
   })();
 }
 
-function browsersync() {
-
+function browsersync(done) {
+  return gulp.parallel(
+    watch,
+    function () {
+      browserSync({
+        proxy: webServer + ':8000'
+      });
+    },
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
 }
-
-// gulp.task('browsersync', ['watch'], function () {
-//   browserSync({
-//     proxy: webServer + ':8000'
-//   });
-// });
 
 /**
  *=======================
