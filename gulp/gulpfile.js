@@ -5,7 +5,7 @@ const util = require('gulp-util');
 
 const babel = require('gulp-babel');
 const babelify = require('babelify');
-const es2015 = require('@babel/preset-env');
+const es2015 = require('babel-preset-es2015');
 
 const browserify = require('browserify');
 const streamify = require('gulp-streamify');
@@ -106,7 +106,7 @@ function browser(entry) {
       cache: {}, packageCache: {}, fullPaths: true
     })
     .transform(babelify.configure({
-      presets: ["\"@babel/preset-env"]
+      "presets": [es2015]
     }))
     .external(excludedModules);
 }
@@ -229,14 +229,15 @@ function js(done) {
   })();
 }
 
-
-// function startwatchify() {
-//   return gulp.parallel(
-//     loadfiles,
-//     startbrowserify
-//   )
-// }
-//
+function startwatchify(done) {
+  return gulp.series(
+    loadfiles,
+    startbrowserify,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
 
 /* to make this work, put stuff in paths.styles.vendors paths.fonts.vendors - but prioritise CDN! */
 function vendors(done) {
@@ -290,6 +291,6 @@ exports.fontsvendors = fontsvendors;
 
 /* BUILD TASKS */
 exports.js = js;
-// exports.startwatchify = startwatchify;
+exports.startwatchify = startwatchify;
 exports.vendors = vendors;
 exports.watchsass = watchsass;
