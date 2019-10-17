@@ -2,11 +2,8 @@
 
 const gulp = require('gulp');
 const util = require('gulp-util');
-
 const babel = require('gulp-babel');
 const babelify = require('babelify');
-const es2015 = require('babel-preset-es2015');
-
 const browserify = require('browserify');
 const streamify = require('gulp-streamify');
 const source = require('vinyl-source-stream');
@@ -168,7 +165,7 @@ function lint() {
     .pipe(jshintSummary.collect())
     .on('end', jshintSummary.summarize());
 }
-//
+
 /**
  *=======================
  *      SASS / FONTS
@@ -252,23 +249,32 @@ function vendors(done) {
 
 function watchsass() {
   return gulp.watch(
-      paths.styles.src,
-      gulp.series(
-          styles,
-          cssadmin
-      )
+    paths.styles.src,
+    gulp.series(
+      styles,
+      cssadmin
+    )
   );
 }
 
-// //
-// gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
-// //
-// // gulp.task('browsersync', ['watch'], function () {
-// //   browserSync({
-// //     proxy: webServer + ':8000'
-// //   });
-// // });
-// //
+function watch(done) {
+  return gulp.series(
+    watchsass,
+    startwatchify,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
+
+//gulp.task('watch', ['watch-sass', 'startwatchify'], browserSync.reload);
+
+// gulp.task('browsersync', ['watch'], function () {
+//   browserSync({
+//     proxy: webServer + ':8000'
+//   });
+// });
+
 // // gulp.task('default', ['watch']);
 
 /**
@@ -294,3 +300,4 @@ exports.js = js;
 exports.startwatchify = startwatchify;
 exports.vendors = vendors;
 exports.watchsass = watchsass;
+exports.watch = watch;
