@@ -55,3 +55,49 @@ python manage.py startup
 **[Build docker containers](#markdown-header-build-docker-containers)**          
 **[Start docker instance](#markdown-header-start-docker-instance)**       
 **https://nixaca.atlassian.net/wiki/spaces/PB/pages/125041233/Ultimate+Starter+Guide+for+Django+Projects**
+
+# Frontend informations - CSS and JS
+
+Both CSS and JS are compiled using [Gulp.js](https://gulpjs.com/ "Gulp.js documentation").
+The gulp folder is located at the root of the projet. The gulpfile.js is located here: PROJECT/gulp/gulpfile.js
+
+## 1 - CSS
+SASS is used for the CSS. SASS files are located here: PROJECT/gulp/scss. To compile SASS into regular CSS, see point 3 - gulp.
+
+## 2 - JS
+We write JS with ES6 syntax, who is converted and minified.
+
+## 3 - Gulp
+When Docker is running, it will run the task browsersync by default. So there is no need to start gulp manually, exept if the docker is not running or if its broken.
+
+### Install gulp to run it manually
+~~~~
+npm install
+~~~~
+
+### Run gulp using gulp main tasks
+
+Compile vendors (fonts and css)
+~~~~
+gulp vendors
+~~~~
+
+Compile and minify SASS to CSS for styles and admin
+~~~~
+gulp watchsass
+~~~~
+
+Compile and minify JS
+~~~~
+gulp startwatchify
+~~~~
+
+Compile and minify SASS and JS
+~~~~
+gulp watch
+~~~~
+
+Task who is running with docker - Compile and minify SASS and JS + run browsersync for live preview (localhost:3000)
+~~~~
+gulp browsersync
+~~~~
