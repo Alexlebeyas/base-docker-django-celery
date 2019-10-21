@@ -102,7 +102,7 @@ function browser(entry) {
       cache: {}, packageCache: {}, fullPaths: true
     })
     .transform(babelify.configure({
-      "presets": ["/Users/claudie/Projets/project-starter/gulp/node_modules/@babel/preset-env"]
+      "presets": ["@babel/preset-env"]
     }))
     .external(excludedModules);
 }
