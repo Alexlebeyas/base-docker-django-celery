@@ -2,8 +2,8 @@
 
 const gulp = require('gulp');
 const util = require('gulp-util');
+const babel = require('gulp-babel');
 const babelify = require('babelify');
-const es2015 = require('babel-preset-es2015');
 const browserify = require('browserify');
 const streamify = require('gulp-streamify');
 const source = require('vinyl-source-stream');
@@ -16,7 +16,6 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const es = require('event-stream');
 const tap = require('gulp-tap');
-const runSequence = require('run-sequence');
 const buffer = require('vinyl-buffer');
 const browserSync = require('browser-sync');
 const reload = browserSync.reload;
@@ -75,7 +74,7 @@ const paths = {
     src: '../apps/**/src/app*.js',
     resolveFile: '../apps/**/static/**/src/*.js',
     resolveDir: '../apps/**/static/**/src',
-    dist: 'static',
+    dist: '../apps/front/static/js/',
     sourceDir: 'src'
   },
   fonts: {
@@ -103,9 +102,9 @@ function browser(entry) {
       cache: {}, packageCache: {}, fullPaths: true
     })
     .transform(babelify.configure({
-        presets: [es2015]
-      })
-    ).external(excludedModules);
+      "presets": ["@babel/preset-env"]
+    }))
+    .external(excludedModules);
 }
 
 function watchBundle(bundler, entry) {
@@ -128,14 +127,14 @@ function watchBundle(bundler, entry) {
   };
 }
 
-gulp.task('load-files', function () {
+function loadfiles() {
   return gulp.src(paths.scripts.src)
     .pipe(tap(function (file) {
       files.push(file.path);
     }));
-});
+}
 
-gulp.task('browserify', function () {
+function startbrowserify(done) {
   var tasks = files.map(function (entry) {
     var bundler = watchify(browser(entry));
     var watch = watchBundle(bundler, entry);
@@ -143,25 +142,28 @@ gulp.task('browserify', function () {
     bundler.on('log', util.log);
     return watch();
   });
-  return es.merge(tasks);
-});
+  return es.merge(tasks), done();
+}
 
-gulp.task('compileJs', function () {
-  var tasks = files.map(function (entry) {
-    var bundler = browser(entry);
-    var bundle = watchBundle(bundler, entry);
-    return bundle();
-  });
-  return es.merge(tasks);
-});
+function compilejs() {
+  return gulp.src([paths.scripts.src])
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.min.js'))
+    .pipe(babel({
+      "presets": ["@babel/preset-env"]
+    }))
+    .pipe(uglify())
+    .on('error', function (err) { util.log(util.colors.red('[Error]'), err.toString()); })
+    .pipe(gulp.dest(paths.scripts.dist));
+}
 
-gulp.task('lint', function () {
+function lint() {
   return gulp.src([paths.scripts.resolveFile, './gulpfile.js'])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshintSummary.collect())
     .on('end', jshintSummary.summarize());
-});
+}
 
 /**
  *=======================
@@ -169,8 +171,8 @@ gulp.task('lint', function () {
  * ======================
  */
 
-gulp.task('styles', function () {
-  gulp.src([paths.styles.main])
+function styles() {
+  return gulp.src([paths.styles.main])
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.mapSources('./'))
     .pipe(sass({outputStyle: 'compact', sourceComments: 'map'}))
@@ -178,32 +180,34 @@ gulp.task('styles', function () {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css))
     .pipe(reload({stream: true}));
-});
+}
 
-gulp.task('cssadmin', function () {
-  gulp.src(paths.styles.admin, {sourcemap: true})
+function cssadmin() {
+  return gulp.src(paths.styles.admin, {sourcemap: true})
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(concat('admin.css'))
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.admin));
-});
+}
 
-gulp.task('cssvendors', function () {
-  gulp.src(paths.styles.vendors)
+/* to make this work, put stuff in paths.styles.vendors - but prioritise CDN! */
+function cssvendors() {
+  return gulp.src(paths.styles.vendors)
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(concat('vendors.css'))
     .pipe(minifycss())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(paths.styles.dist.css));
-});
+}
 
-gulp.task('fontsvendors', function () {
-  gulp.src(paths.fonts.vendors)
+/* to make this work, put stuff in paths.fonts.vendors - but prioritise CDN! */
+function fontsvendors() {
+  return gulp.src(paths.fonts.vendors)
     .pipe(gulp.dest(paths.fonts.dist));
-});
+}
 
 /**
  *=======================
@@ -211,32 +215,95 @@ gulp.task('fontsvendors', function () {
  * ======================
  */
 
-gulp.task('js', function () {
-  runSequence(
-    'load-files',
-    'compileJs'
+function js(done) {
+  return gulp.series(
+    loadfiles,
+    compilejs,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
+
+function startwatchify(done) {
+  return gulp.series(
+    loadfiles,
+    startbrowserify,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
+
+/* to make this work, put stuff in paths.styles.vendors paths.fonts.vendors - but prioritise CDN! */
+function vendors(done) {
+  return gulp.series(
+    cssvendors,
+    fontsvendors,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
+
+function watchsass() {
+  return gulp.watch(
+    paths.styles.src,
+    gulp.series(
+      styles,
+      cssadmin
+    )
   );
-});
+}
 
-gulp.task('watchify', function () {
-  runSequence(
-    'load-files',
-    'browserify'
-  );
-});
+function watch(done) {
+  return gulp.parallel(
+    watchsass,
+    startwatchify,
+    browserSync.reload,
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
 
-gulp.task('vendors', ['cssvendors', 'fontsvendors']);
+function browsersync(done) {
+  return gulp.parallel(
+    watch,
+    function () {
+      browserSync({
+        proxy: webServer + ':8000'
+      });
+    },
+    (seriesDone) => {
+      seriesDone();
+      done();
+  })();
+}
 
-gulp.task('watch-sass', ['styles', 'cssadmin'], function () {
-  gulp.watch(paths.styles.src, ['styles', 'cssadmin']);
-});
+/**
+ *=======================
+ *     GULP TASK LIST
+ * ======================
+ */
 
-gulp.task('watch', ['watch-sass', 'watchify'], browserSync.reload);
+/* JS */
+exports.loadfiles = loadfiles;
+exports.startbrowserify = startbrowserify;
+exports.compilejs = compilejs;
+exports.lint = lint;
 
-gulp.task('browsersync', ['watch'], function () {
-  browserSync({
-    proxy: webServer + ':8000'
-  });
-});
+/* SASS / FONTS */
+exports.styles = styles;
+exports.cssadmin = cssadmin;
+exports.cssvendors = cssvendors;
+exports.fontsvendors = fontsvendors;
 
-gulp.task('default', ['watch']);
+/* BUILD TASKS */
+exports.js = js;
+exports.startwatchify = startwatchify;
+exports.vendors = vendors;
+exports.watchsass = watchsass;
+exports.watch = watch;
+exports.browsersync = browsersync;
+exports.default = watch;
