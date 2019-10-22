@@ -1,4 +1,4 @@
-# ![Nixa](https://nixaca.s3.amazonaws.com/static/nixa/images/logo-home.png)
+# ![Nixa](https://nixaca.s3.amazonaws.com/static/nixa/images/logo-nixa.png)
 
 # To create a new project from project-starter, follow these steps:
 
@@ -61,13 +61,17 @@ python manage.py startup
 Both CSS and JS are compiled using [Gulp.js](https://gulpjs.com/ "Gulp.js documentation").
 The gulp folder is located at the root of the projet. The gulpfile.js is located here: PROJECT/gulp/gulpfile.js
 
-## 1 - CSS
-SASS is used for the CSS. SASS files are located here: PROJECT/gulp/scss. To compile SASS into regular CSS, see point 3 - gulp.
+## 1. CSS
+[SASS](https://sass-lang.com/ "SASS documentation") is used for the CSS. SASS files are located here: PROJECT/gulp/scss. To compile SASS into regular CSS, see point 3. gulp.
 
-## 2 - JS
+To learn more about our sass structure, read our [documentation](https://app.nuclino.com/Nixa/Genious-Database/Mthodologie---Normes-dintgration-WEB-a3a60b5b-2c81-4118-94ec-130e4c0c4335 "Integration wiki on Nuclino") (Nuclino).
+
+## 2. JS
 We write JS with ES6 syntax, who is converted and minified.
 
-## 3 - Nixa Gulp (version 4.0.0)
+To learn more about our JS structure, read our [documentation](https://app.nuclino.com/Nixa/Genious-Database/Recommendation-de-structure-JavaScript-6d3c5937-0f44-4575-a0c0-a544ce881696 "JS wiki on Nuclino") (Nuclino).
+
+## 3. Nixa Gulp (version 4.0.0)
 When Docker is running, it will run the task browsersync by default. So there is no need to start gulp manually, exept if the docker is not running or if its broken.
 
 ### Install gulp to run it manually
@@ -79,6 +83,7 @@ npm install
 ~~~~
 
 ### Gulp Tasks
+The gulp tasks can be run only in the gulp folder.
 
 #### Styles
 - ```gulp watch-sass``` : Watches SASS' folders and runs styles task.

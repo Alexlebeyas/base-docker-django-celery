@@ -10,6 +10,7 @@ npm install
 ~~~~
 
 ## Gulp Tasks
+The gulp tasks can be run only in the gulp folder.
 
 ### Styles
 - ```gulp watch-sass``` : Watches SASS' folders and runs styles task.
