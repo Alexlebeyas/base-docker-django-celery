@@ -56,7 +56,7 @@ python manage.py startup
 **[Start docker instance](#markdown-header-start-docker-instance)**       
 **https://nixaca.atlassian.net/wiki/spaces/PB/pages/125041233/Ultimate+Starter+Guide+for+Django+Projects**
 
-# Frontend informations - CSS and JS
+# Frontend - CSS and JS
 
 Both CSS and JS are compiled using [Gulp.js](https://gulpjs.com/ "Gulp.js documentation").
 The gulp folder is located at the root of the projet. The gulpfile.js is located here: PROJECT/gulp/gulpfile.js
@@ -67,7 +67,7 @@ The gulp folder is located at the root of the projet. The gulpfile.js is located
 To learn more about our sass structure, read our [documentation](https://app.nuclino.com/Nixa/Genious-Database/Mthodologie---Normes-dintgration-WEB-a3a60b5b-2c81-4118-94ec-130e4c0c4335 "Integration wiki on Nuclino") (Nuclino).
 
 ## 2. JS
-We write JS with ES6 syntax, who is converted and minified.
+We write JS with [ES6 syntax](https://www.w3schools.com/js/js_es6.asp "ES6 informations on w3school"), who is converted and minified.
 
 To learn more about our JS structure, read our [documentation](https://app.nuclino.com/Nixa/Genious-Database/Recommendation-de-structure-JavaScript-6d3c5937-0f44-4575-a0c0-a544ce881696 "JS wiki on Nuclino") (Nuclino).
 
