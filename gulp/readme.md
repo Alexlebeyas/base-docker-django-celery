@@ -1,7 +1,16 @@
-# Nixa Gulp
-Version : 3.0.0
+# Nixa Gulp (version 4.0.0)
+When Docker is running, it will run the task browsersync by default. So there is no need to start gulp manually, exept if the docker is not running or if its broken.
+
+## Install gulp to run it manually
+To install gulp, go with the terminal inside the gulp folder, and then run npm install.
+~~~~
+cd PROJECT/gulp/
+
+npm install
+~~~~
 
 ## Gulp Tasks
+The gulp tasks can be run only in the gulp folder.
 
 ### Styles
 - ```gulp watch-sass``` : Watches SASS' folders and runs styles task.
@@ -20,7 +29,8 @@ This task uses babel to compile es6 Js into the browser-compatible Js.
 The compiled js files are placed in the static/js directory of their Django app under the name app.min.js
 
 ### Global
-- ```gulp watch```    : Watches the Js and the Sass
+- ```gulp watch```       : Watches the Js and the Sass, this is the default task of gulpfile
+- ```gulp browsersync``` : Watches the Js and the Sass, run browsersync for live reload
 
 ## CDN and Nodes Modules
 
