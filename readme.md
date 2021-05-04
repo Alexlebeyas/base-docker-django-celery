@@ -1,18 +1,7 @@
-# ![Nixa](https://nixaca.s3.amazonaws.com/static/nixa/images/logo-nixa.png)
 
 # To create a new project from project-starter, follow these steps:
 
 If your project will use nixa app, you need a pip configuration file
-~~~~
-cd ~
-vim pip.conf
-~~~~
-Here is the content of pip.conf
-~~~~
-[global]
-; Extra index to private pypi dependencies
-extra-index-url = https://{{ USERNAME }}:{{ PASSWORD }}@pip.nixa.ca/simple/
-~~~~
 
 ## 1. Create a new repo on bitbucket:
 my-project.git
