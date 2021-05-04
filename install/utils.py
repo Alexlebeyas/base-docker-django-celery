@@ -14,7 +14,7 @@ from uuid import uuid4
 
 __author__ = 'snake'
 re_non_alpha = re.compile(r'[^a-z0-9]+')
-make_project_user = lambda project_name: re_non_alpha.sub('', project_name.lower())
+make_project_user = lambda ocean: re_non_alpha.sub('', ocean.lower())
 random_password = lambda: str(uuid4()).replace('-', '')
 
 

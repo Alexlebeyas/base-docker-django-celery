@@ -5,7 +5,7 @@ Launching a new project is easy.
 In a terminal window inside project-starter
 
 ~~~~
-python install PROJECT_NAME
+python install ocean
 ~~~~
 
 ## Generating a Secret Key

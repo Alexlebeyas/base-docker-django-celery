@@ -4,4 +4,4 @@
 sleep 10
 
 # run Celery worker for our project myproject with Celery configuration stored in Celeryconf
-sh -c "celery worker -A PROJECT_NAME.celeryconf -l INFO" # TODO
+sh -c "celery worker -A ocean.celeryconf -l INFO" # TODO

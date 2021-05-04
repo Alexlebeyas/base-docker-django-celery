@@ -8,7 +8,7 @@ from tasks.py. Before exiting, this program will run
 project tests and then delete itself.
 
 USAGE:
->> python install project_name
+>> python install ocean
 """
 
 __author__ = 'snake'

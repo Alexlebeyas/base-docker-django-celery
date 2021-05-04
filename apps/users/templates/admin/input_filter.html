@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<h3>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
+<ul>
+  <li>
+    <form method="GET" action="">
+        <input id="partner" onkeyup="autocomplete_company()" type="text" value="{{ spec.value|default_if_none:'' }}" name="{{ spec.parameter_name }}"/>
+    </form>
+  </li>
+</ul>
+</ul>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<!-- jQuery.ui for autocomplete -->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<!-- jQuery.ui for autocomplete -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+   function autocomplete_company(){
+        $("#partner" ).autocomplete({
+          source: "{% url 'partnerautocomplete' %}",
+          minLength: 1,
+          focus: function( event, ui ) {
+              $( "#project" ).val( ui.item.label );
+              return false;
+           },
+           select: function( event, ui ) {
+              $( "#partner" ).val( ui.item.value );
+              $( "#partner" ).val( ui.item.data );
+              //$( "#project-description" ).html( ui.item.desc );
+              return false;
+           }
+
+        });
+    }
+</script>

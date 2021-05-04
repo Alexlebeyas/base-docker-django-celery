@@ -11,15 +11,15 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/PROJECT_NAME
+      - .:/ocean
     tty: true
     restart: always
     command: sh -c "./docker/wait-for.sh -c 'nc -z db 5432' -t 30 && python manage.py runserver 0.0.0.0:8000"
   gulp:
     build: ./gulp
     volumes:
-      - .:/PROJECT_NAME
-      - /PROJECT_NAME/gulp/node_modules
+      - .:/ocean
+      - /ocean/gulp/node_modules
     ports:
       - "3000:3000"
       - "3001:3001"

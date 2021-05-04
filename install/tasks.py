@@ -8,7 +8,7 @@ executed in order.
 """
 from shutil import rmtree, copy
 from os import path, renames, rename, getcwd, remove, system
-from settings import settings_directory, project_directory, project_name, project_user, secret_key, db_pass
+from settings import settings_directory, project_directory, ocean, project_user, secret_key, db_pass
 from utils import manage, FileEditor, TaskManager
 
 __author__ = 'snake'
@@ -19,35 +19,35 @@ tasks = TaskManager()
 def rename_settings_directory():
     """
     Change the settings directory from
-    'PROJECT_NAME' to the chosen project name.
+    'ocean' to the chosen project name.
     """
     if not path.exists(settings_directory):
-        old_directory = path.join(project_directory, 'PROJECT_NAME')
-        renames(old_directory, project_name)
+        old_directory = path.join(project_directory, 'ocean')
+        renames(old_directory, ocean)
 
 
 @tasks.add
 def rename_config_files():
     """
     Change the config files from
-    'PROJECT_NAME' to the chosen project name.
+    'ocean' to the chosen project name.
     """
-    old_file = path.join(project_directory, 'PROJECT_NAME-prod.ini')
-    renames(old_file, "{}-prod.ini".format(project_name))
-    old_file = path.join(project_directory, 'PROJECT_NAME-staging.ini')
-    renames(old_file, "{}-staging.ini".format(project_name))
-    old_file = path.join(project_directory, 'docker', 'nginx', 'PROJECT_NAME.conf')
-    renames(old_file, path.join(project_directory, 'docker', 'nginx', "{}.conf".format(project_name)))
+    old_file = path.join(project_directory, 'ocean-prod.ini')
+    renames(old_file, "{}-prod.ini".format(ocean))
+    old_file = path.join(project_directory, 'ocean-staging.ini')
+    renames(old_file, "{}-staging.ini".format(ocean))
+    old_file = path.join(project_directory, 'docker', 'nginx', 'ocean.conf')
+    renames(old_file, path.join(project_directory, 'docker', 'nginx', "{}.conf".format(ocean)))
 
 
 @tasks.add
-def set_manage_project_name():
+def set_manage_ocean():
     """
     Set the settings path string in manage.py.
     """
     manage_file = path.join(project_directory, 'manage.py')
     with FileEditor(manage_file) as editor:
-        editor.replace('PROJECT_NAME.settings', '%s.settings' % project_name)
+        editor.replace('ocean.settings', '%s.settings' % ocean)
 
 
 @tasks.add
@@ -78,7 +78,7 @@ def set_docker_deploy():
 
 
 @tasks.add
-def set_docker_project_name():
+def set_docker_ocean():
     """
     Set the project name in docker files
     """
@@ -92,24 +92,24 @@ def set_docker_project_name():
         path.join(project_directory, 'gulp', 'Dockerfile'),
         path.join(project_directory, 'docker', 'nginx', 'Dockerfile-staging'),
         path.join(project_directory, 'docker', 'nginx', 'Dockerfile-prod'),
-        path.join(project_directory, 'docker', 'nginx', '{}.conf'.format(project_name)),
-        path.join(project_directory, '{}-staging.ini'.format(project_name)),
-        path.join(project_directory, '{}-prod.ini'.format(project_name)),
+        path.join(project_directory, 'docker', 'nginx', '{}.conf'.format(ocean)),
+        path.join(project_directory, '{}-staging.ini'.format(ocean)),
+        path.join(project_directory, '{}-prod.ini'.format(ocean)),
     )
 
     for file_path in files:
         with FileEditor(file_path) as editor:
-            editor.replace('PROJECT_NAME', project_name)
+            editor.replace('ocean', ocean)
 
     docker_compose_file = path.join(project_directory, 'docker-compose.yml')
     with FileEditor(docker_compose_file) as editor:
-        editor.replace('PROJECT_NAME', project_name)
-        editor.replace('DB_NAME', project_name)
+        editor.replace('ocean', ocean)
+        editor.replace('DB_NAME', ocean)
         editor.replace('DB_USER', project_user)
 
     fabfile = path.join(project_directory, 'deploy', 'fabsettings.py')
     with FileEditor(fabfile) as editor:
-        editor.replace('((PROJECT_NAME))', project_name)
+        editor.replace('((ocean))', ocean)
 
 
 @tasks.add
@@ -140,7 +140,7 @@ def set_settings():
     """
     with FileEditor(path.join(settings_directory, 'settings.py')) as editor:
         editor.replace('((DB_USER))', project_user)
-        editor.replace('((DB_NAME))', project_name)
+        editor.replace('((DB_NAME))', ocean)
         editor.replace('((DB_PASS))', db_pass)
 
 
@@ -163,5 +163,5 @@ def rename_parent_direct():
     '/project-starter/' to the chosen project name.
     """
     parent_directory = path.dirname(getcwd())
-    new_project_directory = path.join(parent_directory, project_name)
+    new_project_directory = path.join(parent_directory, ocean)
     rename(project_directory, new_project_directory)

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  {% static 'img/leaderboard-header-bg.jpg' as leaderboardheaderbg %}
+
+  {% include '_headerGeneral.html' with bg_image=leaderboardheaderbg only %}
+
+  <br>
+  <div>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Login">
+    </form>
+  </div>
+  <br>
+
+{% endblock %}

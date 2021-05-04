@@ -8,6 +8,7 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 from os import path, environ
 from django.core.wsgi import get_wsgi_application
 
-PROJECT_NAME = path.basename(path.dirname(__file__))
-environ.setdefault("DJANGO_SETTINGS_MODULE", "%s.settings" % PROJECT_NAME)
+
+ocean = path.basename(path.dirname(__file__))
+environ.setdefault("DJANGO_SETTINGS_MODULE", "%s.settings" % ocean)
 application = get_wsgi_application()

@@ -3,9 +3,9 @@ from os import environ, path
 from celery import Celery
 from django.conf import settings
 
-PROJECT_NAME = path.basename(path.dirname(__file__))
-environ.setdefault('DJANGO_SETTINGS_MODULE', '%s.settings' % PROJECT_NAME)
+ocean = path.basename(path.dirname(__file__))
+environ.setdefault('DJANGO_SETTINGS_MODULE', '%s.settings' % ocean)
 
-app = Celery(PROJECT_NAME)
+app = Celery(ocean)
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

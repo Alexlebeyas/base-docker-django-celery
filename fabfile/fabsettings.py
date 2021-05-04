@@ -1,8 +1,8 @@
 from uuid import uuid4
 
-PROJECT_NAME = '((PROJECT_NAME))'
+ocean = '((ocean))'
 # ssh link to repository
-REPOSITORY = 'git@bitbucket.org:nixateam/((PROJECT_NAME)).git'  # todo
+REPOSITORY = 'git@bitbucket.org:nixateam/((ocean)).git'  # todo
 DOCKER_COMPOSE_VERSION = '1.14.0'
 WEB_SERVICE = 'web'
 DOCKER_GC_CONTENT = """
@@ -17,7 +17,7 @@ STAGES = {
         'default_branch': 'develop',
         'port': '',  # todo
         'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).staging',
+        'DJANGO_SETTINGS_MODULE': '((ocean)).staging',
         'docker_compose_file': 'docker-compose-staging.yml',
         'authorized_keys_file': 'authorized_keys'
     },
@@ -25,7 +25,7 @@ STAGES = {
         'hosts': [''],  # todo
         'default_branch': 'master',
         'user': 'deploy',
-        'DJANGO_SETTINGS_MODULE': '((PROJECT_NAME)).prod',
+        'DJANGO_SETTINGS_MODULE': '((ocean)).prod',
         'docker_compose_file': 'docker-compose-prod.yml',
         'authorized_keys_file': 'authorized_keys_prod',
     }

@@ -2,7 +2,7 @@
 Django Project Installer
 
 Finish the installation of this project template:
->> python install project_name
+>> python install ocean
 """
 
 from utils import cleanup

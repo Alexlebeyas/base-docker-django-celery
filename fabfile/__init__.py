@@ -10,7 +10,7 @@ from fabric.decorators import with_settings
 from fabric.operations import require, put, sudo, local, get
 
 from fabfile.fabsettings import STAGES, DOCKER_COMPOSE_VERSION, WEB_SERVICE, DOCKER_GC_CONTENT, REPOSITORY, \
-    PROJECT_NAME, ROOT_USER
+    ocean, ROOT_USER
 from fabfile.install_files import UpStartFile
 
 
@@ -71,23 +71,23 @@ def install():
             upstartfile = UpStartFile(
                 django=env.DJANGO_SETTINGS_MODULE,
                 user=env.user,
-                project_name=PROJECT_NAME,
+                ocean=ocean,
                 docker_compose_file=env.docker_compose_file,
             )
             append('nixa_docker.conf', upstartfile.output())
 
     with settings(user=env.user):
         # git setup
-        run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(PROJECT_NAME))
+        run('git config --global user.name \'{}\' && git config --global user.email \'dev@nixa.ca\''.format(ocean))
 
         # install git project
-        run('git clone -b {0} {1} {2}'.format(branch, REPOSITORY, PROJECT_NAME))
-        run('chown -R {0}:{0} {1}'.format(env.user, PROJECT_NAME))
+        run('git clone -b {0} {1} {2}'.format(branch, REPOSITORY, ocean))
+        run('chown -R {0}:{0} {1}'.format(env.user, ocean))
         move_env_file(env.user)
         move_pip_file(env.user)
 
         # docker-compose up every services
-        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with cd('/home/{}/{}'.format(env.user, ocean)):
             run('docker-compose -f {} up --build -d'.format(env.docker_compose_file))
         copy_authorized_keys()
 
@@ -114,7 +114,7 @@ def reup(branch=None, nobuild=False):
 
     branch = branch or env.default_branch
 
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         with prefix(". .env"):
             run('git fetch')
             run('git checkout {}'.format(branch))
@@ -141,7 +141,7 @@ def deploy(branch=None, commit=None, service=WEB_SERVICE):
     if commit is not None:
         branch = None
 
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         with prefix(". .env"):
             compose_services = run('docker-compose -f {0} config --services'.format(env.docker_compose_file))
             compose_services = compose_services.split('\r\n')
@@ -176,7 +176,7 @@ def database_rollback(dumpfile=None):
     if exists_local('.env'):
         move_env_file(env.user)
     if dumpfile:
-        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with cd('/home/{}/{}'.format(env.user, ocean)):
             with prefix(". .env"):
                 current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
                 docker_db_container = run('echo $(docker-compose -f {} ps -q db)'.format(env.docker_compose_file))
@@ -213,7 +213,7 @@ def rollback(commit=None):
     require('stage', provided_by=(staging, production))
 
     if commit:
-        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with cd('/home/{}/{}'.format(env.user, ocean)):
             if exists('docker/postgresql/dumps/{}.sql'.format(commit)):
                 pass
             else:
@@ -224,7 +224,7 @@ def rollback(commit=None):
 
     if exists_local('.env'):
         move_env_file(env.user)
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         with prefix(". .env"):
             run('git fetch')
             current_commit_hash = run('echo $(git show --pretty=format:%h -s)')
@@ -262,20 +262,20 @@ def rollback(commit=None):
 def get_db_dump(commit=None):
     require('stage', provided_by=(staging, production))
     if commit:
-        with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
+        with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, ocean)):
             if exists('{}.sql'.format(commit)):
                 get('{}.sql'.format(commit), '%(basename)s')
     else:
         print('We are going to make a new database dump and download it for you')
         time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
 
-        with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+        with cd('/home/{}/{}'.format(env.user, ocean)):
             with prefix(". .env"):
                 run('docker-compose -f {0} exec -T'
                     ' db pg_dump -d ${{POSTGRES_DB}} -U ${{POSTGRES_USER}} -h localhost -F c >'
                     ' ./docker/postgresql/dumps/manual_dump_{1}.sql'.format(env.docker_compose_file, time_stamp))
 
-        with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
+        with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, ocean)):
             if exists('manual_dump_{}.sql'.format(time_stamp)):
                 get('manual_dump_{}.sql'.format(time_stamp), '%(dirname)s')
 
@@ -284,17 +284,17 @@ def get_db_dump(commit=None):
 def get_logs():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         get('/var/log/docker', 'logs/{}_{}/%(path)s'.format(env.stage, time_stamp))
 
 
 @task
 def copy_media_files():
     require('stage', provided_by=(staging, production))
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         web_id = run('echo $(docker-compose -f {} ps -q web)'.format(env.docker_compose_file))
-        run('docker cp ./media/. {}:/{}/media/'.format(web_id, PROJECT_NAME))
-        run('docker exec -ti {} chown -R uwsgi:101 /{}/media/'.format(web_id, PROJECT_NAME))
+        run('docker cp ./media/. {}:/{}/media/'.format(web_id, ocean))
+        run('docker exec -ti {} chown -R uwsgi:101 /{}/media/'.format(web_id, ocean))
 
 
 def exists_local(path):
@@ -304,16 +304,16 @@ def exists_local(path):
 
 
 def move_env_file(stage_user):
-    put('.env', '/home/{}/{}/.env'.format(stage_user, PROJECT_NAME))
+    put('.env', '/home/{}/{}/.env'.format(stage_user, ocean))
     local('rm .env')
 
 
 def move_pip_file(stage_user):
-    put('~/.pip/pip.conf', '/home/{}/{}/pip.conf'.format(stage_user, PROJECT_NAME))
+    put('~/.pip/pip.conf', '/home/{}/{}/pip.conf'.format(stage_user, ocean))
 
 
 def copy_authorized_keys():
-    run('cp ~/{}/fabconfig/templates/{} ~/.ssh/authorized_keys'.format(PROJECT_NAME, env.authorized_keys_file))
+    run('cp ~/{}/fabconfig/templates/{} ~/.ssh/authorized_keys'.format(ocean, env.authorized_keys_file))
     run('chmod 600 ~/.ssh/authorized_keys')
 
 
@@ -322,13 +322,13 @@ def replicate_db_on_local():
     require('stage', provided_by=(staging, production))
     time_stamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
 
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         with prefix(". .env"):
             run('docker-compose -f {0} exec -T'
                 ' db pg_dump -d ${{POSTGRES_DB}} -U ${{POSTGRES_USER}} -h localhost -F c >'
                 ' ./docker/postgresql/dumps/manual_dump_{1}.sql'.format(env.docker_compose_file, time_stamp))
 
-    with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}/docker/postgresql/dumps'.format(env.user, ocean)):
         if exists('manual_dump_{}.sql'.format(time_stamp)):
             get('manual_dump_{}.sql'.format(time_stamp), '%(dirname)s')
 
@@ -367,13 +367,13 @@ def replicate_db_on_local():
 @task
 def replicate_media_on_local():
     require('stage', provided_by=(staging, production))
-    with cd('/home/{}/{}'.format(env.user, PROJECT_NAME)):
+    with cd('/home/{}/{}'.format(env.user, ocean)):
         with prefix(". .env"):
             run('docker-compose -f {0} exec -T'
                 ' web tar -czvf ./media.tar.gz  media'.format(env.docker_compose_file))
             web_container = run('echo $(docker-compose -f {} ps -q web)'.format(env.docker_compose_file))
-            run('docker cp {web_container}:/{project_name}/media.tar.gz ./'.format(
-                web_container=web_container, project_name=PROJECT_NAME))
+            run('docker cp {web_container}:/{ocean}/media.tar.gz ./'.format(
+                web_container=web_container, ocean=ocean))
             if exists('media.tar.gz'):
                 get('media.tar.gz', '%(dirname)s')
     local('tar -xzvf ./media.tar.gz')

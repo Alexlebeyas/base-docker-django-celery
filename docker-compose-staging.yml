@@ -6,8 +6,8 @@ services:
       dockerfile: ./docker/django/Dockerfile-staging
     volumes:
       - socket:/tmp/uwsgi
-      - static:/PROJECT_NAME/static/
-      - media:/PROJECT_NAME/media/
+      - static:/ocean/static/
+      - media:/ocean/media/
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -30,8 +30,8 @@ services:
       dockerfile: Dockerfile-staging
     volumes:
       - socket:/tmp/uwsgi
-      - static:/PROJECT_NAME/static/
-      - media:/PROJECT_NAME/media/
+      - static:/ocean/static/
+      - media:/ocean/media/
     ports:
       - 80:80
     logging:

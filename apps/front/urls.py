@@ -1,9 +1,8 @@
-from django.conf.urls import url
+from django.urls import path
 from . import views
 
-__author__ = 'snake'
-
+__author__ = 'Alexis'
 
 urlpatterns = (
-    url(r'^$', views.home, name='home'),
+    path('', views.home, name='home'),
 )

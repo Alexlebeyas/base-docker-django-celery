@@ -1,0 +1,40 @@
+{% load static hijack_tags %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, height=
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" id="bootstrap-css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    </head>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <body class="hm-gradient">
+        <main>
+            <div class="container mt-4">
+            {% block content %} {% endblock %}
+                <hr class="my-4">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                      <p class="copyright-text">Copyright &copy; 2021 All Rights Reserved by <a href="mailto:adaformations@gmail.com">ADSINF</a>.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!--MDB Forms-->
+        </main>
+
+        <!-- MDB core JavaScript -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.1.1/css/mdb.min.css" integrity="sha512-vbHq6SaqHW/OPyfei/7ur+YG+Qa0FbcAhv8aftHV1f/97a8PsHAtQL8Ero9OcjmQ+obsWSESqi1kx1Hi/oi+Hg==" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.1.1/js/mdb.min.js" integrity="sha512-3yGteaiMnpsxSo0LHYMpODezVs6NjMZ6vFyRoqQK4WcRhacpMCgUsQ4yfu5GtcMoWf2zjDP5ENtmx1+eCCtKXw==" crossorigin="anonymous"></script>
+
+    </body>
+</html>

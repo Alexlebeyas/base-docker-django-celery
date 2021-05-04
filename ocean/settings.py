@@ -6,8 +6,8 @@ ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'web', 'localhost']
 
 INSTALLED_APPS = (
     'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.auth', # Core authentication framework and its default models.
+    'django.contrib.contenttypes', # Django content type system (allows permissions to be associated with models).
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sitemaps',
@@ -22,11 +22,12 @@ INSTALLED_APPS = (
     'libs.startup',
 
     # Nixa libs
-    'nixa_emails',
-    'nixa_users',
+    #'nixa_emails',
+    #'nixa_users',
 
     # APPS
     'apps.front',
+    'apps.users',
     'hijack',
     'hijack_admin',
 
@@ -39,11 +40,11 @@ ADMINS = (
 PROJECT_PROTOCOL = '//'
 PROJECT_DOMAIN = '127.0.0.1:8000'
 PROJECT_URI = "".join((PROJECT_PROTOCOL, PROJECT_DOMAIN))
-PROJECT_TITLE = "PROJECT_NAME"
+PROJECT_TITLE = "ocean"
 PROJECT_CONTACT = "contact@nixa.com"
 PROJECT_SETTINGS = path.dirname(__file__)
 BASE_DIR = path.dirname(PROJECT_SETTINGS)
-PROJECT_NAME = path.basename(PROJECT_SETTINGS)
+ocean = path.basename(PROJECT_SETTINGS)
 SITE_ID = 1
 
 DEBUG = True
@@ -59,9 +60,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-WSGI_APPLICATION = '%s.wsgi.application' % PROJECT_NAME
+WSGI_APPLICATION = '%s.wsgi.application' % ocean
 
-ROOT_URLCONF = '%s.urls' % PROJECT_NAME
+ROOT_URLCONF = '%s.urls' % ocean
 STATIC_URL = '/static/'
 STATIC_ROOT = path.normpath(path.join(BASE_DIR, 'static'))
 MEDIA_URL = '/media/'
@@ -70,16 +71,26 @@ FIXTURE_DIRS = 'fixtures/',
 LOCALE_PATHS = 'locale/',
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+# LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'home'
+LOGIN_REDIRECT_URL = 'home'
+AUTH_USER_MODEL = 'users.User'
+
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    #'tracking.middleware.VisitorTrackingMiddleware',
+    #'csp.middleware.CSPMiddleware',
+    #'simple_history.middleware.HistoryRequestMiddleware',
+    #'users.anonymousmiddleware.Redirectlogin',
 )
 
 STATICFILES_FINDERS = (
@@ -101,7 +112,7 @@ DATABASES = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ('templates/',),
+        'DIRS': [os.path.join(BASE_DIR, 'apps/front/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,7 +130,7 @@ CACHES = {
         'BACKEND': 'django_redis.cache.RedisCache',
         "LOCATION": "redis://redis:6379/0",
         'TIMEOUT': 300,
-        'KEY_PREFIX': 'django-%s-' % PROJECT_NAME,
+        'KEY_PREFIX': 'django-%s-' % ocean,
     }
 }
 
@@ -198,7 +209,7 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 show_toolbar = lambda r: False
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": '%s.settings.show_toolbar' % PROJECT_NAME,
+    "SHOW_TOOLBAR_CALLBACK": '%s.settings.show_toolbar' % ocean,
 }
 
 ###############################################################################################
@@ -270,7 +281,7 @@ HIJACK_LOGIN_REDIRECT_URL = '/?edit=true'  # Where admins are redirected to afte
 HIJACK_LOGOUT_REDIRECT_URL = '/admin/nixa_users/nixauser/'  # Where admins are redirected to after releasing a user
 
 SECRET_KEY = 'abc123...'
-AUTH_USER_MODEL = 'nixa_users.NixaUser'
+#AUTH_USER_MODEL = 'nixa_users.NixaUser'
 STARTUP_INITIAL_FIXTURES = []
 
 try:

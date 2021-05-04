@@ -1,0 +1,97 @@
+{% load static i18n %}
+
+<form method="POST" enctype="multipart/form-data" id="form_upload2" >
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4">
+
+            {% static 'img/image-upload-preview.png' as defaultBgImg %}
+            {% if upload_form.thumbnails.value.url %}
+            {% include 'components/_getImageFromDesktop.html' with inputname=upload_form.thumbnails.html_name uploadId="imageUpload2" previewId="imagePreview2" defaultBg=upload_form.thumbnails.value.url only %}
+            {% else %}
+            {% include 'components/_getImageFromDesktop.html' with inputname=upload_form.thumbnails.html_name uploadId="imageUpload2" previewId="imagePreview2" defaultBg=defaultBgImg only %}
+            {% endif %}
+
+            {% if upload_form.thumbnails.errors %}
+            <ul class="error-list error-list-field">
+                {% for error in upload_form.thumbnails.errors %}
+                <li class="error-list-item text-danger">{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            {% if messages %}
+            {% for message in messages %}
+            <ul class="messages {% if message.tags %}{{ message.tags }}{% endif %}">
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            </ul>
+            {% endfor %}
+            {% endif %}
+            {% if upload_form.file %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="upload-form-area-wrapper">
+                        <div
+                            id="drop-area"
+                            class="area"
+                            ondragleave="console.log('leave')"
+                            ondragdrop="console.log('dragdrop')">
+
+                            <input name="{{upload_form.file.html_name}}" type="file" id="id_file"  accept="audio/mp3,.m4a" />
+                        </div>
+                        <div class="text_upload"></div>
+                    </div>
+                </div>
+            </div>
+            {% if upload_form.file.errors %}
+            <ul class="error-list error-list-field">
+                {% for error in upload_form.file.errors %}
+                <li class="error-list-item text-danger">{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+
+            <h3>{% trans 'Drag your song here to upload' %}</h3>
+            {% endif %}
+
+            <p>{% trans 'HITLAB is a powerful engine driving music discovery, promotion, and distribution.' %}</p>
+            <div class="row">
+                <div class="col">
+                    <label for="{{upload_form.title.auto_id}}">
+                        <strong>{% trans 'Song Title' %}</strong>
+                        <input id="{{upload_form.title.auto_id}}" name="{{upload_form.title.html_name}}" {% if upload_form.title.value %} value="{{upload_form.title.value}}" {% endif %} placeholder="{% trans 'Song Title' %}" />
+                    </label>
+                </div>
+            </div>
+            {% if upload_form.title.errors %}
+            <ul class="error-list error-list-field">
+                {% for error in upload_form.title.errors %}
+                <li class="error-list-item text-danger">{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="row">
+                <div class="col">
+                    <label for="{{upload_form.artist_name.auto_id}}">
+                        <strong>{% trans 'Artist Name' %}</strong>
+                        <input id="{{upload_form.artist_name.auto_id}}" name="{{upload_form.artist_name.html_name}}" {% if upload_form.artist_name.value %} value="{{upload_form.artist_name.value}}" {% endif %} placeholder="{% trans 'Artist Name' %}" />
+                    </label>
+                </div>
+            </div>
+            {% if upload_form.artist_name.errors %}
+            <ul class="error-list error-list-field">
+                {% for error in upload_form.artist_name.errors %}
+                <li class="error-list-item text-danger">{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="row">
+                <div class="col text-right" data-purpose="upload">
+                    <button type="submit" data-purpose="upload">{% if not upload_form.title.value %} {% trans 'UPLOAD' %} {% else %} {% trans 'UPDATE' %}  {% endif %} </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
